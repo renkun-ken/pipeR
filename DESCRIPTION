@@ -1,0 +1,9 @@
+Package: pipeR
+Type: Package
+Title: Pipeline operators for R
+Description: Pipeline operators for R
+Version: 0.1
+Date: 2014-04-07
+Author: Kun Ren <renkun@outlook.com>
+Maintainer: Kun Ren <renkun@outlook.com>
+License: MIT
