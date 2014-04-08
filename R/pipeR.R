@@ -10,16 +10,16 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' rnorm(100) %.% plot
+#' rnorm(100) %>% plot
 #'
-#' rnorm(100) %.% plot(col="red")
+#' rnorm(100) %>% plot(col="red")
 #'
-#' rnorm(1000) %.% sample(size=100,replace=F) %.% hist
+#' rnorm(1000) %>% sample(size=100,replace=F) %.% hist
 #' }
-`%.%` <- function(x,f) {
+`%>%` <- function(.,f) {
   f <- substitute(f)
   fl <- as.list(f)
-  call <- as.call(c(fl[1],quote(x),fl[-1]))
+  call <- as.call(c(fl[1],quote(.),fl[-1]))
   eval(call)
 }
 
@@ -35,27 +35,24 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' rnorm(100) %>% plot
+#' rnorm(100) %>>% plot
 #'
-#' rnorm(100) %>% plot(.)
+#' rnorm(100) %>>% plot(.)
 #'
-#' rnorm(100) %>% plot(.,col="red")
+#' rnorm(100) %>>% plot(.,col="red")
 #'
-#' rnorm(1000) %>% sample(.,length(.)/20,F)
+#' rnorm(1000) %>>% sample(.,length(.)/20,F)
 #'
-#' rnorm(1000) %>% sample(.,length(.)/20,F) %>% plot(.,main=sprintf("length: %d",length(.)))
+#' rnorm(1000) %>>% sample(.,length(.)/20,F) %>>% plot(.,main=sprintf("length: %d",length(.)))
 #' }
-`%>%` <- function(x,f) {
+`%>>%` <- function(.,f) {
   f <- substitute(f)
   if(is.name(f)) {
-    call <- as.call(c(f,quote(x)))
-    eval(call)
+    call <- as.call(c(f,quote(.)))
   } else if(is.call(f)) {
-    local({
-      . <- x
-      eval(f)
-    })
+    call <- f
   } else {
     stop("Invalid type of function call")
   }
+  eval(call)
 }

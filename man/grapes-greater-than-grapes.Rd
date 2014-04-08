@@ -2,7 +2,7 @@
 \alias{\%>\%}
 \title{Pipe an object forward as `.`}
 \usage{
-x \%>\% f
+. \%>>\% f
 }
 \arguments{
   \item{x}{The object to be piped}
@@ -17,15 +17,15 @@ with the left-hand side object referred to as \code{.}.
 }
 \examples{
 \dontrun{
-rnorm(100) \%>\% plot
+rnorm(100) \%>>\% plot
 
-rnorm(100) \%>\% plot(.)
+rnorm(100) \%>>\% plot(.)
 
-rnorm(100) \%>\% plot(.,col="red")
+rnorm(100) \%>>\% plot(.,col="red")
 
-rnorm(1000) \%>\% sample(.,length(.)/20,F)
+rnorm(1000) \%>>\% sample(.,length(.)/20,F)
 
-rnorm(1000) \%>\% sample(.,length(.)/20,F) \%>\% plot(.,main=sprintf("length: \%d",length(.)))
+rnorm(1000) \%>>\% sample(.,length(.)/20,F) \%>>\% plot(.,main=sprintf("length: \%d",length(.)))
 }
 }
 

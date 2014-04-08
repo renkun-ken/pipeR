@@ -1,7 +1,8 @@
 Package: pipeR
 Type: Package
 Title: Pipeline operators for R
-Description: Pipeline operators for R
+Description: Provides various operators for chaining commands with two
+  forward-piping mechanisms: first-argument piping and dot piping.
 Version: 0.1
 Date: 2014-04-07
 Author: Kun Ren <renkun@outlook.com>

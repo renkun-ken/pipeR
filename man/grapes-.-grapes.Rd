@@ -2,7 +2,7 @@
 \alias{\%.\%}
 \title{Pipe an object forward as the first argument to a function}
 \usage{
-x \%.\% f
+. \%>\% f
 }
 \arguments{
   \item{x}{The object to be piped}
@@ -17,11 +17,11 @@ with the left-hand side object as the first argument.
 }
 \examples{
 \dontrun{
-rnorm(100) \%.\% plot
+rnorm(100) \%>\% plot
 
-rnorm(100) \%.\% plot(col="red")
+rnorm(100) \%>\% plot(col="red")
 
-rnorm(1000) \%.\% sample(size=100,replace=F) \%.\% hist
+rnorm(1000) \%>\% sample(size=100,replace=F) \%.\% hist
 }
 }
 
