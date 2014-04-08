@@ -11,7 +11,7 @@
   as the first argument.}
 }
 \description{
-The \code{\%.\%} operator pipes the left-hand side foward
+The \code{\%>\%} operator pipes the left-hand side foward
 and evaluates the call expression on the right-hand side
 with the left-hand side object as the first argument.
 }
