@@ -47,10 +47,10 @@
 #' }
 `%>>%` <- function(.,f) {
   f <- substitute(f)
-  if(is.name(f)) {
-    call <- as.call(c(f,quote(.)))
-  } else if(is.call(f)) {
+  if(is.call(f)) {
     call <- f
+  } else if(is.name(f)) {
+    call <- as.call(c(f,quote(.)))
   } else {
     stop("Invalid type of function call")
   }
