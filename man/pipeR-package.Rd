@@ -16,8 +16,9 @@ Version: \tab 0.1\cr
 Date: \tab 2014-04-07\cr
 License: \tab MIT\cr
 }
-~~ An overview of how to use the package, including the most important ~~
-~~ functions ~~
+
+
+
 }
 \author{
 Kun Ren <renkun@outlook.com>

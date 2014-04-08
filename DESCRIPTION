@@ -7,4 +7,6 @@ Version: 0.1
 Date: 2014-04-07
 Author: Kun Ren <renkun@outlook.com>
 Maintainer: Kun Ren <renkun@outlook.com>
+Suggests: dplyr
+Enhances: magrittr
 License: MIT

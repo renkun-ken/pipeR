@@ -1,31 +1,27 @@
 \name{\%>\%}
 \alias{\%>\%}
-\title{Pipe an object forward as `.`}
+\title{Pipe an object forward as the first argument to a function}
 \usage{
-. \%>>\% f
+. \%>\% f
 }
 \arguments{
-  \item{x}{The object to be piped}
+  \item{.}{The object to be piped as the first argument}
 
   \item{f}{The expression to evaluate with the piped object
-  referred to as \code{.}}
+  as the first argument.}
 }
 \description{
-The operator \code{\%>\%} pipes the left-hand side foward
+The \code{\%.\%} operator pipes the left-hand side foward
 and evaluates the call expression on the right-hand side
-with the left-hand side object referred to as \code{.}.
+with the left-hand side object as the first argument.
 }
 \examples{
 \dontrun{
-rnorm(100) \%>>\% plot
+rnorm(100) \%>\% plot
 
-rnorm(100) \%>>\% plot(.)
+rnorm(100) \%>\% plot(col="red")
 
-rnorm(100) \%>>\% plot(.,col="red")
-
-rnorm(1000) \%>>\% sample(.,length(.)/20,F)
-
-rnorm(1000) \%>>\% sample(.,length(.)/20,F) \%>>\% plot(.,main=sprintf("length: \%d",length(.)))
+rnorm(1000) \%>\% sample(size=100,replace=F) \%.\% hist
 }
 }
 
