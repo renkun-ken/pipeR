@@ -6,14 +6,14 @@ Pipeline operators for R
 
 This package is not yet released to CRAN, so you may install it through `devtools`.
 
-```r
+```
 library(devtools)
 install_github("renkun-ken/pipeR")
 ```
 
 ## Help overview
 
-```r
+```
 help(package = pipeR)
 ```
 
@@ -29,7 +29,7 @@ In data-driven statistical computing and data analysis, applying a chain of comm
 
 To do it, we need to write the following code in R:
 
-```r
+```
 plot(diff(log(sample(rnorm(10000,mean=10,sd=1),size=100,replace=FALSE))),col="red",type="l")
 ```
 
@@ -37,7 +37,7 @@ But with this package, which provides various operators for chaining commands wi
 
 With the first-argument pipe operator `%>%`, you may write:
 
-```r
+```
 rnorm(10000,mean=10,sd=1) %>%
   sample(size=100,replace=FALSE) %>%
   log %>%
@@ -47,7 +47,7 @@ rnorm(10000,mean=10,sd=1) %>%
 
 With the dot pipe operator `%>>%`, you can do more with `.` to represent the last result:
 
-```r
+```
 rnorm(10000,mean=10,sd=1) %>>%
   sample(.,size=length(.)/500,replace=FALSE) %>>%
   log %>>%
@@ -61,7 +61,7 @@ No matter which one you use, or both in one chain, your code will become much cl
 
 ### First-argument piping with basic functions
 
-```r
+```
 rnorm(100) %>% plot
 
 rnorm(100) %>% plot(col="red")
@@ -71,7 +71,7 @@ rnorm(1000) %>% sample(size=100,replace=F) %.% hist
 
 ### Dot piping with basic functions
 
-```r
+```
 rnorm(100) %>>% plot
 
 rnorm(100) %>>% plot(.)
@@ -91,7 +91,7 @@ rnorm(100) %>>% {
 
 ### Mixed piping with `dplyr`
 
-```r
+```
 library(dplyr)
 library(hflights)
 data(hflights)
