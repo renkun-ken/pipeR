@@ -33,7 +33,7 @@ To do it, we need to write the following code in R:
 plot(diff(log(sample(rnorm(10000,mean=10,sd=1),size=100,replace=FALSE))),col="red",type="l")
 ```
 
-But with this package, which provides various operators for chaining commands with two forward-piping mechanisms: first-argument piping and dot piping, you have two more ways to write the procedure in the logical order of data transformation and manipulation.
+But with this package, which provides various operators for chaining commands with two forward-piping mechanisms: first-argument piping and free piping, you have two more ways to write the procedure in the logical order of data transformation and manipulation.
 
 With the first-argument pipe operator `%>%`, you may write:
 
@@ -45,7 +45,7 @@ rnorm(10000,mean=10,sd=1) %>%
   plot(col="red",type="l")
 ```
 
-With the dot pipe operator `%>>%`, you can do more with `.` to represent the last result:
+With the free pipe operator `%>>%`, you can do more with `.` to represent the last result:
 
 ```
 rnorm(10000,mean=10,sd=1) %>>%
@@ -69,7 +69,7 @@ rnorm(100) %>% plot(col="red")
 rnorm(1000) %>% sample(size=100,replace=F) %>% hist
 ```
 
-### Dot piping with basic functions
+### Free piping with basic functions
 
 ```
 rnorm(100) %>>% plot

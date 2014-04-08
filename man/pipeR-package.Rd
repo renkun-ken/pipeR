@@ -6,7 +6,7 @@
 Pipeline operators for R
 }
 \description{
-Provides various operators for chaining commands with two forward-piping mechanisms: first-argument piping and dot piping.
+Provides various operators for chaining commands with two forward-piping mechanisms: first-argument piping and free piping.
 }
 \details{
 \tabular{ll}{
