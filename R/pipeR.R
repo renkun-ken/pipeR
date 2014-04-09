@@ -14,7 +14,7 @@
 #'
 #' rnorm(100) %>% plot(col="red")
 #'
-#' rnorm(1000) %>% sample(size=100,replace=F) %.% hist
+#' rnorm(1000) %>% sample(size=100,replace=F) %>% hist
 #' }
 `%>%` <- function(.,f) {
   f <- substitute(f)
