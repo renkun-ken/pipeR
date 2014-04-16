@@ -7,8 +7,9 @@ Pipeline operators for R
 This package is not yet released to CRAN, so you may install it through `devtools`.
 
 ```
-library(devtools)
-install_github("renkun-ken/pipeR")
+if(!require(devtools)) install.packages("devtools")
+require(devtools)
+install_github("pipeR","renkun-ken")
 ```
 
 ## Help overview
