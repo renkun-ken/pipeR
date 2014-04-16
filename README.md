@@ -104,8 +104,42 @@ hflights %>%
     speed.sd=sd(Speed,na.rm=T)) %>%
   mutate(speed.ssd=speed.mean/speed.sd) %>%
   arrange(desc(speed.ssd)) %>>%
+  barplot(.$speed.ssd, names.arg = .$UniqueCarrier,
+    main=sprintf("Standardized mean of %d carriers", nrow(.)))
+```
+
+If you want to assign an intermediate result to a symbol, two methods work for you.
+
+Method 1: `assign()` function
+
+```
+hflights %>%
+  mutate(Speed=Distance/ActualElapsedTime) %>%
+  group_by(UniqueCarrier) %>%
+  summarize(n=length(Speed),speed.mean=mean(Speed,na.rm = T),
+    speed.median=median(Speed,na.rm=T),
+    speed.sd=sd(Speed,na.rm=T)) %>%
+  mutate(speed.ssd=speed.mean/speed.sd) %>%
+  arrange(desc(speed.ssd)) %>>%
   assign("hflights.speed",.,.GlobalEnv) %>>%
   barplot(.$speed.ssd, names.arg = .$UniqueCarrier,
     main=sprintf("Standardized mean of %d carriers", nrow(.)))
 ```
 
+Method 2: `->>` global assignment
+
+```
+{
+  hflights %>%
+  mutate(Speed=Distance/ActualElapsedTime) %>%
+  group_by(UniqueCarrier) %>%
+  summarize(n=length(Speed),speed.mean=mean(Speed,na.rm = T),
+    speed.median=median(Speed,na.rm=T),
+    speed.sd=sd(Speed,na.rm=T)) %>%
+  mutate(speed.ssd=speed.mean/speed.sd) %>%
+  arrange(desc(speed.ssd)) ->> 
+    hflights.speed 
+} %>>%
+  barplot(.$speed.ssd, names.arg = .$UniqueCarrier,
+    main=sprintf("Standardized mean of %d carriers", nrow(.)))
+```
