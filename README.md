@@ -36,6 +36,7 @@ rnorm(10000,mean=10,sd=1) %>%
   plot(col="red",type="l")
 ```
 
+### Free piping
 However, it may not always be the case where the last result serves as the first argument of the next function call. In this situation, you may use free pipe operator `%>>%` to allow `.` to represent the last result and let you decide where it should be piped to.
 
 With the free pipe operator `%>>%`, you can do more with `.`:
