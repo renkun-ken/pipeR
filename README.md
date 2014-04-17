@@ -1,10 +1,58 @@
 # pipeR
 
-Pipeline operators for R
+Pipeline operators for R: Making command chaining flexible and straghtforward
+
+## Motivation
+
+In data-driven statistical computing and data analysis, applying a chain of commands step by step is a common situation. However, it is neigher straghtforawd nor flexible to write a group of deeply nested functions in that the last functions must be written first. For example, if we need to take the following steps:
+
+1. Generate 10000 random numbers from normal distribution with mean 10 and standard deviation 1
+2. Take a sample of 100 without replacement from these numbers
+3. Take a log of the sample
+4. Take a difference of the log numbers
+5. Plot these log differences as red line segments.
+
+Here is a translation from these steps to R commands:
+
+```
+plot(diff(log(sample(rnorm(10000,mean=10,sd=1),size=100,replace=FALSE))),col="red",type="l")
+```
+
+The code is neither straightforward for reading nor flexible for modification.
+
+This package provides two types of forward-piping mechanisms: first-argument piping and free piping. The two styles of piping are implemented by `%>%` and `%>>%`, respectively.
+
+### First-argument piping
+
+The first-argument pipe operator `%>%` insert the previous expression before all other specified arguments if any. In other words, `x %>% f(a=1)` will be translated to `f(x,a=1)`.
+
+With the first-argument pipe operator `%>%`, you may rewrite the first example like
+
+```
+rnorm(10000,mean=10,sd=1) %>%
+  sample(size=100,replace=FALSE) %>%
+  log %>%
+  diff %>%
+  plot(col="red",type="l")
+```
+
+However, it may not always be the case where the last result serves as the first argument of the next function call. In this situation, you may use free pipe operator `%>>%` to allow `.` to represent the last result and let you decide where it should be piped to.
+
+With the free pipe operator `%>>%`, you can do more with `.`:
+
+```
+rnorm(10000,mean=10,sd=1) %>>%
+  sample(.,size=length(.)/500,replace=FALSE) %>>%
+  log %>>%
+  diff %>>%
+  plot(.,col="red",type="l",main=sprintf("length: %d",length(.)))
+```
+
+No matter which one you use, or both in one chain, your code will become much clearer and maintainable.
 
 ## Installation
 
-This package is not yet released to CRAN, so you may install it through `devtools`.
+This package is not released to CRAN. You may install it through `devtools`.
 
 ```
 if(!require(devtools)) install.packages("devtools")
@@ -17,46 +65,6 @@ install_github("pipeR","renkun-ken")
 ```
 help(package = pipeR)
 ```
-
-## Motivation
-
-In data-driven statistical computing and data analysis, applying a chain of commands step by step is a common situation. However, it is neigher straghtforawd nor flexible to write a group of deeply nested functions in that the last functions must be written first. For example, if we need to take the following steps:
-
-1. Generate 10000 random numbers from normal distribution with mean 10 and standard deviation 1
-2. Take a sample of 100 without replacement from these numbers
-3. Take a log of the sample
-4. Take a difference of the log numbers
-5. Plot these log differences as red line segments.
-
-To do it, we need to write the following code in R:
-
-```
-plot(diff(log(sample(rnorm(10000,mean=10,sd=1),size=100,replace=FALSE))),col="red",type="l")
-```
-
-But with this package, which provides various operators for chaining commands with two forward-piping mechanisms: first-argument piping and free piping, you have two more ways to write the procedure in the logical order of data transformation and manipulation.
-
-With the first-argument pipe operator `%>%`, you may write:
-
-```
-rnorm(10000,mean=10,sd=1) %>%
-  sample(size=100,replace=FALSE) %>%
-  log %>%
-  diff %>%
-  plot(col="red",type="l")
-```
-
-With the free pipe operator `%>>%`, you can do more with `.` to represent the last result:
-
-```
-rnorm(10000,mean=10,sd=1) %>>%
-  sample(.,size=length(.)/500,replace=FALSE) %>>%
-  log %>>%
-  diff %>>%
-  plot(.,col="red",type="l",main=sprintf("length: %d",length(.)))
-```
-
-No matter which one you use, or both in one chain, your code will become much clearer and maintainable.
 
 ## Example of usage
 
@@ -79,9 +87,11 @@ rnorm(100) %>>% plot(.)
 
 rnorm(100) %>>% plot(.,col="red")
 
-rnorm(1000) %>>% sample(.,length(.)/20,F)
+rnorm(1000) %>>% sample(.,length(.)*0.2,F)
 
-rnorm(1000) %>>% sample(.,length(.)/20,F) %>>% plot(.,main=sprintf("length: %d",length(.)))
+rnorm(1000) %>>% 
+  sample(.,length(.)*0.2,F) %>>% 
+  plot(.,main=sprintf("length: %d",length(.)))
 
 rnorm(100) %>>% {
   par(mfrow=c(1,2))
@@ -90,7 +100,11 @@ rnorm(100) %>>% {
 } 
 ```
 
-### Mixed piping with `dplyr`
+### Mixed piping
+
+`dplyr` package provides a group of functions that make data transformation much easier. `%.%` is a built-in chain operator that pipes the previous result to the first-argument in the next function call. `%>%` is fully compatible with `dplyr` and can replace `%.%` with more consistency.
+
+The following code demonstrates mixed piping with `dplyr` functions.
 
 ```
 library(dplyr)
@@ -105,42 +119,6 @@ hflights %>%
     speed.sd=sd(Speed,na.rm=T)) %>%
   mutate(speed.ssd=speed.mean/speed.sd) %>%
   arrange(desc(speed.ssd)) %>>%
-  barplot(.$speed.ssd, names.arg = .$UniqueCarrier,
-    main=sprintf("Standardized mean of %d carriers", nrow(.)))
-```
-
-If you want to assign an intermediate result to a symbol, two methods work for you.
-
-Method 1: `assign()` function
-
-```
-hflights %>%
-  mutate(Speed=Distance/ActualElapsedTime) %>%
-  group_by(UniqueCarrier) %>%
-  summarize(n=length(Speed),speed.mean=mean(Speed,na.rm = T),
-    speed.median=median(Speed,na.rm=T),
-    speed.sd=sd(Speed,na.rm=T)) %>%
-  mutate(speed.ssd=speed.mean/speed.sd) %>%
-  arrange(desc(speed.ssd)) %>>%
-  assign("hflights.speed",.,.GlobalEnv) %>>%
-  barplot(.$speed.ssd, names.arg = .$UniqueCarrier,
-    main=sprintf("Standardized mean of %d carriers", nrow(.)))
-```
-
-Method 2: `->>` global assignment
-
-```
-{
-  hflights %>%
-  mutate(Speed=Distance/ActualElapsedTime) %>%
-  group_by(UniqueCarrier) %>%
-  summarize(n=length(Speed),speed.mean=mean(Speed,na.rm = T),
-    speed.median=median(Speed,na.rm=T),
-    speed.sd=sd(Speed,na.rm=T)) %>%
-  mutate(speed.ssd=speed.mean/speed.sd) %>%
-  arrange(desc(speed.ssd)) ->> 
-    hflights.speed 
-} %>>%
   barplot(.$speed.ssd, names.arg = .$UniqueCarrier,
     main=sprintf("Standardized mean of %d carriers", nrow(.)))
 ```
