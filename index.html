@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="pipeR : Pipeline operators for R: Making command chaining flexible and straghtforward" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>pipeR</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/renkun-ken/pipeR">View on GitHub</a>
+
+          <h1 id="project_title">pipeR</h1>
+          <h2 id="project_tagline">Pipeline operators for R: Making command chaining flexible and straghtforward</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/renkun-ken/pipeR/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/renkun-ken/pipeR/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="piper" class="anchor" href="#piper"><span class="octicon octicon-link"></span></a>pipeR</h1>
+
+<p>Pipeline operators for R: Making command chaining flexible and straghtforward</p>
+
+<h2>
+<a name="motivation" class="anchor" href="#motivation"><span class="octicon octicon-link"></span></a>Motivation</h2>
+
+<p>In data-driven statistical computing and data analysis, applying a chain of commands step by step is a common situation. However, it is neigher straghtforawd nor flexible to write a group of deeply nested functions in that the last functions must be written first. For example, if we need to take the following steps:</p>
+
+<ol>
+<li>Generate 10000 random numbers from normal distribution with mean 10 and standard deviation 1</li>
+<li>Take a sample of 100 without replacement from these numbers</li>
+<li>Take a log of the sample</li>
+<li>Take a difference of the log numbers</li>
+<li>Plot these log differences as red line segments.</li>
+</ol><p>Here is a translation from these steps to R commands:</p>
+
+<pre><code>plot(diff(log(sample(rnorm(10000,mean=10,sd=1),size=100,replace=FALSE))),col="red",type="l")
+</code></pre>
+
+<p>The code is neither straightforward for reading nor flexible for modification.</p>
+
+<p>This package provides two types of forward-piping mechanisms: first-argument piping and free piping. The two styles of piping are implemented by <code>%&gt;%</code> and <code>%&gt;&gt;%</code>, respectively.</p>
+
+<h3>
+<a name="first-argument-piping" class="anchor" href="#first-argument-piping"><span class="octicon octicon-link"></span></a>First-argument piping</h3>
+
+<p>The first-argument pipe operator <code>%&gt;%</code> insert the previous expression before all other specified arguments if any. In other words, <code>x %&gt;% f(a=1)</code> will be translated to <code>f(x,a=1)</code>.</p>
+
+<p>With the first-argument pipe operator <code>%&gt;%</code>, you may rewrite the first example like</p>
+
+<pre><code>rnorm(10000,mean=10,sd=1) %&gt;%
+  sample(size=100,replace=FALSE) %&gt;%
+  log %&gt;%
+  diff %&gt;%
+  plot(col="red",type="l")
+</code></pre>
+
+<p>However, it may not always be the case where the last result serves as the first argument of the next function call. In this situation, you may use free pipe operator <code>%&gt;&gt;%</code> to allow <code>.</code> to represent the last result and let you decide where it should be piped to.</p>
+
+<p>With the free pipe operator <code>%&gt;&gt;%</code>, you can do more with <code>.</code>:</p>
+
+<pre><code>rnorm(10000,mean=10,sd=1) %&gt;&gt;%
+  sample(.,size=length(.)/500,replace=FALSE) %&gt;&gt;%
+  log %&gt;&gt;%
+  diff %&gt;&gt;%
+  plot(.,col="red",type="l",main=sprintf("length: %d",length(.)))
+</code></pre>
+
+<p>No matter which one you use, or both in one chain, your code will become much clearer and maintainable.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>This package is not released to CRAN. You may install it through <code>devtools</code>.</p>
+
+<pre><code>if(!require(devtools)) install.packages("devtools")
+require(devtools)
+install_github("pipeR","renkun-ken")
+</code></pre>
+
+<h2>
+<a name="help-overview" class="anchor" href="#help-overview"><span class="octicon octicon-link"></span></a>Help overview</h2>
+
+<pre><code>help(package = pipeR)
+</code></pre>
+
+<h2>
+<a name="example-of-usage" class="anchor" href="#example-of-usage"><span class="octicon octicon-link"></span></a>Example of usage</h2>
+
+<h3>
+<a name="first-argument-piping-with-basic-functions" class="anchor" href="#first-argument-piping-with-basic-functions"><span class="octicon octicon-link"></span></a>First-argument piping with basic functions</h3>
+
+<pre><code>rnorm(100) %&gt;% plot
+
+rnorm(100) %&gt;% plot(col="red")
+
+rnorm(1000) %&gt;% sample(size=100,replace=F) %&gt;% hist
+</code></pre>
+
+<h3>
+<a name="free-piping-with-basic-functions" class="anchor" href="#free-piping-with-basic-functions"><span class="octicon octicon-link"></span></a>Free piping with basic functions</h3>
+
+<pre><code>rnorm(100) %&gt;&gt;% plot
+
+rnorm(100) %&gt;&gt;% plot(.)
+
+rnorm(100) %&gt;&gt;% plot(.,col="red")
+
+rnorm(1000) %&gt;&gt;% sample(.,length(.)*0.2,F)
+
+rnorm(1000) %&gt;&gt;% 
+  sample(.,length(.)*0.2,F) %&gt;&gt;% 
+  plot(.,main=sprintf("length: %d",length(.)))
+
+rnorm(100) %&gt;&gt;% {
+  par(mfrow=c(1,2))
+  hist(.,main="hist")
+  plot(.,col="red",main=sprintf("%d",length(.)))
+} 
+</code></pre>
+
+<h3>
+<a name="mixed-piping" class="anchor" href="#mixed-piping"><span class="octicon octicon-link"></span></a>Mixed piping</h3>
+
+<p><code>dplyr</code> package provides a group of functions that make data transformation much easier. <code>%.%</code> is a built-in chain operator that pipes the previous result to the first-argument in the next function call. <code>%&gt;%</code> is fully compatible with <code>dplyr</code> and can replace <code>%.%</code> with more consistency.</p>
+
+<p>The following code demonstrates mixed piping with <code>dplyr</code> functions.</p>
+
+<pre><code>library(dplyr)
+library(hflights)
+data(hflights)
+
+hflights %&gt;%
+  mutate(Speed=Distance/ActualElapsedTime) %&gt;%
+  group_by(UniqueCarrier) %&gt;%
+  summarize(n=length(Speed),speed.mean=mean(Speed,na.rm = T),
+    speed.median=median(Speed,na.rm=T),
+    speed.sd=sd(Speed,na.rm=T)) %&gt;%
+  mutate(speed.ssd=speed.mean/speed.sd) %&gt;%
+  arrange(desc(speed.ssd)) %&gt;&gt;%
+  barplot(.$speed.ssd, names.arg = .$UniqueCarrier,
+    main=sprintf("Standardized mean of %d carriers", nrow(.)))
+</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">pipeR maintained by <a href="https://github.com/renkun-ken">renkun-ken</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
