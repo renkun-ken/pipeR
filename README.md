@@ -1,6 +1,6 @@
 # pipeR
 
-Pipeline operators for R: Making command chaining flexible and straghtforward
+Pipeline operators for R: Making command chaining flexible and straightforward
 
 ## Motivation
 
