@@ -79,12 +79,29 @@
 
 <pre><code>rnorm(10000,mean=10,sd=1) %&gt;&gt;%
   sample(.,size=length(.)/500,replace=FALSE) %&gt;&gt;%
-  log %&gt;&gt;%
-  diff %&gt;&gt;%
+  log %&gt;%
+  diff %&gt;%
   plot(.,col="red",type="l",main=sprintf("length: %d",length(.)))
 </code></pre>
 
 <p>No matter which one you use, or both in one chain, your code will become much clearer and maintainable.</p>
+
+<h3>
+<a name="lambda-piping" class="anchor" href="#lambda-piping"><span class="octicon octicon-link"></span></a>Lambda piping</h3>
+
+<p>In some situations, it can be confusing to see multiple <code>.</code> symbols in the same expression as they represent different things. Even though the expression still works in most cases, it may not a good idea to keep it in that way. Here is an example:</p>
+
+<pre><code>mtcars %&gt;&gt;%
+  lm(mpg ~ ., data=.) %&gt;%
+  summary
+</code></pre>
+
+<p>The code above works correctly, although <code>.</code> in <code>mpg~.</code> represents all variables other than <code>mpg</code> and <code>.</code> in <code>data=.</code> represents <code>mtcars</code> dataset, as it is supposed. One way to reduce the ambiguity is to use <em>lambda expression</em>. Here we define a syntax like <code>x -&gt; f(x)</code> where <code>-&gt;</code> means <em>map</em> rather than <em>assign</em> and <code>x</code> does not need to exist in the environment. Another symbol, <code>%|&gt;%</code> is designed to handle piping with lambda expression, so we can rewrite the example above in this way:</p>
+
+<pre><code>mtcars %|&gt;%
+  (df -&gt; lm(mpg ~ ., data=df)) %&gt;%
+  summary
+</code></pre>
 
 <h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
@@ -118,9 +135,7 @@ rnorm(1000) %&gt;% sample(size=100,replace=F) %&gt;% hist
 <h3>
 <a name="free-piping-with-basic-functions" class="anchor" href="#free-piping-with-basic-functions"><span class="octicon octicon-link"></span></a>Free piping with basic functions</h3>
 
-<pre><code>rnorm(100) %&gt;&gt;% plot
-
-rnorm(100) %&gt;&gt;% plot(.)
+<pre><code>rnorm(100) %&gt;&gt;% plot(.)
 
 rnorm(100) %&gt;&gt;% plot(.,col="red")
 
@@ -138,7 +153,32 @@ rnorm(100) %&gt;&gt;% {
 </code></pre>
 
 <h3>
+<a name="lambda-piping-with-basic-functions" class="anchor" href="#lambda-piping-with-basic-functions"><span class="octicon octicon-link"></span></a>Lambda piping with basic functions</h3>
+
+<pre><code>rnorm(100) %|&gt;% (x -&gt; plot(x))
+
+rnorm(100) %|&gt;% (x -&gt; plot(x,col="red"))
+
+rnorm(1000) %|&gt;% (pop -&gt; sample(pop,length(pop)*0.2,FALSE))
+
+rnorm(1000) %|&gt;% 
+  (pop -&gt; sample(pop,length(pop)*0.2,FALSE)) %|&gt;% 
+  (s -&gt; plot(s,main=sprintf("length: %d",length(s))))
+</code></pre>
+
+<h3>
 <a name="mixed-piping" class="anchor" href="#mixed-piping"><span class="octicon octicon-link"></span></a>Mixed piping</h3>
+
+<p>All the pipe operators can be used together and each of them plays a clear role.</p>
+
+<pre><code>mtcars %|&gt;%
+  (df -&gt; lm(mpg ~ ., data=df)) %&gt;%
+  summary %&gt;&gt;%
+  .$r.squared
+</code></pre>
+
+<h3>
+<a name="piping-with-dplyr-package" class="anchor" href="#piping-with-dplyr-package"><span class="octicon octicon-link"></span></a>Piping with <code>dplyr</code> package</h3>
 
 <p><code>dplyr</code> package provides a group of functions that make data transformation much easier. <code>%.%</code> is a built-in chain operator that pipes the previous result to the first-argument in the next function call. <code>%&gt;%</code> is fully compatible with <code>dplyr</code> and can replace <code>%.%</code> with more consistency.</p>
 
