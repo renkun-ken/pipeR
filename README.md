@@ -4,7 +4,7 @@ Pipeline operators for R: Making command chaining flexible and straightforward
 
 ## Motivation
 
-In data-driven statistical computing and data analysis, applying a chain of commands step by step is a common situation. However, it is neigher straghtforawd nor flexible to write a group of deeply nested functions in that the last functions must be written first. For example, if we need to take the following steps:
+In data-driven statistical computing and data analysis, applying a chain of commands step by step is a common situation. However, it is neither straightforward nor flexible to write a group of deeply nested functions in that the last functions must be written first. For example, if we need to take the following steps:
 
 1. Generate 10000 random numbers from normal distribution with mean 10 and standard deviation 1
 2. Take a sample of 100 without replacement from these numbers
@@ -54,7 +54,7 @@ No matter which one you use, or both in one chain, your code will become much cl
 
 ### Lambda piping: `%|>%`
 
-In some situations, it can be confusing to see multiple `.` symbols in the same expression especially when they represent different things or hanv different meanings in the same context. Even though the expression still works in most cases, it may not a good idea to keep it in that way. Here is an example:
+In some situations, it can be confusing to see multiple `.` symbols in the same expression especially when they represent different things or have different meanings in the same context. Even though the expression still works in most cases, it may not a good idea to keep it in that way. Here is an example:
 
 ```
 mtcars %>>%
