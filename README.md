@@ -20,9 +20,9 @@ plot(diff(log(sample(rnorm(10000,mean=10,sd=1),size=100,replace=FALSE))),col="re
 
 The code is neither straightforward for reading nor flexible for modification.
 
-This package provides two types of forward-piping mechanisms: first-argument piping and free piping. The two styles of piping are implemented by `%>%` and `%>>%`, respectively.
+This package provides various types of forward-piping mechanisms: first-argument piping, free piping, and lambda piping, which are implemented by `%>%`, `%>>%` and `%|>%`, respectively.
 
-### First-argument piping
+### First-argument piping: `%>%`
 
 The first-argument pipe operator `%>%` insert the previous expression before all other specified arguments if any. In other words, `x %>% f(a=1)` will be translated to `f(x,a=1)`.
 
@@ -36,7 +36,7 @@ rnorm(10000,mean=10,sd=1) %>%
   plot(col="red",type="l")
 ```
 
-### Free piping
+### Free piping: `%>>%`
 
 However, it may not always be the case where the piped object serves as the first argument of the next function call. In this situation, you may use free pipe operator `%>>%` to use `.` to represent the piped object, which allows you to decide where it should be piped to.
 
@@ -52,7 +52,7 @@ rnorm(10000,mean=10,sd=1) %>>%
 
 No matter which one you use, or both in one chain, your code will become much clearer and maintainable.
 
-### Lambda piping
+### Lambda piping: `%|>%`
 
 In some situations, it can be confusing to see multiple `.` symbols in the same expression especially when they represent different things or hanv different meanings in the same context. Even though the expression still works in most cases, it may not a good idea to keep it in that way. Here is an example:
 
@@ -149,6 +149,8 @@ hflights %>%
   barplot(.$speed.ssd, names.arg = .$UniqueCarrier,
     main=sprintf("Standardized mean of %d carriers", nrow(.)))
 ```
+
+For more ways of usage, please read the Wiki pages.
 
 ## Installation
 
