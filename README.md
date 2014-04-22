@@ -38,15 +38,15 @@ rnorm(10000,mean=10,sd=1) %>%
 
 ### Free piping
 
-However, it may not always be the case where the last result serves as the first argument of the next function call. In this situation, you may use free pipe operator `%>>%` to allow `.` to represent the last result and let you decide where it should be piped to.
+However, it may not always be the case where the piped object serves as the first argument of the next function call. In this situation, you may use free pipe operator `%>>%` to use `.` to represent the piped object, which allows you to decide where it should be piped to.
 
-With the free pipe operator `%>>%`, you can do more with `.`:
+With the free pipe operator `%>>%`, you can do more with the piped object referred to by `.`:
 
 ```
 rnorm(10000,mean=10,sd=1) %>>%
-  sample(.,size=length(.)/500,replace=FALSE) %>>%
+  sample(.,size=length(.)/500,replace=FALSE) %>%
   log %>%
-  diff %>%
+  diff %>>%
   plot(.,col="red",type="l",main=sprintf("length: %d",length(.)))
 ```
 
@@ -54,7 +54,7 @@ No matter which one you use, or both in one chain, your code will become much cl
 
 ### Lambda piping
 
-In some situations, it can be confusing to see multiple `.` symbols in the same expression as they represent different things. Even though the expression still works in most cases, it may not a good idea to keep it in that way. Here is an example:
+In some situations, it can be confusing to see multiple `.` symbols in the same expression especially when they represent different things or hanv different meanings in the same context. Even though the expression still works in most cases, it may not a good idea to keep it in that way. Here is an example:
 
 ```
 mtcars %>>%
@@ -62,28 +62,12 @@ mtcars %>>%
   summary
 ```
 
-The code above works correctly, although `.` in `mpg~.` represents all variables other than `mpg` and `.` in `data=.` represents `mtcars` dataset, as it is supposed. One way to reduce the ambiguity is to use *lambda expression*. Here we define a syntax like `x -> f(x)` where `->` means *map* rather than *assign* and `x` does not need to exist in the environment. Another symbol, `%|>%` is designed to handle piping with lambda expression, so we can rewrite the example above in this way:
+The code above works correctly with `%>>%` and `%>%`, although `.` in `mpg ~ .` represents all variables other than `mpg` and `.` in `data=.` represents `mtcars` dataset. One way to reduce the ambiguity is to use *lambda expression*. Here we define a syntax like `x -> f(x)` where `->` means *map* rather than *assign* and `x` does not need to exist in the environment. Another symbol, `%|>%`, is designed to handle piping with lambda expression, so we can rewrite the example above in this way:
 
 ```
 mtcars %|>%
   (df -> lm(mpg ~ ., data=df)) %>%
   summary
-```
-
-## Installation
-
-This package is not released to CRAN. You may install it through `devtools`.
-
-```
-if(!require(devtools)) install.packages("devtools")
-require(devtools)
-install_github("pipeR","renkun-ken")
-```
-
-## Help overview
-
-```
-help(package = pipeR)
 ```
 
 ## Example of usage
@@ -95,7 +79,7 @@ rnorm(100) %>% plot
 
 rnorm(100) %>% plot(col="red")
 
-rnorm(1000) %>% sample(size=100,replace=F) %>% hist
+rnorm(1000) %>% sample(size=100,replace=FALSE) %>% hist
 ```
 
 ### Free piping with basic functions
@@ -105,10 +89,10 @@ rnorm(100) %>>% plot(.)
 
 rnorm(100) %>>% plot(.,col="red")
 
-rnorm(1000) %>>% sample(.,length(.)*0.2,F)
+rnorm(1000) %>>% sample(.,length(.)*0.2,FALSE)
 
 rnorm(1000) %>>% 
-  sample(.,length(.)*0.2,F) %>>% 
+  sample(.,length(.)*0.2,FALSE) %>>% 
   plot(.,main=sprintf("length: %d",length(.)))
 
 rnorm(100) %>>% {
@@ -164,4 +148,20 @@ hflights %>%
   arrange(desc(speed.ssd)) %>>%
   barplot(.$speed.ssd, names.arg = .$UniqueCarrier,
     main=sprintf("Standardized mean of %d carriers", nrow(.)))
+```
+
+## Installation
+
+This package is not released to CRAN. You may install it through `devtools`.
+
+```
+if(!require(devtools)) install.packages("devtools")
+require(devtools)
+install_github("pipeR","renkun-ken")
+```
+
+## Help overview
+
+```
+help(package = pipeR)
 ```
