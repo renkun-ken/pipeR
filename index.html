@@ -39,7 +39,7 @@
 <h2>
 <a name="motivation" class="anchor" href="#motivation"><span class="octicon octicon-link"></span></a>Motivation</h2>
 
-<p>In data-driven statistical computing and data analysis, applying a chain of commands step by step is a common situation. However, it is neigher straghtforawd nor flexible to write a group of deeply nested functions in that the last functions must be written first. For example, if we need to take the following steps:</p>
+<p>In data-driven statistical computing and data analysis, applying a chain of commands step by step is a common situation. However, it is neither straightforward nor flexible to write a group of deeply nested functions in that the last functions must be written first. For example, if we need to take the following steps:</p>
 
 <ol>
 <li>Generate 10000 random numbers from normal distribution with mean 10 and standard deviation 1</li>
@@ -54,10 +54,11 @@
 
 <p>The code is neither straightforward for reading nor flexible for modification.</p>
 
-<p>This package provides two types of forward-piping mechanisms: first-argument piping and free piping. The two styles of piping are implemented by <code>%&gt;%</code> and <code>%&gt;&gt;%</code>, respectively.</p>
+<p>This package provides various types of forward-piping mechanisms: first-argument piping, free piping, and lambda piping, which are implemented by <code>%&gt;%</code>, <code>%&gt;&gt;%</code> and <code>%|&gt;%</code>, respectively.</p>
 
 <h3>
-<a name="first-argument-piping" class="anchor" href="#first-argument-piping"><span class="octicon octicon-link"></span></a>First-argument piping</h3>
+<a name="first-argument-piping-" class="anchor" href="#first-argument-piping-"><span class="octicon octicon-link"></span></a>First-argument piping: <code>%&gt;%</code>
+</h3>
 
 <p>The first-argument pipe operator <code>%&gt;%</code> insert the previous expression before all other specified arguments if any. In other words, <code>x %&gt;% f(a=1)</code> will be translated to <code>f(x,a=1)</code>.</p>
 
@@ -71,7 +72,8 @@
 </code></pre>
 
 <h3>
-<a name="free-piping" class="anchor" href="#free-piping"><span class="octicon octicon-link"></span></a>Free piping</h3>
+<a name="free-piping-" class="anchor" href="#free-piping-"><span class="octicon octicon-link"></span></a>Free piping: <code>%&gt;&gt;%</code>
+</h3>
 
 <p>However, it may not always be the case where the piped object serves as the first argument of the next function call. In this situation, you may use free pipe operator <code>%&gt;&gt;%</code> to use <code>.</code> to represent the piped object, which allows you to decide where it should be piped to.</p>
 
@@ -87,9 +89,10 @@
 <p>No matter which one you use, or both in one chain, your code will become much clearer and maintainable.</p>
 
 <h3>
-<a name="lambda-piping" class="anchor" href="#lambda-piping"><span class="octicon octicon-link"></span></a>Lambda piping</h3>
+<a name="lambda-piping-" class="anchor" href="#lambda-piping-"><span class="octicon octicon-link"></span></a>Lambda piping: <code>%|&gt;%</code>
+</h3>
 
-<p>In some situations, it can be confusing to see multiple <code>.</code> symbols in the same expression especially when they represent different things or hanv different meanings in the same context. Even though the expression still works in most cases, it may not a good idea to keep it in that way. Here is an example:</p>
+<p>In some situations, it can be confusing to see multiple <code>.</code> symbols in the same expression especially when they represent different things or have different meanings in the same context. Even though the expression still works in most cases, it may not a good idea to keep it in that way. Here is an example:</p>
 
 <pre><code>mtcars %&gt;&gt;%
   lm(mpg ~ ., data=.) %&gt;%
@@ -183,6 +186,8 @@ hflights %&gt;%
   barplot(.$speed.ssd, names.arg = .$UniqueCarrier,
     main=sprintf("Standardized mean of %d carriers", nrow(.)))
 </code></pre>
+
+<p>For more ways of usage, please read the Wiki pages.</p>
 
 <h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
