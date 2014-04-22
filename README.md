@@ -24,7 +24,7 @@ This package provides various types of forward-piping mechanisms: first-argument
 
 ### First-argument piping: `%>%`
 
-The first-argument pipe operator `%>%` insert the previous expression before all other specified arguments if any. In other words, `x %>% f(a=1)` will be translated to `f(x,a=1)`.
+The first-argument pipe operator `%>%` inserts the previous expression before all other specified arguments if any. In other words, `x %>% f(a=1)` will be translated to `f(x,a=1)`.
 
 With the first-argument pipe operator `%>%`, you may rewrite the first example like
 
