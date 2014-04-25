@@ -170,4 +170,4 @@ help(package = pipeR)
 
 ## License
 
-This package in under [MIT License](http://opensource.org/licenses/MIT).
+This package is under [MIT License](http://opensource.org/licenses/MIT).
