@@ -146,7 +146,7 @@ hflights %>%
 
 ## Notice
 
-The reason why the three operators are not "integrated" into one is that I want to make the functionality of each opeartor as clear and independent as possible, so that guessing and ambiguity could be sharpely reduced. When you decide to use pipe operators to build a chain of expressions, you need to know clearly how you want to pipe your results to the next level. The following bullets are a brief summary:
+The reason why the three operators are not "integrated" into one is that I want to make the functionality of each operator as clear and independent as possible, so that guessing and ambiguity could be sharply reduced. When you decide to use pipe operators to build a chain of expressions, you need to know clearly how you want to pipe your results to the next level. The following bullets are a brief summary:
 
 1. `%>%` only pipes an object to the first-argument of the next *function*, that is, `x %>% f(...)` runs as `f(x,...)`.
 2. `%>>%` only evaluates the next *expression* with `.` representing the object being piped, that is, `x %>>% f(a,.,g(.))` runs as `f(a,x,g(x))`.
