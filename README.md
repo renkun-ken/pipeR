@@ -4,29 +4,45 @@ Pipeline operators for R: Making command chaining flexible and straightforward
 
 ## Motivation
 
-In data-driven statistical computing and data analysis, applying a chain of commands step by step is a common situation. However, it is neither straightforward nor flexible to write a group of deeply nested functions in that the last functions must be written first. For example, if we need to take the following steps:
+In data-driven statistical computing and analysis, applying a chain of commands is a frequent situation. Consider the following example.
+
+Suppose we need to take these steps:
 
 1. Generate 10000 random numbers from normal distribution with mean 10 and standard deviation 1
 2. Take a sample of 100 without replacement from these numbers
 3. Take a log of the sample
 4. Take a difference of the log numbers
-5. Plot these log differences as red line segments.
+5. Plot these log differences with red line segments.
 
-Here is a translation from these steps to R commands:
+Here is the ordinary way we do this in R programming langauge:
 
 ```
 plot(diff(log(sample(rnorm(10000,mean=10,sd=1),size=100,replace=FALSE))),col="red",type="l")
 ```
 
-The code is neither straightforward for reading nor flexible for modification.
+The code is neither straightforward for reading nor flexible for modification. It is because the functions in the first few steps are hiding in the nested brackets, and the written order of the functions goes against the order of logic.
 
-This package provides various types of forward-piping mechanisms: first-argument piping, free piping, and lambda piping, which are implemented by `%>%`, `%>>%` and `%|>%`, respectively.
+pipeR borrows the idea of F# pipeline operator which allows you to write the *object* first and *pipe* it to a following *function*. This package defines three binary pipe operators that provide different types of forward-piping mechanisms: first-argument piping (`%>%`), free piping (`%>>%`), and lambda piping (`%|>%`). And the real magic of this kind of operators is chaining commands by the right order.
 
 ### First-argument piping: `%>%`
 
-The first-argument pipe operator `%>%` inserts the previous expression before all other specified arguments if any. In other words, `x %>% f(a=1)` will be translated to `f(x,a=1)`.
+The first-argument pipe operator `%>%` inserts the expression on the left-hand side to the first argument of the **function** on the right-hand side. In other words, `x %>% f(a=1)` will be transformed to and be evaluated as `f(x,a=1)`. This operator accepts both function call, e.g. `plot()` or `plot(col="red")`, and function name, e.g. `log` or `plot`.
 
-With the first-argument pipe operator `%>%`, you may rewrite the first example like
+```
+rnorm(100) %>% plot
+# plot(rnorm(100))
+
+rnorm(100) %>% plot()
+# plot(rnorm(100))
+
+rnorm(100) %>% plot(col="red")
+# plot(rnorm(100),col="red")
+
+rnorm(100) %>% sample(size=100,replace=FALSE) %>% hist
+# hist(sample(rnorm(100),size=100,replace=FALSE))
+```
+
+With the first-argument pipe operator `%>%`, you may rewrite the first example as
 
 ```
 rnorm(10000,mean=10,sd=1) %>%
@@ -38,23 +54,44 @@ rnorm(10000,mean=10,sd=1) %>%
 
 ### Free piping: `%>>%`
 
-However, it may not always be the case where the piped object serves as the first argument of the next function call. In this situation, you may use free pipe operator `%>>%` to use `.` to represent the piped object, which allows you to decide where it should be piped to.
-
-With the free pipe operator `%>>%`, you can do more with the piped object referred to by `.`:
+You may not always want to pipe the object to the first argument of the next function. Then you can use free pipe operator `%>>%`, which takes `.` to represent the piped object on the left-hand side and evaluate the *expression* on the right-hand side with `.` as the piped object. In other words, you have the right to decide where the object should be piped to.
 
 ```
+rnorm(100) %>>% plot(.)
+# plot(rnorm(100))
+
+rnorm(100) %>>% plot(., col="red")
+# plot(rnorm(100),col="red")
+
+rnorm(100) %>>% sample(., size=length(.)*0.5)
+# (`.` is piped to multiple places)
+
+mtcars %>>% lm(mpg ~ cyl + disp, data=.) %>% summary
+# summary(lm(mgp ~ cyl + disp, data=mtcars))
+
+rnorm(100) %>>% 
+  sample(.,length(.)*0.2,FALSE) %>>% 
+  plot(.,main=sprintf("length: %d",length(.)))
+# (`.` is piped to multiple places and mutiple levels)
+
+rnorm(100) %>>% {
+  par(mfrow=c(1,2))
+  hist(.,main="hist")
+  plot(.,col="red",main=sprintf("%d",length(.)))
+}
+# (`.` is piped to an enclosed expression)
+
 rnorm(10000,mean=10,sd=1) %>>%
   sample(.,size=length(.)/500,replace=FALSE) %>%
   log %>%
   diff %>>%
   plot(.,col="red",type="l",main=sprintf("length: %d",length(.)))
+# (`%>%` and `%>>%` are used together. Be clear what they mean)
 ```
-
-No matter which one you use, or both in one chain, your code will become much clearer and maintainable.
 
 ### Lambda piping: `%|>%`
 
-In some situations, it can be confusing to see multiple `.` symbols in the same expression especially when they represent different things or have different meanings in the same context. Even though the expression still works in most cases, it may not a good idea to keep it in that way. Here is an example:
+It can be confusing to see multiple `.` symbols in the same context. In some cases, they may represent different things in the same expression. Even though the expression mostly still works, it may not be a good idea to keep it in that way. Here is an example:
 
 ```
 mtcars %>>%
@@ -62,7 +99,9 @@ mtcars %>>%
   summary
 ```
 
-The code above works correctly with `%>>%` and `%>%`, although `.` in `mpg ~ .` represents all variables other than `mpg` and `.` in `data=.` represents `mtcars` dataset. One way to reduce the ambiguity is to use *lambda expression*. Here we define a syntax like `x -> f(x)` where `->` means *map* rather than *assign* and `x` does not need to exist in the environment. Another symbol, `%|>%`, is designed to handle piping with lambda expression, so we can rewrite the example above in this way:
+The code above works correctly with `%>>%` and `%>%`, even though the two dots in the second line have different meanings. `.` in formula `mpg ~ .` represents all variables other than `mpg` in data frame `mtcars`; `.` in `data=.` represents `mtcars` itself. One way to reduce ambiguity is to use *lambda expression* that names the piped object on the left of `->` and specifies the expression to evaluate on the right.
+
+A new pipe operator `%|>%` is defined, which works with lambda expression in the form `(x -> f(x))`. More specifically, `->` means *map* (rather than *assign*) and the expression will be interpreted as *`f(x)` will be evaluated with `x` being the piped object*. Therefore, the previous example can be rewritten with `%|>%` like this:
 
 ```
 mtcars %|>%
@@ -70,61 +109,15 @@ mtcars %|>%
   summary
 ```
 
-## Example of usage
-
-### First-argument piping with basic functions
-
-```
-rnorm(100) %>% plot
-
-rnorm(100) %>% plot(col="red")
-
-rnorm(1000) %>% sample(size=100,replace=FALSE) %>% hist
-```
-
-### Free piping with basic functions
-
-```
-rnorm(100) %>>% plot(.)
-
-rnorm(100) %>>% plot(.,col="red")
-
-rnorm(1000) %>>% sample(.,length(.)*0.2,FALSE)
-
-rnorm(1000) %>>% 
-  sample(.,length(.)*0.2,FALSE) %>>% 
-  plot(.,main=sprintf("length: %d",length(.)))
-
-rnorm(100) %>>% {
-  par(mfrow=c(1,2))
-  hist(.,main="hist")
-  plot(.,col="red",main=sprintf("%d",length(.)))
-} 
-```
-
-### Lambda piping with basic functions
-
-```
-rnorm(100) %|>% (x -> plot(x))
-
-rnorm(100) %|>% (x -> plot(x,col="red"))
-
-rnorm(1000) %|>% (pop -> sample(pop,length(pop)*0.2,FALSE))
-
-rnorm(1000) %|>% 
-  (pop -> sample(pop,length(pop)*0.2,FALSE)) %|>% 
-  (s -> plot(s,main=sprintf("length: %d",length(s))))
-```
-
 ### Mixed piping
 
-All the pipe operators can be used together and each of them plays a clear role.
+All the pipe operators can be used together and each of them only works in their own way.
 
 ```
 mtcars %|>%
   (df -> lm(mpg ~ ., data=df)) %>%
   summary %>>%
-  .$r.squared
+  .$fstatistic
 ```
 
 ### Piping with `dplyr` package
@@ -136,6 +129,7 @@ The following code demonstrates mixed piping with `dplyr` functions.
 ```
 library(dplyr)
 library(hflights)
+library(pipeR)
 data(hflights)
 
 hflights %>%
@@ -150,7 +144,13 @@ hflights %>%
     main=sprintf("Standardized mean of %d carriers", nrow(.)))
 ```
 
-For more ways of usage, please read the Wiki pages.
+## Notice
+
+The reason why the three operators are not "integrated" into one is that I want to make the functionality of each opeartor as clear and independent as possible, so that guessing and ambiguity could be sharpely reduced. When you decide to use pipe operators to build a chain of expressions, you need to know clearly how you want to pipe your results to the next level. The following bullets are a brief summary:
+
+1. `%>%` only pipes an object to the first-argument of the next *function*, that is, `x %>% f(...)` runs as `f(x,...)`.
+2. `%>>%` only evaluates the next *expression* with `.` representing the object being piped, that is, `x %>>% f(a,.,g(.))` runs as `f(a,x,g(x))`.
+3. `%|>%` only evaluates the *expression* on the right-hand side of `->` in the lambda expression with symbol on the left representing the object being piped, that is, `x %|>% (a -> f(a,g(a)))` runs as `f(x,g(x))`.
 
 ## Installation
 
@@ -167,3 +167,7 @@ install_github("pipeR","renkun-ken")
 ```
 help(package = pipeR)
 ```
+
+## License
+
+This package in under [MIT License](http://opensource.org/licenses/MIT).
