@@ -17,10 +17,10 @@
 #' rnorm(1000) %>% sample(size=100,replace=F) %>% hist
 #' }
 `%>%` <- function(.,f) {
-  f <- substitute(f)
-  fl <- as.list(f)
-  call <- as.call(c(fl[1],quote(.),fl[-1]))
-  eval(call)
+  . <- substitute(.)
+  f <- as.list(substitute(f))
+  call <- as.call(c(f[1],.,f[-1]))
+  eval(call,envir = parent.frame())
 }
 
 #' Pipe an object forward as `.`
@@ -46,8 +46,10 @@
 #'   plot(.,main=sprintf("length: %d",length(.)))
 #' }
 `%>>%` <- function(.,f) {
+  env <- new.env(parent = parent.frame())
+  env$. <- .
   f <- substitute(f)
-  eval(f)
+  eval(f,envir = env)
 }
 
 #' Pipe an object by lambda expression
@@ -73,7 +75,7 @@
 #'   (s ~ plot(s,main=sprintf("length: sample: %d",length(s))))
 #' }
 `%|>%` <- function(.,f) {
-  eval(as.call(list(`<-`,f[[2]],.)))
-  rm(.)
-  eval(f[[3]])
+  env <- new.env(parent = parent.frame())
+  eval(as.call(list(`<-`,f[[2]],.)),envir = env)
+  eval(f[[3]],envir = env)
 }
