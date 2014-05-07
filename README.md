@@ -99,15 +99,29 @@ mtcars %>>%
   summary
 ```
 
-The code above works correctly with `%>>%` and `%>%`, even though the two dots in the second line have different meanings. `.` in formula `mpg ~ .` represents all variables other than `mpg` in data frame `mtcars`; `.` in `data=.` represents `mtcars` itself. One way to reduce ambiguity is to use *lambda expression* that names the piped object on the left of `->` and specifies the expression to evaluate on the right.
+The code above works correctly with `%>>%` and `%>%`, even though the two dots in the second line have different meanings. `.` in formula `mpg ~ .` represents all variables other than `mpg` in data frame `mtcars`; `.` in `data=.` represents `mtcars` itself. One way to reduce ambiguity is to use *lambda expression* that names the piped object on the left of `~` and specifies the expression to evaluate on the right.
 
-A new pipe operator `%|>%` is defined, which works with lambda expression in the form `(x -> f(x))`. More specifically, `->` means *map* (rather than *assign*) and the expression will be interpreted as *`f(x)` will be evaluated with `x` being the piped object*. Therefore, the previous example can be rewritten with `%|>%` like this:
+A new pipe operator `%|>%` is defined, which works with lambda expression in the formula form `x ~ f(x)`. More specifically, the expression will be interpreted as *`f(x)` is evaluated with `x` being the piped object*. Therefore, the previous example can be rewritten with `%|>%` like this:
 
 ```
 mtcars %|>%
-  (df -> lm(mpg ~ ., data=df)) %>%
+  (df ~ lm(mpg ~ ., data=df)) %>%
   summary
 ```
+
+Moreover, we could store the lambda expressions by assigning the formula to symbols.
+
+```
+runlm <- df ~ lm(mpg ~ ., data=df)
+plotlm <- m ~ {
+  par(mfrow=c(2,2))
+  plot(m,ask=FALSE)
+}
+
+mtcars %|>%
+  runlm %|>%
+  plotlm
+``` 
 
 ### Mixed piping
 
@@ -115,7 +129,7 @@ All the pipe operators can be used together and each of them only works in their
 
 ```
 mtcars %|>%
-  (df -> lm(mpg ~ ., data=df)) %>%
+  (df ~ lm(mpg ~ ., data=df)) %>%
   summary %>>%
   .$fstatistic
 ```
@@ -150,7 +164,7 @@ The reason why the three operators are not "integrated" into one is that I want 
 
 1. `%>%` only pipes an object to the first-argument of the next *function*, that is, `x %>% f(...)` runs as `f(x,...)`.
 2. `%>>%` only evaluates the next *expression* with `.` representing the object being piped, that is, `x %>>% f(a,.,g(.))` runs as `f(a,x,g(x))`.
-3. `%|>%` only evaluates the *expression* on the right-hand side of `->` in the lambda expression with symbol on the left representing the object being piped, that is, `x %|>% (a -> f(a,g(a)))` runs as `f(x,g(x))`.
+3. `%|>%` only evaluates the *expression* on the right-hand side of `~` in the lambda expression formula with symbol on the left representing the object being piped, that is, `x %|>% (a ~ f(a,g(a)))` runs as `f(x,g(x))`.
 
 ## Installation
 

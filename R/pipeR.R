@@ -57,24 +57,23 @@
 #' and evaluates that expression.
 #'
 #' @param . The object to be piped
-#' @param f The lambda expression which should always be in the form like \(x -> g\(x\)\)
+#' @param f The lambda expression which should always be in the form like \(x ~ g\(x\)\)
 #' @name %|>%
 #' @export
 #' @examples
 #' \dontrun{
-#' rnorm(100) %|>% (x -> plot(x))
+#' rnorm(100) %|>% (x ~ plot(x))
 #'
-#' rnorm(100) %|>% (x -> plot(x,col="red"))
+#' rnorm(100) %|>% (x ~ plot(x,col="red"))
 #'
-#' rnorm(1000) %|>% (pop -> sample(pop,length(pop)*0.2,FALSE))
+#' rnorm(1000) %|>% (pop ~ sample(pop,length(pop)*0.2,FALSE))
 #'
 #' rnorm(1000) %|>%
-#'   (pop -> sample(pop,length(pop)*0.2,FALSE)) %|>%
-#'   (s -> plot(s,main=sprintf("length: sample: %d",length(s))))
+#'   (pop ~ sample(pop,length(pop)*0.2,FALSE)) %|>%
+#'   (s ~ plot(s,main=sprintf("length: sample: %d",length(s))))
 #' }
 `%|>%` <- function(.,f) {
-  f <- substitute(f)[[2]]
-  eval(as.call(list(`<-`,f[[3]],.)))
+  eval(as.call(list(`<-`,f[[2]],.)))
   rm(.)
-  eval(f[[2]])
+  eval(f[[3]])
 }
