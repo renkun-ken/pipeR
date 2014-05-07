@@ -135,13 +135,26 @@ rnorm(10000,mean=10,sd=1) %&gt;&gt;%
   summary
 </code></pre>
 
-<p>The code above works correctly with <code>%&gt;&gt;%</code> and <code>%&gt;%</code>, even though the two dots in the second line have different meanings. <code>.</code> in formula <code>mpg ~ .</code> represents all variables other than <code>mpg</code> in data frame <code>mtcars</code>; <code>.</code> in <code>data=.</code> represents <code>mtcars</code> itself. One way to reduce ambiguity is to use <em>lambda expression</em> that names the piped object on the left of <code>-&gt;</code> and specifies the expression to evaluate on the right.</p>
+<p>The code above works correctly with <code>%&gt;&gt;%</code> and <code>%&gt;%</code>, even though the two dots in the second line have different meanings. <code>.</code> in formula <code>mpg ~ .</code> represents all variables other than <code>mpg</code> in data frame <code>mtcars</code>; <code>.</code> in <code>data=.</code> represents <code>mtcars</code> itself. One way to reduce ambiguity is to use <em>lambda expression</em> that names the piped object on the left of <code>~</code> and specifies the expression to evaluate on the right.</p>
 
-<p>A new pipe operator <code>%|&gt;%</code> is defined, which works with lambda expression in the form <code>(x -&gt; f(x))</code>. More specifically, <code>-&gt;</code> means <em>map</em> (rather than <em>assign</em>) and the expression will be interpreted as <em><code>f(x)</code> will be evaluated with <code>x</code> being the piped object</em>. Therefore, the previous example can be rewritten with <code>%|&gt;%</code> like this:</p>
+<p>A new pipe operator <code>%|&gt;%</code> is defined, which works with lambda expression in the formula form <code>x ~ f(x)</code>. More specifically, the expression will be interpreted as <em><code>f(x)</code> is evaluated with <code>x</code> being the piped object</em>. Therefore, the previous example can be rewritten with <code>%|&gt;%</code> like this:</p>
 
 <pre><code>mtcars %|&gt;%
-  (df -&gt; lm(mpg ~ ., data=df)) %&gt;%
+  (df ~ lm(mpg ~ ., data=df)) %&gt;%
   summary
+</code></pre>
+
+<p>Moreover, we could store the lambda expressions by assigning the formula to symbols.</p>
+
+<pre><code>runlm &lt;- df ~ lm(mpg ~ ., data=df)
+plotlm &lt;- m ~ {
+  par(mfrow=c(2,2))
+  plot(m,ask=FALSE)
+}
+
+mtcars %|&gt;%
+  runlm %|&gt;%
+  plotlm
 </code></pre>
 
 <h3>
@@ -150,7 +163,7 @@ rnorm(10000,mean=10,sd=1) %&gt;&gt;%
 <p>All the pipe operators can be used together and each of them only works in their own way.</p>
 
 <pre><code>mtcars %|&gt;%
-  (df -&gt; lm(mpg ~ ., data=df)) %&gt;%
+  (df ~ lm(mpg ~ ., data=df)) %&gt;%
   summary %&gt;&gt;%
   .$fstatistic
 </code></pre>
@@ -190,7 +203,7 @@ hflights %&gt;%
 <li>
 <code>%&gt;&gt;%</code> only evaluates the next <em>expression</em> with <code>.</code> representing the object being piped, that is, <code>x %&gt;&gt;% f(a,.,g(.))</code> runs as <code>f(a,x,g(x))</code>.</li>
 <li>
-<code>%|&gt;%</code> only evaluates the <em>expression</em> on the right-hand side of <code>-&gt;</code> in the lambda expression with symbol on the left representing the object being piped, that is, <code>x %|&gt;% (a -&gt; f(a,g(a)))</code> runs as <code>f(x,g(x))</code>.</li>
+<code>%|&gt;%</code> only evaluates the <em>expression</em> on the right-hand side of <code>~</code> in the lambda expression formula with symbol on the left representing the object being piped, that is, <code>x %|&gt;% (a ~ f(a,g(a)))</code> runs as <code>f(x,g(x))</code>.</li>
 </ol><h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
