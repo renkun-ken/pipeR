@@ -3,12 +3,12 @@
 \alias{\%|>\%}
 \title{Pipe an object by lambda expression}
 \usage{
-. \%|>\% f
+. \%|>\% lambda
 }
 \arguments{
 \item{.}{The object to be piped}
 
-\item{f}{The lambda expression which should always be in the form like \(x ~ g\(x\)\)}
+\item{lambda}{The lambda expression which should always be in the form like \(x ~ g\(x\)\)}
 }
 \description{
 The operator \code{\%|>\%} pipes the left-hand side to the

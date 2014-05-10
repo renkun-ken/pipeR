@@ -11,3 +11,4 @@ Maintainer: Kun Ren <renkun@outlook.com>
 Suggests: dplyr
 Enhances: magrittr
 License: MIT
+Roxygen: list(wrap = FALSE)

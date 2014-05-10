@@ -3,12 +3,12 @@
 \alias{\%>>\%}
 \title{Pipe an object forward as `.`}
 \usage{
-. \%>>\% f
+. \%>>\% expr
 }
 \arguments{
 \item{.}{The object to be piped as represented by \code{.}}
 
-\item{f}{The expression to evaluate with the piped object referred to as \code{.}}
+\item{expr}{The expression to evaluate with the piped object referred to as \code{.}}
 }
 \description{
 The operator \code{\%>>\%} pipes the left-hand side foward
