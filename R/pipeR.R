@@ -1,11 +1,10 @@
 #' Pipe an object forward as the first argument to a function
 #'
-#' The \code{\%>\%} operator pipes the left-hand side foward
-#' and evaluates the call expression on the right-hand side
-#' with the left-hand side object as the first argument.
+#' The \code{\%>\%} operator evaluates the function call on the right-hand side
+#' with the left-hand side object being the first argument.
 #'
 #' @param . The object to be piped as the first argument
-#' @param fun The expression to evaluate with the piped object as the first argument.
+#' @param fun The function call to evaluate with the piped object as the first argument.
 #' @name %>%
 #' @export
 #' @examples
@@ -18,10 +17,9 @@
 #' }
 `%>%` <- .pipe
 
-#' Pipe an object forward as `.`
+#' Pipe an object forward as `.` to an expression
 #'
-#' The operator \code{\%>>\%} pipes the left-hand side foward
-#' and evaluates the call expression on the right-hand side
+#' The operator \code{\%>>\%} evaluates the expression on the right-hand side
 #' with the left-hand side object referred to as \code{.}.
 #'
 #' @param . The object to be piped as represented by \code{.}
@@ -34,10 +32,10 @@
 #'
 #' rnorm(100) %>>% plot(.,col="red")
 #'
-#' rnorm(1000) %>>% sample(.,length(.)/20,F)
+#' rnorm(1000) %>>% sample(.,size=length(.)*0.1,replace=FALSE)
 #'
 #' rnorm(1000) %>>%
-#'   sample(.,length(.)/20,F) %>>%
+#'   sample(.,length(.)*0.1,FALSE) %>>%
 #'   plot(.,main=sprintf("length: %d",length(.)))
 #' }
 `%>>%` <- .fpipe
@@ -46,7 +44,7 @@
 #'
 #' The operator \code{\%|>\%} pipes the left-hand side to the
 #' symbol defined by the lambda expression on the right-hand side
-#' and evaluates that expression.
+#' and evaluates the target expression.
 #'
 #' @param . The object to be piped
 #' @param lambda The lambda expression which should always be in the form like \(x ~ g\(x\)\)

@@ -2,6 +2,16 @@
 
 Pipeline operators for R: Making command chaining flexible and straightforward
 
+## Installation
+
+This package is not released to CRAN. You may install it through `devtools`.
+
+```
+if(!require(devtools)) install.packages("devtools")
+require(devtools)
+install_github("pipeR","renkun-ken")
+```
+
 ## Motivation
 
 In data-driven statistical computing and analysis, applying a chain of commands is a frequent situation. Consider the following example.
@@ -165,16 +175,6 @@ The reason why the three operators are not "integrated" into one is that I want 
 1. `%>%` only pipes an object to the first-argument of the next *function*, that is, `x %>% f(...)` runs as `f(x,...)`.
 2. `%>>%` only evaluates the next *expression* with `.` representing the object being piped, that is, `x %>>% f(a,.,g(.))` runs as `f(a,x,g(x))`.
 3. `%|>%` only evaluates the *expression* on the right-hand side of `~` in the lambda expression formula with symbol on the left representing the object being piped, that is, `x %|>% (a ~ f(a,g(a)))` runs as `f(x,g(x))`.
-
-## Installation
-
-This package is not released to CRAN. You may install it through `devtools`.
-
-```
-if(!require(devtools)) install.packages("devtools")
-require(devtools)
-install_github("pipeR","renkun-ken")
-```
 
 ## Help overview
 

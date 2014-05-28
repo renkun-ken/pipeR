@@ -4,8 +4,8 @@ Title: Pipeline operators for R
 Description: Provides operators for chaining commands with various
   forward-piping mechanisms: first-argument piping, free piping, and
   lambda piping.
-Version: 0.2-2
-Date: 2014-05-08
+Version: 0.2-3
+Date: 2014-05-28
 Author: Kun Ren <renkun@outlook.com>
 Maintainer: Kun Ren <renkun@outlook.com>
 Suggests: dplyr
