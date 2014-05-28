@@ -37,6 +37,16 @@
 <p>Pipeline operators for R: Making command chaining flexible and straightforward</p>
 
 <h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>This package is not released to CRAN. You may install it through <code>devtools</code>.</p>
+
+<pre><code>if(!require(devtools)) install.packages("devtools")
+require(devtools)
+install_github("pipeR","renkun-ken")
+</code></pre>
+
+<h2>
 <a name="motivation" class="anchor" href="#motivation"><span class="octicon octicon-link"></span></a>Motivation</h2>
 
 <p>In data-driven statistical computing and analysis, applying a chain of commands is a frequent situation. Consider the following example.</p>
@@ -205,16 +215,6 @@ hflights %&gt;%
 <li>
 <code>%|&gt;%</code> only evaluates the <em>expression</em> on the right-hand side of <code>~</code> in the lambda expression formula with symbol on the left representing the object being piped, that is, <code>x %|&gt;% (a ~ f(a,g(a)))</code> runs as <code>f(x,g(x))</code>.</li>
 </ol><h2>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
-
-<p>This package is not released to CRAN. You may install it through <code>devtools</code>.</p>
-
-<pre><code>if(!require(devtools)) install.packages("devtools")
-require(devtools)
-install_github("pipeR","renkun-ken")
-</code></pre>
-
-<h2>
 <a name="help-overview" class="anchor" href="#help-overview"><span class="octicon octicon-link"></span></a>Help overview</h2>
 
 <pre><code>help(package = pipeR)
