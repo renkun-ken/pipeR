@@ -4,12 +4,16 @@ Pipeline operators for R: Making command chaining flexible and straightforward
 
 ## Installation
 
-This package is not released to CRAN. You may install it through `devtools`.
+Install from CRAN:
 
 ```
-if(!require(devtools)) install.packages("devtools")
-require(devtools)
-install_github("pipeR","renkun-ken")
+install.packages("pipeR")
+```
+
+Install the devel version from GitHub (`devtools` package is required):
+
+```
+devtools::install_github("pipeR","renkun-ken")
 ```
 
 ## Motivation
