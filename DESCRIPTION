@@ -1,14 +1,22 @@
 Package: pipeR
 Type: Package
 Title: Pipeline operators for R
-Description: Provides operators for chaining commands with various
-  forward-piping mechanisms: first-argument piping, free piping, and
-  lambda piping.
-Version: 0.2-3
-Date: 2014-05-28
+Version: 0.2-4
 Author: Kun Ren <renkun@outlook.com>
 Maintainer: Kun Ren <renkun@outlook.com>
-Suggests: dplyr
+Description: Provides operators for chaining
+    commands with various forward-piping
+    mechanisms: first-argument piping, free piping,
+    and lambda piping.
+Depends:
+    R (>= 2.14)
+Date: 2014-05-31
+Suggests:
+    dplyr,
+    ggvis
 Enhances: magrittr
-License: MIT
+License: MIT + file LICENSE
+URL: http://renkun.me/pipeR,
+    https://github.com/renkun-ken/pipeR
+BugReports: https://github.com/renkun-ken/pipeR/issues
 Roxygen: list(wrap = FALSE)

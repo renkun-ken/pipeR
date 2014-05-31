@@ -5,7 +5,7 @@
 #'
 #' @param . The object to be piped as the first argument
 #' @param fun The function call to evaluate with the piped object as the first argument.
-#' @name %>%
+#' @name first-argument piping
 #' @export
 #' @examples
 #' \dontrun{
@@ -24,7 +24,7 @@
 #'
 #' @param . The object to be piped as represented by \code{.}
 #' @param expr The expression to evaluate with the piped object referred to as \code{.}
-#' @name %>>%
+#' @name free-piping
 #' @export
 #' @examples
 #' \dontrun{
@@ -48,7 +48,7 @@
 #'
 #' @param . The object to be piped
 #' @param lambda The lambda expression which should always be in the form like \(x ~ g\(x\)\)
-#' @name %|>%
+#' @name lambda-piping
 #' @export
 #' @examples
 #' \dontrun{
