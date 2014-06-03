@@ -69,72 +69,72 @@
 
 <p>The code is neither straightforward for reading nor flexible for modification. It is because the functions in the first few steps are hiding in the nested brackets, and the written order of the functions goes against the order of logic.</p>
 
-<p>pipeR borrows the idea of F# pipeline operator which allows you to write the <em>object</em> first and <em>pipe</em> it to a following <em>function</em>. This package defines three binary pipe operators that provide different types of forward-piping mechanisms: first-argument piping (<code>%&gt;%</code>), free piping (<code>%&gt;&gt;%</code>), and lambda piping (<code>%|&gt;%</code>). And the real magic of this kind of operators is chaining commands by the right order.</p>
+<p>pipeR borrows the idea of F# pipeline operator which allows you to write the <em>object</em> first and <em>pipe</em> it to a following <em>function</em>. This package defines three binary pipe operators that provide different types of forward-piping mechanisms: first-argument piping (<code>%&gt;&gt;%</code>), free piping (<code>%:&gt;%</code>), and lambda piping (<code>%|&gt;%</code>). And the real magic of this kind of operators is chaining commands by the right order.</p>
 
 <h3>
-<a name="first-argument-piping-" class="anchor" href="#first-argument-piping-"><span class="octicon octicon-link"></span></a>First-argument piping: <code>%&gt;%</code>
+<a name="first-argument-piping-" class="anchor" href="#first-argument-piping-"><span class="octicon octicon-link"></span></a>First-argument piping: <code>%&gt;&gt;%</code>
 </h3>
 
-<p>The first-argument pipe operator <code>%&gt;%</code> inserts the expression on the left-hand side to the first argument of the <strong>function</strong> on the right-hand side. In other words, <code>x %&gt;% f(a=1)</code> will be transformed to and be evaluated as <code>f(x,a=1)</code>. This operator accepts both function call, e.g. <code>plot()</code> or <code>plot(col="red")</code>, and function name, e.g. <code>log</code> or <code>plot</code>.</p>
+<p>The first-argument pipe operator <code>%&gt;&gt;%</code> inserts the expression on the left-hand side to the first argument of the <strong>function</strong> on the right-hand side. In other words, <code>x %&gt;&gt;% f(a=1)</code> will be transformed to and be evaluated as <code>f(x,a=1)</code>. This operator accepts both function call, e.g. <code>plot()</code> or <code>plot(col="red")</code>, and function name, e.g. <code>log</code> or <code>plot</code>.</p>
 
-<pre><code>rnorm(100) %&gt;% plot
+<pre><code>rnorm(100) %&gt;&gt;% plot
 # plot(rnorm(100))
 
-rnorm(100) %&gt;% plot()
+rnorm(100) %&gt;&gt;% plot()
 # plot(rnorm(100))
 
-rnorm(100) %&gt;% plot(col="red")
+rnorm(100) %&gt;&gt;% plot(col="red")
 # plot(rnorm(100),col="red")
 
-rnorm(100) %&gt;% sample(size=100,replace=FALSE) %&gt;% hist
+rnorm(100) %&gt;&gt;% sample(size=100,replace=FALSE) %&gt;&gt;% hist
 # hist(sample(rnorm(100),size=100,replace=FALSE))
 </code></pre>
 
-<p>With the first-argument pipe operator <code>%&gt;%</code>, you may rewrite the first example as</p>
+<p>With the first-argument pipe operator <code>%&gt;&gt;%</code>, you may rewrite the first example as</p>
 
-<pre><code>rnorm(10000,mean=10,sd=1) %&gt;%
-  sample(size=100,replace=FALSE) %&gt;%
-  log %&gt;%
-  diff %&gt;%
+<pre><code>rnorm(10000,mean=10,sd=1) %&gt;&gt;%
+  sample(size=100,replace=FALSE) %&gt;&gt;%
+  log %&gt;&gt;%
+  diff %&gt;&gt;%
   plot(col="red",type="l")
 </code></pre>
 
 <h3>
-<a name="free-piping-" class="anchor" href="#free-piping-"><span class="octicon octicon-link"></span></a>Free piping: <code>%&gt;&gt;%</code>
+<a name="free-piping-" class="anchor" href="#free-piping-"><span class="octicon octicon-link"></span></a>Free piping: <code>%:&gt;%</code>
 </h3>
 
-<p>You may not always want to pipe the object to the first argument of the next function. Then you can use free pipe operator <code>%&gt;&gt;%</code>, which takes <code>.</code> to represent the piped object on the left-hand side and evaluate the <em>expression</em> on the right-hand side with <code>.</code> as the piped object. In other words, you have the right to decide where the object should be piped to.</p>
+<p>You may not always want to pipe the object to the first argument of the next function. Then you can use free pipe operator <code>%:&gt;%</code>, which takes <code>.</code> to represent the piped object on the left-hand side and evaluate the <em>expression</em> on the right-hand side with <code>.</code> as the piped object. In other words, you have the right to decide where the object should be piped to.</p>
 
-<pre><code>rnorm(100) %&gt;&gt;% plot(.)
+<pre><code>rnorm(100) %:&gt;% plot(.)
 # plot(rnorm(100))
 
-rnorm(100) %&gt;&gt;% plot(., col="red")
+rnorm(100) %:&gt;% plot(., col="red")
 # plot(rnorm(100),col="red")
 
-rnorm(100) %&gt;&gt;% sample(., size=length(.)*0.5)
+rnorm(100) %:&gt;% sample(., size=length(.)*0.5)
 # (`.` is piped to multiple places)
 
-mtcars %&gt;&gt;% lm(mpg ~ cyl + disp, data=.) %&gt;% summary
+mtcars %:&gt;% lm(mpg ~ cyl + disp, data=.) %&gt;&gt;% summary
 # summary(lm(mgp ~ cyl + disp, data=mtcars))
 
-rnorm(100) %&gt;&gt;% 
-  sample(.,length(.)*0.2,FALSE) %&gt;&gt;% 
+rnorm(100) %:&gt;% 
+  sample(.,length(.)*0.2,FALSE) %:&gt;% 
   plot(.,main=sprintf("length: %d",length(.)))
 # (`.` is piped to multiple places and mutiple levels)
 
-rnorm(100) %&gt;&gt;% {
+rnorm(100) %:&gt;% {
   par(mfrow=c(1,2))
   hist(.,main="hist")
   plot(.,col="red",main=sprintf("%d",length(.)))
 }
 # (`.` is piped to an enclosed expression)
 
-rnorm(10000,mean=10,sd=1) %&gt;&gt;%
-  sample(.,size=length(.)/500,replace=FALSE) %&gt;%
-  log %&gt;%
-  diff %&gt;&gt;%
+rnorm(10000,mean=10,sd=1) %:&gt;%
+  sample(.,size=length(.)/500,replace=FALSE) %&gt;&gt;%
+  log %&gt;&gt;%
+  diff %:&gt;%
   plot(.,col="red",type="l",main=sprintf("length: %d",length(.)))
-# (`%&gt;%` and `%&gt;&gt;%` are used together. Be clear what they mean)
+# (`%&gt;&gt;%` and `%:&gt;%` are used together. Be clear what they mean)
 </code></pre>
 
 <h3>
@@ -143,17 +143,17 @@ rnorm(10000,mean=10,sd=1) %&gt;&gt;%
 
 <p>It can be confusing to see multiple <code>.</code> symbols in the same context. In some cases, they may represent different things in the same expression. Even though the expression mostly still works, it may not be a good idea to keep it in that way. Here is an example:</p>
 
-<pre><code>mtcars %&gt;&gt;%
-  lm(mpg ~ ., data=.) %&gt;%
+<pre><code>mtcars %:&gt;%
+  lm(mpg ~ ., data=.) %&gt;&gt;%
   summary
 </code></pre>
 
-<p>The code above works correctly with <code>%&gt;&gt;%</code> and <code>%&gt;%</code>, even though the two dots in the second line have different meanings. <code>.</code> in formula <code>mpg ~ .</code> represents all variables other than <code>mpg</code> in data frame <code>mtcars</code>; <code>.</code> in <code>data=.</code> represents <code>mtcars</code> itself. One way to reduce ambiguity is to use <em>lambda expression</em> that names the piped object on the left of <code>~</code> and specifies the expression to evaluate on the right.</p>
+<p>The code above works correctly with <code>%:&gt;%</code> and <code>%&gt;&gt;%</code>, even though the two dots in the second line have different meanings. <code>.</code> in formula <code>mpg ~ .</code> represents all variables other than <code>mpg</code> in data frame <code>mtcars</code>; <code>.</code> in <code>data=.</code> represents <code>mtcars</code> itself. One way to reduce ambiguity is to use <em>lambda expression</em> that names the piped object on the left of <code>~</code> and specifies the expression to evaluate on the right.</p>
 
 <p>A new pipe operator <code>%|&gt;%</code> is defined, which works with lambda expression in the formula form <code>x ~ f(x)</code>. More specifically, the expression will be interpreted as <em><code>f(x)</code> is evaluated with <code>x</code> being the piped object</em>. Therefore, the previous example can be rewritten with <code>%|&gt;%</code> like this:</p>
 
 <pre><code>mtcars %|&gt;%
-  (df ~ lm(mpg ~ ., data=df)) %&gt;%
+  (df ~ lm(mpg ~ ., data=df)) %&gt;&gt;%
   summary
 </code></pre>
 
@@ -176,15 +176,15 @@ mtcars %|&gt;%
 <p>All the pipe operators can be used together and each of them only works in their own way.</p>
 
 <pre><code>mtcars %|&gt;%
-  (df ~ lm(mpg ~ ., data=df)) %&gt;%
-  summary %&gt;&gt;%
+  (df ~ lm(mpg ~ ., data=df)) %&gt;&gt;%
+  summary %:&gt;%
   .$fstatistic
 </code></pre>
 
 <h3>
 <a name="piping-with-dplyr-package" class="anchor" href="#piping-with-dplyr-package"><span class="octicon octicon-link"></span></a>Piping with <code>dplyr</code> package</h3>
 
-<p><code>dplyr</code> package provides a group of functions that make data transformation much easier. <code>%.%</code> is a built-in chain operator that pipes the previous result to the first-argument in the next function call. <code>%&gt;%</code> is fully compatible with <code>dplyr</code> and can replace <code>%.%</code> with more consistency.</p>
+<p><code>dplyr</code> package provides a group of functions that make data transformation much easier. <code>%.%</code> is a built-in chain operator that pipes the previous result to the first-argument in the next function call. <code>%&gt;&gt;%</code> is fully compatible with <code>dplyr</code> and can replace <code>%.%</code> with more consistency.</p>
 
 <p>The following code demonstrates mixed piping with <code>dplyr</code> functions.</p>
 
@@ -193,14 +193,14 @@ library(hflights)
 library(pipeR)
 data(hflights)
 
-hflights %&gt;%
-  mutate(Speed=Distance/ActualElapsedTime) %&gt;%
-  group_by(UniqueCarrier) %&gt;%
+hflights %&gt;&gt;%
+  mutate(Speed=Distance/ActualElapsedTime) %&gt;&gt;%
+  group_by(UniqueCarrier) %&gt;&gt;%
   summarize(n=length(Speed),speed.mean=mean(Speed,na.rm = T),
     speed.median=median(Speed,na.rm=T),
-    speed.sd=sd(Speed,na.rm=T)) %&gt;%
-  mutate(speed.ssd=speed.mean/speed.sd) %&gt;%
-  arrange(desc(speed.ssd)) %&gt;&gt;%
+    speed.sd=sd(Speed,na.rm=T)) %&gt;&gt;%
+  mutate(speed.ssd=speed.mean/speed.sd) %&gt;&gt;%
+  arrange(desc(speed.ssd)) %:&gt;%
   barplot(.$speed.ssd, names.arg = .$UniqueCarrier,
     main=sprintf("Standardized mean of %d carriers", nrow(.)))
 </code></pre>
@@ -212,12 +212,17 @@ hflights %&gt;%
 
 <ol>
 <li>
-<code>%&gt;%</code> only pipes an object to the first-argument of the next <em>function</em>, that is, <code>x %&gt;% f(...)</code> runs as <code>f(x,...)</code>.</li>
+<code>%&gt;&gt;%</code> only pipes an object to the first-argument of the next <em>function</em>, that is, <code>x %&gt;&gt;% f(...)</code> runs as <code>f(x,...)</code>.</li>
 <li>
-<code>%&gt;&gt;%</code> only evaluates the next <em>expression</em> with <code>.</code> representing the object being piped, that is, <code>x %&gt;&gt;% f(a,.,g(.))</code> runs as <code>f(a,x,g(x))</code>.</li>
+<code>%:&gt;%</code> only evaluates the next <em>expression</em> with <code>.</code> representing the object being piped, that is, <code>x %:&gt;% f(a,.,g(.))</code> runs as <code>f(a,x,g(x))</code>.</li>
 <li>
 <code>%|&gt;%</code> only evaluates the <em>expression</em> on the right-hand side of <code>~</code> in the lambda expression formula with symbol on the left representing the object being piped, that is, <code>x %|&gt;% (a ~ f(a,g(a)))</code> runs as <code>f(x,g(x))</code>.</li>
 </ol><h2>
+<a name="performance" class="anchor" href="#performance"><span class="octicon octicon-link"></span></a>Performance</h2>
+
+<p>Since each pipe operators defined in this package specializes in its work and is made as simple as possible, the overhead is significantly lower than its peer implmentation in <code>magrittr</code> package. In general, <code>pipeR</code> is more than 3 times faster than <code>magrittr</code> and can be more than 30 times faster when the pipeline gets longer or when the data gets bigger. The detailed performance tests can be seen in issues.</p>
+
+<h2>
 <a name="help-overview" class="anchor" href="#help-overview"><span class="octicon octicon-link"></span></a>Help overview</h2>
 
 <pre><code>help(package = pipeR)
