@@ -1,0 +1,66 @@
+v0.3 (2014-06-03)
+===
+Major operator change
+
+To avoid naming conflict with magrittr package (issue #12), the first-argument pipe operator is changed to `%>>%` and free pipe operator with dot is changed to `%:>%`. Now the three operators are:
+
+First-argument piping: `%>>%`
+Free piping: `%:>%`
+Lambda piping: `%|>%`
+
+Now this package can perfectly coexist with magritter and dplyr but is not backward compatible with previous code if old operators are used, please notify the potential issues and upgrade to the new set of operators if possible.
+
+
+
+v0.2-4 (2014-05-31)
+===
+Refined to adapt to CRAN standards.
+
+
+
+v0.2-3 (2014-05-28)
+===
+Minor changes to function descriptions
+
+
+
+v0.2-2 (2014-05-08)
+===
+This is a major refine of code for better compatibility.
+
+Resolved issue #9 and #5.
+
+Now the code is highly compatible with functions that have ... as an argument.
+
+
+
+v0.2-1 (2014-05-07)
+===
+This version is not compatible with v0.2 due to the switch of lambda expression symbol from `->` to `~`.
+
+The reason is that using ~ directly refers to formula object that is more well defined and usable in this case, which does not diminish any feature in v0.2 but allows lambda expressions to store in symbols.
+
+
+
+
+v0.2 (2014-04-21)
+===
+1. Add lambda piping `%|>%`
+```
+mtcars %|>%
+  (df -> lm(mpg ~ ., data=df))
+```
+2. `%>>%` no longer allows naked function calling
+```
+rnorm(100,10,1) %>>% log %>>% diff
+```
+is no longer allowed. You should always use `%>%` to call by function name like
+```
+rnorm(100,10,1) %>% log %>% diff
+```
+
+
+
+v0.1 (2014-04-08)
+===
+Initial release
