@@ -12,8 +12,7 @@ Depends:
     R (>= 2.14)
 Date: 2014-06-03
 Suggests:
-    plyr,dplyr,testthat
-Enhances: magrittr
+    testthat
 License: MIT + file LICENSE
 URL: http://renkun.me/pipeR,
     https://github.com/renkun-ken/pipeR
