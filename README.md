@@ -1,5 +1,7 @@
 # pipeR
 
+[![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR)
+
 Pipeline operators for R: Making command chaining flexible and straightforward
 
 ## What's New?
