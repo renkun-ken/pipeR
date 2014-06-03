@@ -1,6 +1,6 @@
 #' Pipe an object forward as the first argument to a function
 #'
-#' The \code{\%>\%} operator evaluates the function call on the right-hand side
+#' The \code{\%>>\%} operator evaluates the function call on the right-hand side
 #' with the left-hand side object being the first argument.
 #'
 #' @param . The object to be piped as the first argument
@@ -9,17 +9,17 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' rnorm(100) %>% plot
+#' rnorm(100) %>>% plot
 #'
-#' rnorm(100) %>% plot(col="red")
+#' rnorm(100) %>>% plot(col="red")
 #'
-#' rnorm(1000) %>% sample(size=100,replace=F) %>% hist
+#' rnorm(1000) %>>% sample(size=100,replace=F) %>>% hist
 #' }
-`%>%` <- .pipe
+`%>>%` <- .pipe
 
 #' Pipe an object forward as `.` to an expression
 #'
-#' The operator \code{\%>>\%} evaluates the expression on the right-hand side
+#' The operator \code{\%:>\%} evaluates the expression on the right-hand side
 #' with the left-hand side object referred to as \code{.}.
 #'
 #' @param . The object to be piped as represented by \code{.}
@@ -28,17 +28,17 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' rnorm(100) %>>% plot(.)
+#' rnorm(100) %:>% plot(.)
 #'
-#' rnorm(100) %>>% plot(.,col="red")
+#' rnorm(100) %:>% plot(.,col="red")
 #'
-#' rnorm(1000) %>>% sample(.,size=length(.)*0.1,replace=FALSE)
+#' rnorm(1000) %:>% sample(.,size=length(.)*0.1,replace=FALSE)
 #'
-#' rnorm(1000) %>>%
+#' rnorm(1000) %:>%
 #'   sample(.,length(.)*0.1,FALSE) %>>%
 #'   plot(.,main=sprintf("length: %d",length(.)))
 #' }
-`%>>%` <- .fpipe
+`%:>%` <- .fpipe
 
 #' Pipe an object by lambda expression
 #'
