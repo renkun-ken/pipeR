@@ -2,6 +2,12 @@
 
 Pipeline operators for R: Making command chaining flexible and straightforward
 
+## What's New?
+
+**Major operator change** (See issue [#12](https://github.com/renkun-ken/pipeR/issues/12))
+
+[Release notes](https://github.com/renkun-ken/pipeR/releases)
+
 ## Installation
 
 Install from CRAN:
