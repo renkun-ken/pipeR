@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR)
 
-Pipeline operators for R: Making command chaining flexible and straightforward
+Specialized, high-performance pipeline operators for R: Making command chaining fast, flexible and straightforward
 
 ## What's New?
 
@@ -24,27 +24,7 @@ Install the devel version from GitHub (`devtools` package is required):
 devtools::install_github("pipeR","renkun-ken")
 ```
 
-## Motivation
-
-In data-driven statistical computing and analysis, applying a chain of commands is a frequent situation. Consider the following example.
-
-Suppose we need to take these steps:
-
-1. Generate 10000 random numbers from normal distribution with mean 10 and standard deviation 1
-2. Take a sample of 100 without replacement from these numbers
-3. Take a log of the sample
-4. Take a difference of the log numbers
-5. Plot these log differences with red line segments.
-
-Here is the ordinary way we do this in R programming langauge:
-
-```
-plot(diff(log(sample(rnorm(10000,mean=10,sd=1),size=100,replace=FALSE))),col="red",type="l")
-```
-
-The code is neither straightforward for reading nor flexible for modification. It is because the functions in the first few steps are hiding in the nested brackets, and the written order of the functions goes against the order of logic.
-
-pipeR borrows the idea of F# pipeline operator which allows you to write the *object* first and *pipe* it to a following *function*. This package defines three binary pipe operators that provide different types of forward-piping mechanisms: first-argument piping (`%>>%`), free piping (`%:>%`), and lambda piping (`%|>%`). And the real magic of this kind of operators is chaining commands by the right order.
+## Getting started
 
 ### First-argument piping: `%>>%`
 
@@ -64,7 +44,7 @@ rnorm(100) %>>% sample(size=100,replace=FALSE) %>>% hist
 # hist(sample(rnorm(100),size=100,replace=FALSE))
 ```
 
-With the first-argument pipe operator `%>>%`, you may rewrite the first example as
+With the first-argument pipe operator `%>>%`, you can write code like
 
 ```
 rnorm(10000,mean=10,sd=1) %>>%
@@ -104,7 +84,7 @@ rnorm(100) %:>% {
 # (`.` is piped to an enclosed expression)
 
 rnorm(10000,mean=10,sd=1) %:>%
-  sample(.,size=length(.)/500,replace=FALSE) %>>%
+  sample(.,size=length(.)*0.2,replace=FALSE) %>>%
   log %>>%
   diff %:>%
   plot(.,col="red",type="l",main=sprintf("length: %d",length(.)))
@@ -131,7 +111,7 @@ mtcars %|>%
   summary
 ```
 
-Moreover, we could store the lambda expressions by assigning the formula to symbols.
+Moreover, you can store the lambda expressions by assigning the formula to symbols.
 
 ```
 runlm <- df ~ lm(mpg ~ ., data=df)
@@ -158,7 +138,7 @@ mtcars %|>%
 
 ### Piping with `dplyr` package
 
-`dplyr` package provides a group of functions that make data transformation much easier. `%.%` is a built-in chain operator that pipes the previous result to the first-argument in the next function call. `%>>%` is fully compatible with `dplyr` and can replace `%.%` with more consistency.
+`dplyr` package provides a group of functions that make data transformation much easier. These operators are fully compatible with `dplyr` and provide higher performance than its default pipe operator.
 
 The following code demonstrates mixed piping with `dplyr` functions.
 
@@ -180,17 +160,13 @@ hflights %>>%
     main=sprintf("Standardized mean of %d carriers", nrow(.)))
 ```
 
-## Notice
-
-The reason why the three operators are not "integrated" into one is that I want to make the functionality of each operator as clear and independent as possible, so that guessing and ambiguity could be sharply reduced. When you decide to use pipe operators to build a chain of expressions, you need to know clearly how you want to pipe your results to the next level. The following bullets are a brief summary:
-
-1. `%>>%` only pipes an object to the first-argument of the next *function*, that is, `x %>>% f(...)` runs as `f(x,...)`.
-2. `%:>%` only evaluates the next *expression* with `.` representing the object being piped, that is, `x %:>% f(a,.,g(.))` runs as `f(a,x,g(x))`.
-3. `%|>%` only evaluates the *expression* on the right-hand side of `~` in the lambda expression formula with symbol on the left representing the object being piped, that is, `x %|>% (a ~ f(a,g(a)))` runs as `f(x,g(x))`.
-
 ## Performance
 
-Since each pipe operators defined in this package specializes in its work and is made as simple as possible, the overhead is significantly lower than its peer implmentation in `magrittr` package. In general, `pipeR` is more than 3 times faster than `magrittr` and can be more than 30 times faster when the pipeline gets longer or when the data gets bigger. The detailed performance tests can be seen in issues.
+Each operators defined in this package specializes in its work and is made as simple as possible, Therefore the overhead is significantly lower than its peer implmentation in `magrittr` package. 
+
+In general, `pipeR` is more than 3 times faster than `magrittr` and can be more than 30 times faster when the pipeline gets longer or when the data gets bigger. The detailed performance tests can be seen in issues.
+
+This package is only a simplified and specialized version of three types of pipeline operations. To assist your work, you can load both packages and use both set of functions and operators in practice.
 
 ## Help overview
 
