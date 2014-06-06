@@ -4,7 +4,7 @@
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="pipeR : Pipeline operators for R: Making command chaining flexible and straightforward" />
+    <meta name="description" content="pipeR : Specialized, high-performance pipeline operators for R" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -19,7 +19,7 @@
           <a id="forkme_banner" href="https://github.com/renkun-ken/pipeR">View on GitHub</a>
 
           <h1 id="project_title">pipeR</h1>
-          <h2 id="project_tagline">Pipeline operators for R: Making command chaining flexible and straightforward</h2>
+          <h2 id="project_tagline">Specialized, high-performance pipeline operators for R</h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/renkun-ken/pipeR/zipball/master">Download this project as a .zip file</a>
@@ -36,7 +36,7 @@
 
 <p><a href="https://travis-ci.org/renkun-ken/pipeR"><img src="https://travis-ci.org/renkun-ken/pipeR.png?branch=master" alt="Build Status"></a></p>
 
-<p>Pipeline operators for R: Making command chaining flexible and straightforward</p>
+<p>Specialized, high-performance pipeline operators for R: Making command chaining fast, flexible and straightforward</p>
 
 <h2>
 <a name="whats-new" class="anchor" href="#whats-new"><span class="octicon octicon-link"></span></a>What's New?</h2>
@@ -215,21 +215,13 @@ hflights %&gt;&gt;%
 </code></pre>
 
 <h2>
-<a name="notice" class="anchor" href="#notice"><span class="octicon octicon-link"></span></a>Notice</h2>
-
-<p>The reason why the three operators are not "integrated" into one is that I want to make the functionality of each operator as clear and independent as possible, so that guessing and ambiguity could be sharply reduced. When you decide to use pipe operators to build a chain of expressions, you need to know clearly how you want to pipe your results to the next level. The following bullets are a brief summary:</p>
-
-<ol>
-<li>
-<code>%&gt;&gt;%</code> only pipes an object to the first-argument of the next <em>function</em>, that is, <code>x %&gt;&gt;% f(...)</code> runs as <code>f(x,...)</code>.</li>
-<li>
-<code>%:&gt;%</code> only evaluates the next <em>expression</em> with <code>.</code> representing the object being piped, that is, <code>x %:&gt;% f(a,.,g(.))</code> runs as <code>f(a,x,g(x))</code>.</li>
-<li>
-<code>%|&gt;%</code> only evaluates the <em>expression</em> on the right-hand side of <code>~</code> in the lambda expression formula with symbol on the left representing the object being piped, that is, <code>x %|&gt;% (a ~ f(a,g(a)))</code> runs as <code>f(x,g(x))</code>.</li>
-</ol><h2>
 <a name="performance" class="anchor" href="#performance"><span class="octicon octicon-link"></span></a>Performance</h2>
 
-<p>Since each pipe operators defined in this package specializes in its work and is made as simple as possible, the overhead is significantly lower than its peer implmentation in <code>magrittr</code> package. In general, <code>pipeR</code> is more than 3 times faster than <code>magrittr</code> and can be more than 30 times faster when the pipeline gets longer or when the data gets bigger. The detailed performance tests can be seen in issues.</p>
+<p>Each operators defined in this package specializes in its work and is made as simple as possible, Therefore the overhead is significantly lower than its peer implmentation in <code>magrittr</code> package. </p>
+
+<p>In general, <code>pipeR</code> is more than 3 times faster than <code>magrittr</code> and can be more than 30 times faster when the pipeline gets longer or when the data gets bigger. The detailed performance tests can be seen in issues.</p>
+
+<p>This package is only a simplified and specialized version of three types of pipeline operations. To assist your work, you can load both packages and use both set of functions and operators in practice.</p>
 
 <h2>
 <a name="help-overview" class="anchor" href="#help-overview"><span class="octicon octicon-link"></span></a>Help overview</h2>
