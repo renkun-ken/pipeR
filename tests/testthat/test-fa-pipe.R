@@ -3,22 +3,16 @@ context("First-argument piping")
 test_that("First-argument piping works as expected", {
 
   # ordinary usages
-  expect_that(1:10 %>>% sin %>>% sum,
-    is_identical_to(sum(sin(1:10))))
-  expect_that(1:10 %>>% sin() %>>% sum(),
-    is_identical_to(sum(sin(1:10))))
-  expect_that(iris %>>% names,
-    is_identical_to(names(iris)))
-  expect_that(iris %>>% head(n=3),
-    is_identical_to(head(iris,n=3)))
-  expect_that("a" %>>% switch(a=1,b=2,c=3),
-    is_identical_to(switch("a",a=1,b=2,c=3)))
+  expect_identical(1:10 %>>% sin %>>% sum, sum(sin(1:10)))
+  expect_identical(1:10 %>>% sin() %>>% sum(), sum(sin(1:10)))
+  expect_identical(iris %>>% names, names(iris))
+  expect_identical(iris %>>% head(n=3),head(iris,n=3))
+  expect_identical("a" %>>% switch(a=1,b=2,c=3),switch("a",a=1,b=2,c=3))
 
   # working with higher-order functions
-  expect_that(1:5 %>>% lapply(function(i) i+1),
-    is_identical_to(lapply(1:5,function(i) i+1)))
-  expect_that(1:5 %>>% vapply(function(i) c(i,i^2),numeric(2)),
-    is_identical_to(vapply(1:5,function(i) c(i,i^2),numeric(2))))
+  expect_identical(1:5 %>>% lapply(function(i) i+1), lapply(1:5,function(i) i+1))
+  expect_identical(1:5 %>>% vapply(function(i) c(i,i^2),numeric(2)),
+    vapply(1:5,function(i) c(i,i^2),numeric(2)))
 
   # working with ...
   fun1 <- function(x,a,b) {
@@ -29,6 +23,5 @@ test_that("First-argument piping works as expected", {
     fun1(x,...)
   }
 
-  expect_that(1:10 %>>% fun2(a=-1,b=1),
-    is_identical_to(fun1(1:10,a=-1,b=1)))
+  expect_identical(1:10 %>>% fun2(a=-1,b=1), fun1(1:10,a=-1,b=1))
 })
