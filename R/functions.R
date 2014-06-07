@@ -5,13 +5,13 @@
 }
 
 .fpipe <- function(.,expr) {
-  env <- new.env(parent = parent.frame())
-  env$. <- .
+  env <- new.env(hash = FALSE,parent = parent.frame(),size = 1)
+  assign(".",.,envir = env,inherits = FALSE)
   eval(substitute(expr),envir = env,enclos = baseenv())
 }
 
 .lpipe <- function(.,lambda) {
-  env <- new.env(parent = parent.frame())
-  assign(as.character(lambda[[2]]),.,envir = env)
+  env <- new.env(hash = FALSE,parent = parent.frame(),size = 1)
+  assign(as.character(lambda[[2]]),.,envir = env,inherits = FALSE)
   eval(lambda[[3]],envir = env,enclos = baseenv())
 }
