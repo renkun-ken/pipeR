@@ -17,7 +17,7 @@
 #' }
 `%>>%` <- .pipe
 
-#' Pipe an object forward as `.` to an expression
+#' Pipe an object forward as \code{.} to an expression
 #'
 #' The operator \code{\%:>\%} evaluates the expression on the right-hand side
 #' with the left-hand side object referred to as \code{.}.

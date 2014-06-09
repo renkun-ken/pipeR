@@ -2,7 +2,7 @@
 \name{free-piping}
 \alias{\%:>\%}
 \alias{free-piping}
-\title{Pipe an object forward as `.` to an expression}
+\title{Pipe an object forward as \code{.} to an expression}
 \usage{
 . \%:>\% expr
 }
