@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR)
 
-Specialized, high-performance pipeline operators for R: Making command chaining fast, flexible and straightforward
+Specialized, high-performance pipeline operators for R: making command chaining clear, fast, readable and flexible.
 
 ## What's New?
 
@@ -162,11 +162,7 @@ hflights %>>%
 
 ## Performance
 
-Each operators defined in this package specializes in its work and is made as simple as possible, Therefore the overhead is significantly lower than its peer implmentation in `magrittr` package. 
-
-In general, `pipeR` is more than 3 times faster than `magrittr` and can be more than 30 times faster when the pipeline gets longer or when the data gets bigger. The detailed performance tests can be seen in issues.
-
-This package is only a simplified and specialized version of three types of pipeline operations. To assist your work, you can load both packages and use both set of functions and operators in practice.
+Each operator defined in this package specializes in its work and is made as simple as possible. Therefore the overhead is extremely low and their performance is very close to traditional approach. This allow you to build long pipelines and perform intensive computations without worrying much about the performance cost of it.
 
 ## Help overview
 
