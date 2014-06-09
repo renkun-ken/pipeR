@@ -7,8 +7,8 @@ Maintainer: Kun Ren <renkun@outlook.com>
 Description: Provides specialized, high-performance operators
     for chaining commands with three forward-piping
     operations: first-argument piping, free piping,
-    and lambda piping, making command chaining fast,
-    flexible and straightforward.
+    and lambda piping, making command chaining clear,
+    fast, flexible and readable.
 Depends:
     R (>= 2.14)
 Date: 2014-06-03
@@ -19,3 +19,4 @@ URL: http://renkun.me/pipeR,
     https://github.com/renkun-ken/pipeR
 BugReports: https://github.com/renkun-ken/pipeR/issues
 Roxygen: list(wrap = FALSE)
+ByteCompile: TRUE
