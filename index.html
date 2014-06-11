@@ -50,13 +50,13 @@
 
 <p>Install from CRAN:</p>
 
-<pre><code>install.packages("pipeR")
-</code></pre>
+<div class="highlight highlight-s"><pre>install.packages<span class="p">(</span><span class="s">"pipeR"</span><span class="p">)</span>
+</pre></div>
 
 <p>Install the devel version from GitHub (<code>devtools</code> package is required):</p>
 
-<pre><code>devtools::install_github("pipeR","renkun-ken")
-</code></pre>
+<div class="highlight highlight-s"><pre>devtools<span class="o">::</span>install_github<span class="p">(</span><span class="s">"pipeR"</span><span class="p">,</span><span class="s">"renkun-ken"</span><span class="p">)</span>
+</pre></div>
 
 <h2>
 <a name="motivation" class="anchor" href="#motivation"><span class="octicon octicon-link"></span></a>Motivation</h2>
@@ -73,8 +73,8 @@
 <li>Plot these log differences with red line segments.</li>
 </ol><p>Here is the ordinary way we do this in R programming langauge:</p>
 
-<pre><code>plot(diff(log(sample(rnorm(10000,mean=10,sd=1),size=100,replace=FALSE))),col="red",type="l")
-</code></pre>
+<div class="highlight highlight-s"><pre>plot<span class="p">(</span>diff<span class="p">(</span>log<span class="p">(</span>sample<span class="p">(</span>rnorm<span class="p">(</span><span class="m">10000</span><span class="p">,</span>mean<span class="o">=</span><span class="m">10</span><span class="p">,</span>sd<span class="o">=</span><span class="m">1</span><span class="p">),</span>size<span class="o">=</span><span class="m">100</span><span class="p">,</span>replace<span class="o">=</span><span class="kc">FALSE</span><span class="p">))),</span>col<span class="o">=</span><span class="s">"red"</span><span class="p">,</span>type<span class="o">=</span><span class="s">"l"</span><span class="p">)</span>
+</pre></div>
 
 <p>The code is neither straightforward for reading nor flexible for modification. It is because the functions in the first few steps are hiding in the nested brackets, and the written order of the functions goes against the order of logic.</p>
 
@@ -86,27 +86,27 @@
 
 <p>The first-argument pipe operator <code>%&gt;&gt;%</code> inserts the expression on the left-hand side to the first argument of the <strong>function</strong> on the right-hand side. In other words, <code>x %&gt;&gt;% f(a=1)</code> will be transformed to and be evaluated as <code>f(x,a=1)</code>. This operator accepts both function call, e.g. <code>plot()</code> or <code>plot(col="red")</code>, and function name, e.g. <code>log</code> or <code>plot</code>.</p>
 
-<pre><code>rnorm(100) %&gt;&gt;% plot
-# plot(rnorm(100))
+<div class="highlight highlight-s"><pre>rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span> plot
+<span class="c1"># plot(rnorm(100))</span>
 
-rnorm(100) %&gt;&gt;% plot()
-# plot(rnorm(100))
+rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span> plot<span class="p">()</span>
+<span class="c1"># plot(rnorm(100))</span>
 
-rnorm(100) %&gt;&gt;% plot(col="red")
-# plot(rnorm(100),col="red")
+rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span> plot<span class="p">(</span>col<span class="o">=</span><span class="s">"red"</span><span class="p">)</span>
+<span class="c1"># plot(rnorm(100),col="red")</span>
 
-rnorm(100) %&gt;&gt;% sample(size=100,replace=FALSE) %&gt;&gt;% hist
-# hist(sample(rnorm(100),size=100,replace=FALSE))
-</code></pre>
+rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span> sample<span class="p">(</span>size<span class="o">=</span><span class="m">100</span><span class="p">,</span>replace<span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span> hist
+<span class="c1"># hist(sample(rnorm(100),size=100,replace=FALSE))</span>
+</pre></div>
 
 <p>With the first-argument pipe operator <code>%&gt;&gt;%</code>, you may rewrite the first example as</p>
 
-<pre><code>rnorm(10000,mean=10,sd=1) %&gt;&gt;%
-  sample(size=100,replace=FALSE) %&gt;&gt;%
-  log %&gt;&gt;%
-  diff %&gt;&gt;%
-  plot(col="red",type="l")
-</code></pre>
+<div class="highlight highlight-s"><pre>rnorm<span class="p">(</span><span class="m">10000</span><span class="p">,</span>mean<span class="o">=</span><span class="m">10</span><span class="p">,</span>sd<span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+  sample<span class="p">(</span>size<span class="o">=</span><span class="m">100</span><span class="p">,</span>replace<span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+  log <span class="o">%&gt;&gt;%</span>
+  diff <span class="o">%&gt;&gt;%</span>
+  plot<span class="p">(</span>col<span class="o">=</span><span class="s">"red"</span><span class="p">,</span>type<span class="o">=</span><span class="s">"l"</span><span class="p">)</span>
+</pre></div>
 
 <h3>
 <a name="free-piping-" class="anchor" href="#free-piping-"><span class="octicon octicon-link"></span></a>Free piping: <code>%:&gt;%</code>
@@ -114,37 +114,37 @@ rnorm(100) %&gt;&gt;% sample(size=100,replace=FALSE) %&gt;&gt;% hist
 
 <p>You may not always want to pipe the object to the first argument of the next function. Then you can use free pipe operator <code>%:&gt;%</code>, which takes <code>.</code> to represent the piped object on the left-hand side and evaluate the <em>expression</em> on the right-hand side with <code>.</code> as the piped object. In other words, you have the right to decide where the object should be piped to.</p>
 
-<pre><code>rnorm(100) %:&gt;% plot(.)
-# plot(rnorm(100))
+<div class="highlight highlight-s"><pre>rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%:&gt;%</span> plot<span class="p">(</span>.<span class="p">)</span>
+<span class="c1"># plot(rnorm(100))</span>
 
-rnorm(100) %:&gt;% plot(., col="red")
-# plot(rnorm(100),col="red")
+rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%:&gt;%</span> plot<span class="p">(</span>.<span class="p">,</span> col<span class="o">=</span><span class="s">"red"</span><span class="p">)</span>
+<span class="c1"># plot(rnorm(100),col="red")</span>
 
-rnorm(100) %:&gt;% sample(., size=length(.)*0.5)
-# (`.` is piped to multiple places)
+rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%:&gt;%</span> sample<span class="p">(</span>.<span class="p">,</span> size<span class="o">=</span>length<span class="p">(</span>.<span class="p">)</span><span class="o">*</span><span class="m">0.5</span><span class="p">)</span>
+<span class="c1"># (`.` is piped to multiple places)</span>
 
-mtcars %:&gt;% lm(mpg ~ cyl + disp, data=.) %&gt;&gt;% summary
-# summary(lm(mgp ~ cyl + disp, data=mtcars))
+mtcars <span class="o">%:&gt;%</span> lm<span class="p">(</span>mpg <span class="o">~</span> cyl <span class="o">+</span> disp<span class="p">,</span> data<span class="o">=</span>.<span class="p">)</span> <span class="o">%&gt;&gt;%</span> summary
+<span class="c1"># summary(lm(mgp ~ cyl + disp, data=mtcars))</span>
 
-rnorm(100) %:&gt;% 
-  sample(.,length(.)*0.2,FALSE) %:&gt;% 
-  plot(.,main=sprintf("length: %d",length(.)))
-# (`.` is piped to multiple places and mutiple levels)
+rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%:&gt;%</span> 
+  sample<span class="p">(</span>.<span class="p">,</span>length<span class="p">(</span>.<span class="p">)</span><span class="o">*</span><span class="m">0.2</span><span class="p">,</span><span class="kc">FALSE</span><span class="p">)</span> <span class="o">%:&gt;%</span> 
+  plot<span class="p">(</span>.<span class="p">,</span>main<span class="o">=</span>sprintf<span class="p">(</span><span class="s">"length: %d"</span><span class="p">,</span>length<span class="p">(</span>.<span class="p">)))</span>
+<span class="c1"># (`.` is piped to multiple places and mutiple levels)</span>
 
-rnorm(100) %:&gt;% {
-  par(mfrow=c(1,2))
-  hist(.,main="hist")
-  plot(.,col="red",main=sprintf("%d",length(.)))
-}
-# (`.` is piped to an enclosed expression)
+rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%:&gt;%</span> <span class="p">{</span>
+  par<span class="p">(</span>mfrow<span class="o">=</span>c<span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+  hist<span class="p">(</span>.<span class="p">,</span>main<span class="o">=</span><span class="s">"hist"</span><span class="p">)</span>
+  plot<span class="p">(</span>.<span class="p">,</span>col<span class="o">=</span><span class="s">"red"</span><span class="p">,</span>main<span class="o">=</span>sprintf<span class="p">(</span><span class="s">"%d"</span><span class="p">,</span>length<span class="p">(</span>.<span class="p">)))</span>
+<span class="p">}</span>
+<span class="c1"># (`.` is piped to an enclosed expression)</span>
 
-rnorm(10000,mean=10,sd=1) %:&gt;%
-  sample(.,size=length(.)/500,replace=FALSE) %&gt;&gt;%
-  log %&gt;&gt;%
-  diff %:&gt;%
-  plot(.,col="red",type="l",main=sprintf("length: %d",length(.)))
-# (`%&gt;&gt;%` and `%:&gt;%` are used together. Be clear what they mean)
-</code></pre>
+rnorm<span class="p">(</span><span class="m">10000</span><span class="p">,</span>mean<span class="o">=</span><span class="m">10</span><span class="p">,</span>sd<span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">%:&gt;%</span>
+  sample<span class="p">(</span>.<span class="p">,</span>size<span class="o">=</span>length<span class="p">(</span>.<span class="p">)</span><span class="o">/</span><span class="m">500</span><span class="p">,</span>replace<span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+  log <span class="o">%&gt;&gt;%</span>
+  diff <span class="o">%:&gt;%</span>
+  plot<span class="p">(</span>.<span class="p">,</span>col<span class="o">=</span><span class="s">"red"</span><span class="p">,</span>type<span class="o">=</span><span class="s">"l"</span><span class="p">,</span>main<span class="o">=</span>sprintf<span class="p">(</span><span class="s">"length: %d"</span><span class="p">,</span>length<span class="p">(</span>.<span class="p">)))</span>
+<span class="c1"># (`%&gt;&gt;%` and `%:&gt;%` are used together. Be clear what they mean)</span>
+</pre></div>
 
 <h3>
 <a name="lambda-piping-" class="anchor" href="#lambda-piping-"><span class="octicon octicon-link"></span></a>Lambda piping: <code>%|&gt;%</code>
@@ -152,43 +152,43 @@ rnorm(10000,mean=10,sd=1) %:&gt;%
 
 <p>It can be confusing to see multiple <code>.</code> symbols in the same context. In some cases, they may represent different things in the same expression. Even though the expression mostly still works, it may not be a good idea to keep it in that way. Here is an example:</p>
 
-<pre><code>mtcars %:&gt;%
-  lm(mpg ~ ., data=.) %&gt;&gt;%
+<div class="highlight highlight-s"><pre>mtcars <span class="o">%:&gt;%</span>
+  lm<span class="p">(</span>mpg <span class="o">~</span> .<span class="p">,</span> data<span class="o">=</span>.<span class="p">)</span> <span class="o">%&gt;&gt;%</span>
   summary
-</code></pre>
+</pre></div>
 
 <p>The code above works correctly with <code>%:&gt;%</code> and <code>%&gt;&gt;%</code>, even though the two dots in the second line have different meanings. <code>.</code> in formula <code>mpg ~ .</code> represents all variables other than <code>mpg</code> in data frame <code>mtcars</code>; <code>.</code> in <code>data=.</code> represents <code>mtcars</code> itself. One way to reduce ambiguity is to use <em>lambda expression</em> that names the piped object on the left of <code>~</code> and specifies the expression to evaluate on the right.</p>
 
 <p>A new pipe operator <code>%|&gt;%</code> is defined, which works with lambda expression in the formula form <code>x ~ f(x)</code>. More specifically, the expression will be interpreted as <em><code>f(x)</code> is evaluated with <code>x</code> being the piped object</em>. Therefore, the previous example can be rewritten with <code>%|&gt;%</code> like this:</p>
 
-<pre><code>mtcars %|&gt;%
-  (df ~ lm(mpg ~ ., data=df)) %&gt;&gt;%
+<div class="highlight highlight-s"><pre>mtcars <span class="o">%|&gt;%</span>
+  <span class="p">(</span>df <span class="o">~</span> lm<span class="p">(</span>mpg <span class="o">~</span> .<span class="p">,</span> data<span class="o">=</span>df<span class="p">))</span> <span class="o">%&gt;&gt;%</span>
   summary
-</code></pre>
+</pre></div>
 
 <p>Moreover, we could store the lambda expressions by assigning the formula to symbols.</p>
 
-<pre><code>runlm &lt;- df ~ lm(mpg ~ ., data=df)
-plotlm &lt;- m ~ {
-  par(mfrow=c(2,2))
-  plot(m,ask=FALSE)
-}
+<div class="highlight highlight-s"><pre>runlm <span class="o">&lt;-</span> df <span class="o">~</span> lm<span class="p">(</span>mpg <span class="o">~</span> .<span class="p">,</span> data<span class="o">=</span>df<span class="p">)</span>
+plotlm <span class="o">&lt;-</span> m <span class="o">~</span> <span class="p">{</span>
+  par<span class="p">(</span>mfrow<span class="o">=</span>c<span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+  plot<span class="p">(</span>m<span class="p">,</span>ask<span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="p">}</span>
 
-mtcars %|&gt;%
-  runlm %|&gt;%
+mtcars <span class="o">%|&gt;%</span>
+  runlm <span class="o">%|&gt;%</span>
   plotlm
-</code></pre>
+</pre></div>
 
 <h3>
 <a name="mixed-piping" class="anchor" href="#mixed-piping"><span class="octicon octicon-link"></span></a>Mixed piping</h3>
 
 <p>All the pipe operators can be used together and each of them only works in their own way.</p>
 
-<pre><code>mtcars %|&gt;%
-  (df ~ lm(mpg ~ ., data=df)) %&gt;&gt;%
-  summary %:&gt;%
-  .$fstatistic
-</code></pre>
+<div class="highlight highlight-s"><pre>mtcars <span class="o">%|&gt;%</span>
+  <span class="p">(</span>df <span class="o">~</span> lm<span class="p">(</span>mpg <span class="o">~</span> .<span class="p">,</span> data<span class="o">=</span>df<span class="p">))</span> <span class="o">%&gt;&gt;%</span>
+  summary <span class="o">%:&gt;%</span>
+  .<span class="o">$</span>fstatistic
+</pre></div>
 
 <h3>
 <a name="piping-with-dplyr-package" class="anchor" href="#piping-with-dplyr-package"><span class="octicon octicon-link"></span></a>Piping with <code>dplyr</code> package</h3>
@@ -197,22 +197,22 @@ mtcars %|&gt;%
 
 <p>The following code demonstrates mixed piping with <code>dplyr</code> functions.</p>
 
-<pre><code>library(dplyr)
-library(hflights)
-library(pipeR)
-data(hflights)
+<div class="highlight highlight-s"><pre>library<span class="p">(</span>dplyr<span class="p">)</span>
+library<span class="p">(</span>hflights<span class="p">)</span>
+library<span class="p">(</span>pipeR<span class="p">)</span>
+data<span class="p">(</span>hflights<span class="p">)</span>
 
-hflights %&gt;&gt;%
-  mutate(Speed=Distance/ActualElapsedTime) %&gt;&gt;%
-  group_by(UniqueCarrier) %&gt;&gt;%
-  summarize(n=length(Speed),speed.mean=mean(Speed,na.rm = T),
-    speed.median=median(Speed,na.rm=T),
-    speed.sd=sd(Speed,na.rm=T)) %&gt;&gt;%
-  mutate(speed.ssd=speed.mean/speed.sd) %&gt;&gt;%
-  arrange(desc(speed.ssd)) %:&gt;%
-  barplot(.$speed.ssd, names.arg = .$UniqueCarrier,
-    main=sprintf("Standardized mean of %d carriers", nrow(.)))
-</code></pre>
+hflights <span class="o">%&gt;&gt;%</span>
+  mutate<span class="p">(</span>Speed<span class="o">=</span>Distance<span class="o">/</span>ActualElapsedTime<span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+  group_by<span class="p">(</span>UniqueCarrier<span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+  summarize<span class="p">(</span>n<span class="o">=</span>length<span class="p">(</span>Speed<span class="p">),</span>speed.mean<span class="o">=</span>mean<span class="p">(</span>Speed<span class="p">,</span>na.rm <span class="o">=</span> <span class="k-Variable">T</span><span class="p">),</span>
+    speed.median<span class="o">=</span>median<span class="p">(</span>Speed<span class="p">,</span>na.rm<span class="o">=</span><span class="k-Variable">T</span><span class="p">),</span>
+    speed.sd<span class="o">=</span>sd<span class="p">(</span>Speed<span class="p">,</span>na.rm<span class="o">=</span><span class="k-Variable">T</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
+  mutate<span class="p">(</span>speed.ssd<span class="o">=</span>speed.mean<span class="o">/</span>speed.sd<span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+  arrange<span class="p">(</span>desc<span class="p">(</span>speed.ssd<span class="p">))</span> <span class="o">%:&gt;%</span>
+  barplot<span class="p">(</span>.<span class="o">$</span>speed.ssd<span class="p">,</span> names.arg <span class="o">=</span> .<span class="o">$</span>UniqueCarrier<span class="p">,</span>
+    main<span class="o">=</span>sprintf<span class="p">(</span><span class="s">"Standardized mean of %d carriers"</span><span class="p">,</span> nrow<span class="p">(</span>.<span class="p">)))</span>
+</pre></div>
 
 <h2>
 <a name="performance" class="anchor" href="#performance"><span class="octicon octicon-link"></span></a>Performance</h2>
@@ -222,8 +222,8 @@ hflights %&gt;&gt;%
 <h2>
 <a name="help-overview" class="anchor" href="#help-overview"><span class="octicon octicon-link"></span></a>Help overview</h2>
 
-<pre><code>help(package = pipeR)
-</code></pre>
+<div class="highlight highlight-s"><pre>help<span class="p">(</span>package <span class="o">=</span> pipeR<span class="p">)</span>
+</pre></div>
 
 <h2>
 <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
