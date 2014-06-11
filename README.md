@@ -14,13 +14,13 @@ Specialized, high-performance pipeline operators for R: making command chaining 
 
 Install from CRAN:
 
-```
+```s
 install.packages("pipeR")
 ```
 
 Install the devel version from GitHub (`devtools` package is required):
 
-```
+```s
 devtools::install_github("pipeR","renkun-ken")
 ```
 
@@ -30,7 +30,7 @@ devtools::install_github("pipeR","renkun-ken")
 
 The first-argument pipe operator `%>>%` inserts the expression on the left-hand side to the first argument of the **function** on the right-hand side. In other words, `x %>>% f(a=1)` will be transformed to and be evaluated as `f(x,a=1)`. This operator accepts both function call, e.g. `plot()` or `plot(col="red")`, and function name, e.g. `log` or `plot`.
 
-```
+```s
 rnorm(100) %>>% plot
 # plot(rnorm(100))
 
@@ -46,7 +46,7 @@ rnorm(100) %>>% sample(size=100,replace=FALSE) %>>% hist
 
 With the first-argument pipe operator `%>>%`, you can write code like
 
-```
+```s
 rnorm(10000,mean=10,sd=1) %>>%
   sample(size=100,replace=FALSE) %>>%
   log %>>%
@@ -58,7 +58,7 @@ rnorm(10000,mean=10,sd=1) %>>%
 
 You may not always want to pipe the object to the first argument of the next function. Then you can use free pipe operator `%:>%`, which takes `.` to represent the piped object on the left-hand side and evaluate the *expression* on the right-hand side with `.` as the piped object. In other words, you have the right to decide where the object should be piped to.
 
-```
+```s
 rnorm(100) %:>% plot(.)
 # plot(rnorm(100))
 
@@ -95,7 +95,7 @@ rnorm(10000,mean=10,sd=1) %:>%
 
 It can be confusing to see multiple `.` symbols in the same context. In some cases, they may represent different things in the same expression. Even though the expression mostly still works, it may not be a good idea to keep it in that way. Here is an example:
 
-```
+```s
 mtcars %:>%
   lm(mpg ~ ., data=.) %>>%
   summary
@@ -105,7 +105,7 @@ The code above works correctly with `%:>%` and `%>>%`, even though the two dots 
 
 A new pipe operator `%|>%` is defined, which works with lambda expression in the formula form `x ~ f(x)`. More specifically, the expression will be interpreted as *`f(x)` is evaluated with `x` being the piped object*. Therefore, the previous example can be rewritten with `%|>%` like this:
 
-```
+```s
 mtcars %|>%
   (df ~ lm(mpg ~ ., data=df)) %>>%
   summary
@@ -113,7 +113,7 @@ mtcars %|>%
 
 Moreover, you can store the lambda expressions by assigning the formula to symbols.
 
-```
+```s
 runlm <- df ~ lm(mpg ~ ., data=df)
 plotlm <- m ~ {
   par(mfrow=c(2,2))
@@ -129,7 +129,7 @@ mtcars %|>%
 
 All the pipe operators can be used together and each of them only works in their own way.
 
-```
+```s
 mtcars %|>%
   (df ~ lm(mpg ~ ., data=df)) %>>%
   summary %:>%
@@ -142,7 +142,7 @@ mtcars %|>%
 
 The following code demonstrates mixed piping with `dplyr` functions.
 
-```
+```s
 library(dplyr)
 library(hflights)
 library(pipeR)
@@ -166,7 +166,7 @@ Each operator defined in this package specializes in its work and is made as sim
 
 ## Help overview
 
-```
+```s
 help(package = pipeR)
 ```
 
