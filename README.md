@@ -4,10 +4,6 @@
 
 Specialized, high-performance pipeline operators for R: making command chaining clear, fast, readable and flexible.
 
-## What's New?
-
-**Major operator change** (See issue [#12](https://github.com/renkun-ken/pipeR/issues/12))
-
 [Release notes](https://github.com/renkun-ken/pipeR/releases)
 
 ## Installation
