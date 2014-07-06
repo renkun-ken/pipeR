@@ -2,12 +2,12 @@
 \name{first-argument piping}
 \alias{\%>>\%}
 \alias{first-argument piping}
-\title{Pipe an object forward as the first argument to a function}
+\title{Pipe an object forward as the first argument to a function call}
 \usage{
 . \%>>\% fun
 }
 \arguments{
-\item{.}{The object to be piped as the first argument}
+\item{.}{The object to pipe as the first argument}
 
 \item{fun}{The function call to evaluate with the piped object as the first argument.}
 }
@@ -18,10 +18,11 @@ with the left-hand side object being the first argument.
 \examples{
 \dontrun{
 rnorm(100) \%>>\% plot
-
 rnorm(100) \%>>\% plot(col="red")
-
 rnorm(1000) \%>>\% sample(size=100,replace=F) \%>>\% hist
+# pipe to a function in namespace
+1:10 \%>>\% base::mean()
+# note that "()" must follow the function in namespace.
 }
 }
 

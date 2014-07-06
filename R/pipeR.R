@@ -1,19 +1,20 @@
-#' Pipe an object forward as the first argument to a function
+#' Pipe an object forward as the first argument to a function call
 #'
 #' The \code{\%>>\%} operator evaluates the function call on the right-hand side
 #' with the left-hand side object being the first argument.
 #'
-#' @param . The object to be piped as the first argument
+#' @param . The object to pipe as the first argument
 #' @param fun The function call to evaluate with the piped object as the first argument.
 #' @name first-argument piping
 #' @export
 #' @examples
 #' \dontrun{
 #' rnorm(100) %>>% plot
-#'
 #' rnorm(100) %>>% plot(col="red")
-#'
 #' rnorm(1000) %>>% sample(size=100,replace=F) %>>% hist
+#' # pipe to a function in namespace
+#' 1:10 %>>% base::mean()
+#' # note that "()" must follow the function in namespace.
 #' }
 `%>>%` <- .pipe
 
