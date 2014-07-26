@@ -7,6 +7,8 @@
 ```{r, echo = FALSE, message = FALSE}
 knitr::opts_chunk$set(comment="#",error=FALSE,tidy=FALSE)
 set.seed(1)
+library(magrittr)
+library(pipeR)
 ```
 
 # Performance
@@ -17,13 +19,10 @@ Each operator defined in this package specializes in its work and is made as sim
 - If you care about performance issues and are sure which type of piping you are using, it's better to use pipeR operators. Below is a simple test of the performance.
 
 ```{r}
-library(magrittr)
-
 # magrittr::`%>%`
 system.time(lapply(1:50000, function(i) 
   rnorm(100) %>% c(rnorm(100))))
 
-library(pipeR)   
 # pipeR::`%>>%`
 system.time(lapply(1:50000, function(i) 
   rnorm(100) %>>% c(rnorm(100))))
