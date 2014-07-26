@@ -9,7 +9,7 @@ install:
   - ./travis-tool.sh r_binary_install knitr
   - ./travis-tool.sh r_binary_install magrittr
   - ./travis-tool.sh r_binary_install dplyr
-  - ./travis-tool.sh r_binary_install rlist
+  - ./travis-tool.sh r_source_install rlist
 
 script: ./travis-tool.sh run_tests
 
