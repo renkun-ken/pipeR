@@ -48,13 +48,13 @@
 <div class="highlight highlight-r"><pre>install.packages<span class="p">(</span><span class="s">"pipeR"</span><span class="p">)</span>
 </pre></div>
 
-<p>Install the devel version from GitHub (<code>devtools</code> package is required):</p>
+<p>Install the development version from GitHub (<code>devtools</code> package is required):</p>
 
 <div class="highlight highlight-r"><pre>devtools<span class="o">::</span>install_github<span class="p">(</span><span class="s">"pipeR"</span><span class="p">,</span><span class="s">"renkun-ken"</span><span class="p">)</span>
 </pre></div>
 
 <h2>
-<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting started</h2>
+<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
 
 <h3>
 <a name="first-argument-piping-" class="anchor" href="#first-argument-piping-"><span class="octicon octicon-link"></span></a>First-argument piping: <code>%&gt;&gt;%</code>
@@ -83,6 +83,8 @@ rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> 
   diff <span class="o">%&gt;&gt;%</span>
   plot<span class="p">(</span>col<span class="o">=</span><span class="s">"red"</span><span class="p">,</span>type<span class="o">=</span><span class="s">"l"</span><span class="p">)</span>
 </pre></div>
+
+<p>*Notice: function call within a namespace must end up with parentheses  like <code>x %&gt;&gt;% namespace::fun()</code>.</p>
 
 <h3>
 <a name="free-piping-" class="anchor" href="#free-piping-"><span class="octicon octicon-link"></span></a>Free piping: <code>%:&gt;%</code>
@@ -194,6 +196,19 @@ hflights <span class="o">%&gt;&gt;%</span>
 <a name="performance" class="anchor" href="#performance"><span class="octicon octicon-link"></span></a>Performance</h2>
 
 <p>Each operator defined in this package specializes in its work and is made as simple as possible. Therefore the overhead is extremely low and their performance is very close to traditional approach. This allow you to build long pipelines and perform intensive computations without worrying much about the performance cost of it.</p>
+
+<ul>
+<li>If you want to stick to a single operator and do not consider the performance of intensive calling, you may use <code>%&gt;%</code> in <a href="https://github.com/smbache/magrittr">magrittr</a>. </li>
+<li>If you care about performance issues and are sure which type of piping you are using, it's better to use pipeR operators. Below is a simple test of the performance.</li>
+</ul><div class="highlight highlight-rconsole"><pre><span class="gp">&gt; </span><span class="kn">library</span><span class="p">(</span>magrittr<span class="p">)</span>
+<span class="gp">&gt; </span><span class="kn">library</span><span class="p">(</span>pipeR<span class="p">)</span>
+<span class="gp">&gt; </span><span class="kp">system.time</span><span class="p">(</span><span class="kp">lapply</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">50000</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span>i<span class="p">)</span> rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="kt">c</span><span class="p">(</span>rnorm<span class="p">(</span><span class="m">100</span><span class="p">))))</span>
+<span class="go">   user  system elapsed </span>
+<span class="go">   7.36    0.00    7.38 </span>
+<span class="gp">&gt; </span><span class="kp">system.time</span><span class="p">(</span><span class="kp">lapply</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">50000</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span>i<span class="p">)</span> rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span> <span class="kt">c</span><span class="p">(</span>rnorm<span class="p">(</span><span class="m">100</span><span class="p">))))</span>
+<span class="go">   user  system elapsed </span>
+<span class="go">   1.66    0.00    1.66 </span>
+</pre></div>
 
 <h2>
 <a name="help-overview" class="anchor" href="#help-overview"><span class="octicon octicon-link"></span></a>Help overview</h2>
