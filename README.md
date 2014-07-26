@@ -22,9 +22,9 @@ devtools::install_github("pipeR","renkun-ken")
 
 ## Examples
 
-### First-argument piping: `%>>%`
+### First-argument piping
 
-The first-argument pipe operator `%>>%` inserts the expression on the left-hand side to the first argument of the **function** on the right-hand side. In other words, `x %>>% f(a=1)` will be transformed to and be evaluated as `f(x,a=1)`. This operator accepts both function call, e.g. `plot()` or `plot(col="red")`, and function name, e.g. `log` or `plot`.
+`%>>%` operator inserts the expression on the left-hand side to the first argument of the **function** on the right-hand side.
 
 ```r
 rnorm(100) %>>% plot
@@ -50,11 +50,9 @@ rnorm(10000,mean=10,sd=1) %>>%
   plot(col="red",type="l")
 ```
 
-*Notice: function call within a namespace must end up with parentheses  like `x %>>% namespace::fun()`.
+### Free piping
 
-### Free piping: `%:>%`
-
-You may not always want to pipe the object to the first argument of the next function. Then you can use free pipe operator `%:>%`, which takes `.` to represent the piped object on the left-hand side and evaluate the *expression* on the right-hand side with `.` as the piped object. In other words, you have the right to decide where the object should be piped to.
+`%:>%` takes `.` to represent the piped object on the left-hand side and evaluate the *expression* on the right-hand side.
 
 ```r
 rnorm(100) %:>% plot(.)
@@ -80,48 +78,16 @@ rnorm(100) %:>% {
   plot(.,col="red",main=sprintf("%d",length(.)))
 }
 # (`.` is piped to an enclosed expression)
-
-rnorm(10000,mean=10,sd=1) %:>%
-  sample(.,size=length(.)*0.2,replace=FALSE) %>>%
-  log %>>%
-  diff %:>%
-  plot(.,col="red",type="l",main=sprintf("length: %d",length(.)))
-# (`%>>%` and `%:>%` are used together. Be clear what they mean)
 ```
 
-### Lambda piping: `%|>%`
+### Lambda piping
 
-It can be confusing to see multiple `.` symbols in the same context. In some cases, they may represent different things in the same expression. Even though the expression mostly still works, it may not be a good idea to keep it in that way. Here is an example:
-
-```r
-mtcars %:>%
-  lm(mpg ~ ., data=.) %>>%
-  summary
-```
-
-The code above works correctly with `%:>%` and `%>>%`, even though the two dots in the second line have different meanings. `.` in formula `mpg ~ .` represents all variables other than `mpg` in data frame `mtcars`; `.` in `data=.` represents `mtcars` itself. One way to reduce ambiguity is to use *lambda expression* that names the piped object on the left of `~` and specifies the expression to evaluate on the right.
-
-A new pipe operator `%|>%` is defined, which works with lambda expression in the formula form `x ~ f(x)`. More specifically, the expression will be interpreted as *`f(x)` is evaluated with `x` being the piped object*. Therefore, the previous example can be rewritten with `%|>%` like this:
+`%|>%` operator evaluates a lambda expression like `x ~ f(x)` in which `x` represents the left-hand side and `f(x)` represents the right-hand side expression about `x`.
 
 ```r
 mtcars %|>%
-  (df ~ lm(mpg ~ ., data=df)) %>>%
-  summary
+  (df ~ lm(mpg ~ ., data=df))
 ```
-
-Moreover, you can store the lambda expressions by assigning the formula to symbols.
-
-```r
-runlm <- df ~ lm(mpg ~ ., data=df)
-plotlm <- m ~ {
-  par(mfrow=c(2,2))
-  plot(m,ask=FALSE)
-}
-
-mtcars %|>%
-  runlm %|>%
-  plotlm
-``` 
 
 ### Mixed piping
 
@@ -134,47 +100,21 @@ mtcars %|>%
   .$fstatistic
 ```
 
-### Piping with `dplyr` package
-
-`dplyr` package provides a group of functions that make data transformation much easier. These operators are fully compatible with `dplyr` and provide higher performance than its default pipe operator.
-
-The following code demonstrates mixed piping with `dplyr` functions.
-
-```r
-library(dplyr)
-library(hflights)
-library(pipeR)
-data(hflights)
-
-hflights %>>%
-  mutate(Speed=Distance/ActualElapsedTime) %>>%
-  group_by(UniqueCarrier) %>>%
-  summarize(n=length(Speed),speed.mean=mean(Speed,na.rm = T),
-    speed.median=median(Speed,na.rm=T),
-    speed.sd=sd(Speed,na.rm=T)) %>>%
-  mutate(speed.ssd=speed.mean/speed.sd) %>>%
-  arrange(desc(speed.ssd)) %:>%
-  barplot(.$speed.ssd, names.arg = .$UniqueCarrier,
-    main=sprintf("Standardized mean of %d carriers", nrow(.)))
-```
-
 ## Performance
 
-Each operator defined in this package specializes in its work and is made as simple as possible. Therefore the overhead is extremely low and their performance is very close to traditional approach. This allow you to build long pipelines and perform intensive computations without worrying much about the performance cost of it.
+Since these operators are specialized in their tasks, their performance is very close to traditional approach. 
 
-- If you want to stick to a single operator and do not consider the performance of intensive calling, you may use `%>%` in [magrittr](https://github.com/smbache/magrittr). 
-- If you care about performance issues and are sure which type of piping you are using, it's better to use pipeR operators. Below is a simple test of the performance.
+- If you want to stick to a single operator and do not consider the performance of intensive calling, you may use `%>%` in [magrittr](https://github.com/smbache/magrittr) which also provides additional aliases of basic functions. 
+- If you care about performance issues and are sure which type of piping you are using, it's better to use pipeR operators. 
 
-```rconsole
-> library(magrittr)
-> library(pipeR)
-> system.time(lapply(1:50000, function(i) rnorm(100) %>% c(rnorm(100))))
-   user  system elapsed 
-   7.36    0.00    7.38 
-> system.time(lapply(1:50000, function(i) rnorm(100) %>>% c(rnorm(100))))
-   user  system elapsed 
-   1.66    0.00    1.66 
-```
+## Vignettes
+
+The package also provides the following vignettes:
+
+- [Introduction](http://cran.r-project.org/web/packages/pipeR/vignettes/Introduction.html)
+- [Examples](http://cran.r-project.org/web/packages/pipeR/vignettes/Examples.html)
+- [Performance](http://cran.r-project.org/web/packages/pipeR/vignettes/Performance.html)
+
 
 ## Help overview
 
