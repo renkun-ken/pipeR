@@ -6,10 +6,7 @@ before_install:
   - ./travis-tool.sh bootstrap
   - ./travis-tool.sh github_package testthat
 install:
-  - ./travis-tool.sh r_binary_install knitr
-  - ./travis-tool.sh r_binary_install magrittr
-  - ./travis-tool.sh r_binary_install dplyr
-  - ./travis-tool.sh r_source_install rlist
+  - ./travis-tool.sh install_deps
 
 script: ./travis-tool.sh run_tests
 
