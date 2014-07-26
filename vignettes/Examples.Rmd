@@ -1,0 +1,75 @@
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{Examples}
+%\VignetteDepends{dplyr}
+%\VignetteDepends{rlist}
+-->
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(comment="#",error=FALSE,tidy=FALSE)
+```
+
+# Examples
+
+## Working with dplyr
+
+`dplyr` package ([CRAN](http://cran.r-project.org/web/packages/dplyr/),[GitHub](https://github.com/hadley/dplyr)) provides a group of functions that make data transformation much easier. These operators are fully compatible with `dplyr` and provide higher performance than its default pipe operator.
+
+The following code demonstrates piping with `dplyr` functions.
+
+```{r}
+library(dplyr)
+library(pipeR)
+
+mtcars %>>%
+  select(mpg,cyl,disp,hp) %>>%
+  filter(mpg <= median(mpg)) %>>%
+  mutate(rmpg = mpg / max(mpg)) %>>%
+  group_by(cyl) %>>%
+  do(data.frame(mean=mean(.$rmpg),median=median(.$rmpg)))
+```
+
+`.` in the last call is introduced by `do(...)` rather than `%>>%`, which also makes it clear the scope of symbols.
+
+## Working with rlist
+
+[`rlist` package](http://renkun.me/rlist/) ([CRAN](http://cran.r-project.org/web/packages/rlist/),[GitHub](https://github.com/renkun-ken/rlist)) is a set of tools for working with list objects storing non-tabular non-relational, or non-structured data as opposed to data frames. The major functions in this package are intentionally designed to work with pipeline.
+
+The following example deals with the list of developers with names, ages, interests, and programming language they use and the number of years they have been using them.
+
+```{r}
+library(rlist)
+library(pipeR)
+devs <- 
+  list(
+    p1=list(name="Ken",age=24,
+      interest=c("reading","music","movies"),
+      lang=list(r=2,csharp=4,python=3)),
+    p2=list(name="James",age=25,
+      interest=c("sports","music"),
+      lang=list(r=3,java=2,cpp=5)),
+    p3=list(name="Penny",age=24,
+      interest=c("movies","reading"),
+      lang=list(r=1,cpp=4,python=2)))
+```
+
+The following code queries the name of each developer who likes music and uses R, and put stack the results in a data frame.
+
+```{r}
+devs %>>% 
+  list.filter("music" %in% interest & "r" %in% names(lang)) %>>%
+  list.select(name,age) %>>%
+  list.stack
+```
+
+The following example groups the developers by age and for each group it classifies the developers into interest classes and count the number of people in each class.
+
+```{r}
+devs %>>%
+  list.group(age) %>>%
+  list.map(group -> group %>>%
+      list.class(interest) %>>%
+      list.map(int -> length(int))) %>>%
+  str
+```
+

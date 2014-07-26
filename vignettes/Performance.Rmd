@@ -1,0 +1,48 @@
+<!--
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{Performance}
+%\VignetteDepends{magrittr}
+-->
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(comment="#",error=FALSE,tidy=FALSE)
+set.seed(1)
+```
+
+# Performance
+
+Each operator defined in this package specializes in its work and is made as simple as possible. Therefore the overhead is extremely low and their performance is very close to traditional approach. This allow you to build long and nested pipelines and perform intensive computations without worrying much about the performance cost.
+
+- If you want to stick to a single operator and do not consider the performance of intensive calling, you may use `%>%` in [magrittr](https://github.com/smbache/magrittr) which also provides additional aliases of basic functions. 
+- If you care about performance issues and are sure which type of piping you are using, it's better to use pipeR operators. Below is a simple test of the performance.
+
+```{r}
+library(magrittr)
+
+# magrittr::`%>%`
+system.time(lapply(1:50000, function(i) 
+  rnorm(100) %>% c(rnorm(100))))
+
+library(pipeR)   
+# pipeR::`%>>%`
+system.time(lapply(1:50000, function(i) 
+  rnorm(100) %>>% c(rnorm(100))))
+```
+
+The more levels the operator is nested in iterations, the larger the performance difference will be.
+
+```{r}
+# magrittr::`%>%`
+system.time(lapply(1:1000, function(i) 
+  rnorm(100) %>% c(rnorm(100),
+    sapply(1:100, function(j) 
+      rnorm(50) %>% c(rnorm(50))))))
+
+# pipeR::`%>>%`
+system.time(lapply(1:1000, function(i) 
+  rnorm(100) %>>% c(rnorm(100),
+    sapply(1:100, function(j) 
+      rnorm(50) %>>% c(rnorm(50))))))
+```
+
+These packages use different set of symbols and are thus compatibile with each other. You may choose according to your needs and considerations.
