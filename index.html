@@ -57,10 +57,9 @@
 <a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
 
 <h3>
-<a name="first-argument-piping-" class="anchor" href="#first-argument-piping-"><span class="octicon octicon-link"></span></a>First-argument piping: <code>%&gt;&gt;%</code>
-</h3>
+<a name="first-argument-piping" class="anchor" href="#first-argument-piping"><span class="octicon octicon-link"></span></a>First-argument piping</h3>
 
-<p>The first-argument pipe operator <code>%&gt;&gt;%</code> inserts the expression on the left-hand side to the first argument of the <strong>function</strong> on the right-hand side. In other words, <code>x %&gt;&gt;% f(a=1)</code> will be transformed to and be evaluated as <code>f(x,a=1)</code>. This operator accepts both function call, e.g. <code>plot()</code> or <code>plot(col="red")</code>, and function name, e.g. <code>log</code> or <code>plot</code>.</p>
+<p><code>%&gt;&gt;%</code> operator inserts the expression on the left-hand side to the first argument of the <strong>function</strong> on the right-hand side.</p>
 
 <div class="highlight highlight-r"><pre>rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span> plot
 <span class="c1"># plot(rnorm(100))</span>
@@ -84,13 +83,10 @@ rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> 
   plot<span class="p">(</span>col<span class="o">=</span><span class="s">"red"</span><span class="p">,</span>type<span class="o">=</span><span class="s">"l"</span><span class="p">)</span>
 </pre></div>
 
-<p>*Notice: function call within a namespace must end up with parentheses  like <code>x %&gt;&gt;% namespace::fun()</code>.</p>
-
 <h3>
-<a name="free-piping-" class="anchor" href="#free-piping-"><span class="octicon octicon-link"></span></a>Free piping: <code>%:&gt;%</code>
-</h3>
+<a name="free-piping" class="anchor" href="#free-piping"><span class="octicon octicon-link"></span></a>Free piping</h3>
 
-<p>You may not always want to pipe the object to the first argument of the next function. Then you can use free pipe operator <code>%:&gt;%</code>, which takes <code>.</code> to represent the piped object on the left-hand side and evaluate the <em>expression</em> on the right-hand side with <code>.</code> as the piped object. In other words, you have the right to decide where the object should be piped to.</p>
+<p><code>%:&gt;%</code> takes <code>.</code> to represent the piped object on the left-hand side and evaluate the <em>expression</em> on the right-hand side.</p>
 
 <div class="highlight highlight-r"><pre>rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%:&gt;%</span> plot<span class="p">(</span><span class="m">.</span><span class="p">)</span>
 <span class="c1"># plot(rnorm(100))</span>
@@ -115,46 +111,15 @@ rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> 
   plot<span class="p">(</span><span class="m">.</span><span class="p">,</span>col<span class="o">=</span><span class="s">"red"</span><span class="p">,</span>main<span class="o">=</span><span class="kp">sprintf</span><span class="p">(</span><span class="s">"%d"</span><span class="p">,</span><span class="kp">length</span><span class="p">(</span><span class="m">.</span><span class="p">)))</span>
 <span class="p">}</span>
 <span class="c1"># (`.` is piped to an enclosed expression)</span>
-
-rnorm<span class="p">(</span><span class="m">10000</span><span class="p">,</span>mean<span class="o">=</span><span class="m">10</span><span class="p">,</span>sd<span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">%:&gt;%</span>
-  <span class="kp">sample</span><span class="p">(</span><span class="m">.</span><span class="p">,</span>size<span class="o">=</span><span class="kp">length</span><span class="p">(</span><span class="m">.</span><span class="p">)</span><span class="o">*</span><span class="m">0.2</span><span class="p">,</span>replace<span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
-  log <span class="o">%&gt;&gt;%</span>
-  diff <span class="o">%:&gt;%</span>
-  plot<span class="p">(</span><span class="m">.</span><span class="p">,</span>col<span class="o">=</span><span class="s">"red"</span><span class="p">,</span>type<span class="o">=</span><span class="s">"l"</span><span class="p">,</span>main<span class="o">=</span><span class="kp">sprintf</span><span class="p">(</span><span class="s">"length: %d"</span><span class="p">,</span><span class="kp">length</span><span class="p">(</span><span class="m">.</span><span class="p">)))</span>
-<span class="c1"># (`%&gt;&gt;%` and `%:&gt;%` are used together. Be clear what they mean)</span>
 </pre></div>
 
 <h3>
-<a name="lambda-piping-" class="anchor" href="#lambda-piping-"><span class="octicon octicon-link"></span></a>Lambda piping: <code>%|&gt;%</code>
-</h3>
+<a name="lambda-piping" class="anchor" href="#lambda-piping"><span class="octicon octicon-link"></span></a>Lambda piping</h3>
 
-<p>It can be confusing to see multiple <code>.</code> symbols in the same context. In some cases, they may represent different things in the same expression. Even though the expression mostly still works, it may not be a good idea to keep it in that way. Here is an example:</p>
-
-<div class="highlight highlight-r"><pre>mtcars <span class="o">%:&gt;%</span>
-  lm<span class="p">(</span>mpg <span class="o">~</span> <span class="m">.</span><span class="p">,</span> data<span class="o">=</span><span class="m">.</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
-  <span class="kp">summary</span>
-</pre></div>
-
-<p>The code above works correctly with <code>%:&gt;%</code> and <code>%&gt;&gt;%</code>, even though the two dots in the second line have different meanings. <code>.</code> in formula <code>mpg ~ .</code> represents all variables other than <code>mpg</code> in data frame <code>mtcars</code>; <code>.</code> in <code>data=.</code> represents <code>mtcars</code> itself. One way to reduce ambiguity is to use <em>lambda expression</em> that names the piped object on the left of <code>~</code> and specifies the expression to evaluate on the right.</p>
-
-<p>A new pipe operator <code>%|&gt;%</code> is defined, which works with lambda expression in the formula form <code>x ~ f(x)</code>. More specifically, the expression will be interpreted as <em><code>f(x)</code> is evaluated with <code>x</code> being the piped object</em>. Therefore, the previous example can be rewritten with <code>%|&gt;%</code> like this:</p>
+<p><code>%|&gt;%</code> operator evaluates a lambda expression like <code>x ~ f(x)</code> in which <code>x</code> represents the left-hand side and <code>f(x)</code> represents the right-hand side expression about <code>x</code>.</p>
 
 <div class="highlight highlight-r"><pre>mtcars <span class="o">%|&gt;%</span>
-  <span class="p">(</span>df <span class="o">~</span> lm<span class="p">(</span>mpg <span class="o">~</span> <span class="m">.</span><span class="p">,</span> data<span class="o">=</span>df<span class="p">))</span> <span class="o">%&gt;&gt;%</span>
-  <span class="kp">summary</span>
-</pre></div>
-
-<p>Moreover, you can store the lambda expressions by assigning the formula to symbols.</p>
-
-<div class="highlight highlight-r"><pre>runlm <span class="o">&lt;-</span> df <span class="o">~</span> lm<span class="p">(</span>mpg <span class="o">~</span> <span class="m">.</span><span class="p">,</span> data<span class="o">=</span>df<span class="p">)</span>
-plotlm <span class="o">&lt;-</span> m <span class="o">~</span> <span class="p">{</span>
-  par<span class="p">(</span>mfrow<span class="o">=</span><span class="kt">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
-  plot<span class="p">(</span>m<span class="p">,</span>ask<span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
-<span class="p">}</span>
-
-mtcars <span class="o">%|&gt;%</span>
-  runlm <span class="o">%|&gt;%</span>
-  plotlm
+  <span class="p">(</span>df <span class="o">~</span> lm<span class="p">(</span>mpg <span class="o">~</span> <span class="m">.</span><span class="p">,</span> data<span class="o">=</span>df<span class="p">))</span>
 </pre></div>
 
 <h3>
@@ -168,49 +133,24 @@ mtcars <span class="o">%|&gt;%</span>
   <span class="m">.</span><span class="o">$</span>fstatistic
 </pre></div>
 
-<h3>
-<a name="piping-with-dplyr-package" class="anchor" href="#piping-with-dplyr-package"><span class="octicon octicon-link"></span></a>Piping with <code>dplyr</code> package</h3>
-
-<p><code>dplyr</code> package provides a group of functions that make data transformation much easier. These operators are fully compatible with <code>dplyr</code> and provide higher performance than its default pipe operator.</p>
-
-<p>The following code demonstrates mixed piping with <code>dplyr</code> functions.</p>
-
-<div class="highlight highlight-r"><pre><span class="kn">library</span><span class="p">(</span>dplyr<span class="p">)</span>
-<span class="kn">library</span><span class="p">(</span>hflights<span class="p">)</span>
-<span class="kn">library</span><span class="p">(</span>pipeR<span class="p">)</span>
-data<span class="p">(</span>hflights<span class="p">)</span>
-
-hflights <span class="o">%&gt;&gt;%</span>
-  mutate<span class="p">(</span>Speed<span class="o">=</span>Distance<span class="o">/</span>ActualElapsedTime<span class="p">)</span> <span class="o">%&gt;&gt;%</span>
-  group_by<span class="p">(</span>UniqueCarrier<span class="p">)</span> <span class="o">%&gt;&gt;%</span>
-  summarize<span class="p">(</span>n<span class="o">=</span><span class="kp">length</span><span class="p">(</span>Speed<span class="p">),</span>speed.mean<span class="o">=</span><span class="kp">mean</span><span class="p">(</span>Speed<span class="p">,</span>na.rm <span class="o">=</span> <span class="bp">T</span><span class="p">),</span>
-    speed.median<span class="o">=</span>median<span class="p">(</span>Speed<span class="p">,</span>na.rm<span class="o">=</span><span class="bp">T</span><span class="p">),</span>
-    speed.sd<span class="o">=</span>sd<span class="p">(</span>Speed<span class="p">,</span>na.rm<span class="o">=</span><span class="bp">T</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
-  mutate<span class="p">(</span>speed.ssd<span class="o">=</span>speed.mean<span class="o">/</span>speed.sd<span class="p">)</span> <span class="o">%&gt;&gt;%</span>
-  arrange<span class="p">(</span>desc<span class="p">(</span>speed.ssd<span class="p">))</span> <span class="o">%:&gt;%</span>
-  barplot<span class="p">(</span><span class="m">.</span><span class="o">$</span>speed.ssd<span class="p">,</span> names.arg <span class="o">=</span> <span class="m">.</span><span class="o">$</span>UniqueCarrier<span class="p">,</span>
-    main<span class="o">=</span><span class="kp">sprintf</span><span class="p">(</span><span class="s">"Standardized mean of %d carriers"</span><span class="p">,</span> <span class="kp">nrow</span><span class="p">(</span><span class="m">.</span><span class="p">)))</span>
-</pre></div>
-
 <h2>
 <a name="performance" class="anchor" href="#performance"><span class="octicon octicon-link"></span></a>Performance</h2>
 
-<p>Each operator defined in this package specializes in its work and is made as simple as possible. Therefore the overhead is extremely low and their performance is very close to traditional approach. This allow you to build long pipelines and perform intensive computations without worrying much about the performance cost of it.</p>
+<p>Since these operators are specialized in their tasks, their performance is very close to traditional approach. </p>
 
 <ul>
-<li>If you want to stick to a single operator and do not consider the performance of intensive calling, you may use <code>%&gt;%</code> in <a href="https://github.com/smbache/magrittr">magrittr</a>. </li>
-<li>If you care about performance issues and are sure which type of piping you are using, it's better to use pipeR operators. Below is a simple test of the performance.</li>
-</ul><div class="highlight highlight-rconsole"><pre><span class="gp">&gt; </span><span class="kn">library</span><span class="p">(</span>magrittr<span class="p">)</span>
-<span class="gp">&gt; </span><span class="kn">library</span><span class="p">(</span>pipeR<span class="p">)</span>
-<span class="gp">&gt; </span><span class="kp">system.time</span><span class="p">(</span><span class="kp">lapply</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">50000</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span>i<span class="p">)</span> rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="kt">c</span><span class="p">(</span>rnorm<span class="p">(</span><span class="m">100</span><span class="p">))))</span>
-<span class="go">   user  system elapsed </span>
-<span class="go">   7.36    0.00    7.38 </span>
-<span class="gp">&gt; </span><span class="kp">system.time</span><span class="p">(</span><span class="kp">lapply</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">50000</span><span class="p">,</span> <span class="kr">function</span><span class="p">(</span>i<span class="p">)</span> rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span> <span class="kt">c</span><span class="p">(</span>rnorm<span class="p">(</span><span class="m">100</span><span class="p">))))</span>
-<span class="go">   user  system elapsed </span>
-<span class="go">   1.66    0.00    1.66 </span>
-</pre></div>
+<li>If you want to stick to a single operator and do not consider the performance of intensive calling, you may use <code>%&gt;%</code> in <a href="https://github.com/smbache/magrittr">magrittr</a> which also provides additional aliases of basic functions. </li>
+<li>If you care about performance issues and are sure which type of piping you are using, it's better to use pipeR operators. </li>
+</ul><h2>
+<a name="vignettes" class="anchor" href="#vignettes"><span class="octicon octicon-link"></span></a>Vignettes</h2>
 
-<h2>
+<p>The package also provides the following vignettes:</p>
+
+<ul>
+<li><a href="http://cran.r-project.org/web/packages/pipeR/vignettes/Introduction.html">Introduction</a></li>
+<li><a href="http://cran.r-project.org/web/packages/pipeR/vignettes/Examples.html">Examples</a></li>
+<li><a href="http://cran.r-project.org/web/packages/pipeR/vignettes/Performance.html">Performance</a></li>
+</ul><h2>
 <a name="help-overview" class="anchor" href="#help-overview"><span class="octicon octicon-link"></span></a>Help overview</h2>
 
 <div class="highlight highlight-r"><pre>help<span class="p">(</span>package <span class="o">=</span> pipeR<span class="p">)</span>
