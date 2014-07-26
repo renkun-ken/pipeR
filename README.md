@@ -14,13 +14,13 @@ Install from CRAN:
 install.packages("pipeR")
 ```
 
-Install the devel version from GitHub (`devtools` package is required):
+Install the development version from GitHub (`devtools` package is required):
 
 ```r
 devtools::install_github("pipeR","renkun-ken")
 ```
 
-## Getting started
+## Examples
 
 ### First-argument piping: `%>>%`
 
@@ -49,6 +49,8 @@ rnorm(10000,mean=10,sd=1) %>>%
   diff %>>%
   plot(col="red",type="l")
 ```
+
+*Notice: function call within a namespace must end up with parentheses  like `x %>>% namespace::fun()`.
 
 ### Free piping: `%:>%`
 
@@ -159,6 +161,20 @@ hflights %>>%
 ## Performance
 
 Each operator defined in this package specializes in its work and is made as simple as possible. Therefore the overhead is extremely low and their performance is very close to traditional approach. This allow you to build long pipelines and perform intensive computations without worrying much about the performance cost of it.
+
+- If you want to stick to a single operator and do not consider the performance of intensive calling, you may use `%>%` in [magrittr](https://github.com/smbache/magrittr). 
+- If you care about performance issues and are sure which type of piping you are using, it's better to use pipeR operators. Below is a simple test of the performance.
+
+```rconsole
+> library(magrittr)
+> library(pipeR)
+> system.time(lapply(1:50000, function(i) rnorm(100) %>% c(rnorm(100))))
+   user  system elapsed 
+   7.36    0.00    7.38 
+> system.time(lapply(1:50000, function(i) rnorm(100) %>>% c(rnorm(100))))
+   user  system elapsed 
+   1.66    0.00    1.66 
+```
 
 ## Help overview
 
