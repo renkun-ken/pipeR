@@ -4,10 +4,10 @@
 \alias{lambda-piping}
 \title{Pipe an object by lambda expression}
 \usage{
-. \%|>\% lambda
+x \%|>\% lambda
 }
 \arguments{
-\item{.}{The object to be piped}
+\item{x}{The object to be piped}
 
 \item{lambda}{The lambda expression which should always be in the form like \(x ~ g\(x\)\)}
 }

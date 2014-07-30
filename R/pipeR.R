@@ -3,7 +3,7 @@
 #' The \code{\%>>\%} operator evaluates the function call on the right-hand side
 #' with the left-hand side object being the first argument.
 #'
-#' @param . The object to pipe as the first argument
+#' @param x The object to pipe as the first argument
 #' @param fun The function call to evaluate with the piped object as the first argument.
 #' @name first-argument piping
 #' @export
@@ -47,7 +47,7 @@
 #' symbol defined by the lambda expression on the right-hand side
 #' and evaluates the target expression.
 #'
-#' @param . The object to be piped
+#' @param x The object to be piped
 #' @param lambda The lambda expression which should always be in the form like \(x ~ g\(x\)\)
 #' @name lambda-piping
 #' @export

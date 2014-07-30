@@ -4,10 +4,10 @@
 \alias{first-argument piping}
 \title{Pipe an object forward as the first argument to a function call}
 \usage{
-. \%>>\% fun
+x \%>>\% fun
 }
 \arguments{
-\item{.}{The object to pipe as the first argument}
+\item{x}{The object to pipe as the first argument}
 
 \item{fun}{The function call to evaluate with the piped object as the first argument.}
 }

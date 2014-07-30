@@ -1,3 +1,8 @@
+v0.3-3 (2014-07-30)
+===
+Resolve issue #16 so that call-using functions will not get the piped object.
+
+
 v0.3-2 (2014-07-26)
 ===
 Add vignettes
