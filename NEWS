@@ -1,4 +1,4 @@
-v0.3-3 (2014-07-30)
+v0.3-3 (2014-08-02)
 ===
 Resolve issue #16 so that call-using functions will not get the piped object.
 

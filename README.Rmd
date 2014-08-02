@@ -1,4 +1,9 @@
-
+```{r knitsetup, echo=FALSE, results='hide', warning=FALSE, message=FALSE, cache=FALSE}
+library(knitr)
+opts_knit$set(base.dir='./', fig.path='', out.format='md')
+opts_chunk$set(prompt=FALSE, comment='', results='markup')
+library(pipeR)
+```
 
 # pipeR
 
@@ -97,8 +102,7 @@ Since these operators are specialized in their tasks, their performance is very 
 
 Here is a simple performance test:
 
-
-```r
+```{r}
 library(magrittr)
 system.time({
   lapply(1:100000, function(i) {
@@ -109,13 +113,7 @@ system.time({
 })
 ```
 
-```
-   user  system elapsed 
-  30.12    0.00   30.15 
-```
-
-
-```r
+```{r}
 library(pipeR)
 system.time({
   lapply(1:100000, function(i) {
@@ -124,11 +122,6 @@ system.time({
       equals("rstats")
   })
 })
-```
-
-```
-   user  system elapsed 
-    2.7     0.0     2.7 
 ```
 
 - If you want to stick to a single operator and do not consider the performance of intensive calling, you may use `%>%` in [magrittr](https://github.com/smbache/magrittr) which also provides additional aliases of basic functions. 
