@@ -1,35 +1,86 @@
+#' Evaluate a lambda expression for Pipe object
+#' @param value value
+#' @param expr the lambda expression in the following forms:
+#'
+#' 1. An expression with \code{.} representing \code{value}
+#'
+#' 2. \code{x -> f(x)}
+#'
+#' 3. \code{x ~ f(x)}
+#' @param envir the environment to evaluate \code{expr}.
 #' @export
-fun <- function(value, expr) {
+fun <- function(value, expr, envir = parent.frame(2L)) {
   expr <- substitute(expr)
-  switch(as.character.default(expr[[1L]]),
-    "~" = {
-      eval(expr[[3L]],
-        "names<-"(list(value),as.character.default(expr[[2L]])),
-        parent.frame())
-    }, "<-" = {
-      eval(expr[[2L]],
-        "names<-"(list(value),as.character.default(expr[[3L]])),
-        parent.frame())
-    }, eval(expr,list(.=value),parent.frame()))
+  pipe.lambda(value,expr,envir)
 }
 
 #' Pipe object
+#' @details
+#' Pipe object provides object-based mechanism for command chaining, which avoids using
+#' external operator and look simpler.
 #'
+#' \code{Pipe()} creates a Pipe object and then we can use \code{$} to perform
+#' first-argument piping, call \code{fun()} to evaluate an expression with \code{.}
+#' or symbol defined by lambda expression. \code{[]} ends a pipeline and extracts
+#' its final value.
+#'
+#' A typical usage of Pipe object is to start with \code{Pipe()} and end with
+#' \code{[]}.
 #' @param value value to pipe
-#' @name pipe
+#' @name Pipe
+#' @return Pipe object
+#' @examples
+#' # Pipe as first-argument using $
+#' Pipe(rnorm(100))$mean()
+#' Pipe(rnorm(100))$plot(col="red")
+#'
+#' # Extract the value from the Pipe object using []
+#' Pipe(rnorm(100))$c(4,5) []
+#'
+#' # Pipe to an exrepssion with . or symbol defined in
+#' # lambda expression to represent the object
+#' Pipe(rnorm(100))$fun(1 + .) []
+#' Pipe(rnorm(100))$fun(x -> 1 + x) []
+#' Pipe(rnorm(100))$fun(x ~ 1 + x) []
+#'
+#' # Command chaining
+#' Pipe(rnorm(100,mean=10))$
+#'   log()$
+#'   diff()$
+#'   plot(col="red")
+#'
+#' # Store an continue piping
+#' pipe1 <- Pipe(rnorm(100,mean=10))$log()$diff()
+#' pipe1$plot(col="red")
+#'
+#' # Data manipulation with dplyr
+#' library(dplyr)
+#' Pipe(mtcars)$
+#'   select(mpg,cyl,disp,hp)$
+#'   filter(mpg <= median(mpg))$
+#'   mutate(rmpg = mpg / max(mpg))$
+#'   group_by(cyl)$
+#'   do(data.frame(mean=mean(.$rmpg),median=median(.$rmpg))) []
+#'
+#' # Data manipulation with rlist
+#' library(rlist)
+#' Pipe(list(1,2,3))$
+#'   list.map(. + 1)$
+#'   list.filter(. <= 5)$
+#'   list.sort(.) []
 #' @export
 Pipe <- function(value) {
   envir <- environment()
-  class(envir) <- c("Pipe","environment")
-  envir
+  setclass(envir, "Pipe")
 }
 
 #' @export
 `$.Pipe` <- function(x,y) {
-  fun <-  get(y,envir = parent.frame(),mode = "function")
+  f <-  get(y,envir = parent.frame(),mode = "function")
   value <- get("value",envir = x,inherits = FALSE)
   function(...) {
-    Pipe(fun(value,...))
+    value <- f(value,...)
+    Pipe(value)
   }
 }
 

@@ -3,8 +3,6 @@
 S3method("$",Pipe)
 S3method("[",Pipe)
 S3method(print,Pipe)
-export("%:>%")
 export("%>>%")
-export("%|>%")
 export(Pipe)
 export(fun)
