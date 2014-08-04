@@ -31,6 +31,18 @@ mtcars %>>%
 
 `.` in the last call is introduced by `do(...)` rather than `%>>%`, which also makes it clear the scope of symbols.
 
+Equivalently, Pipe object can do the same thing.
+
+```{r}
+Pipe(mtcars)$
+  select(mpg,cyl,disp,hp)$
+  filter(mpg <= median(mpg))$
+  mutate(rmpg = mpg / max(mpg))$
+  group_by(cyl)$
+  do(data.frame(mean=mean(.$rmpg),median=median(.$rmpg))) []
+```
+
+
 ## Working with rlist
 
 [`rlist` package](http://renkun.me/rlist/) ([CRAN](http://cran.r-project.org/web/packages/rlist/),[GitHub](https://github.com/renkun-ken/rlist)) is a set of tools for working with list objects storing non-tabular non-relational, or non-structured data as opposed to data frames. The major functions in this package are intentionally designed to work with pipeline.
@@ -62,6 +74,16 @@ devs %>>%
   list.stack
 ```
 
+or equivalently using Pipe object:
+
+```{r}
+Pipe(devs)$
+  list.filter("music" %in% interest & "r" %in% names(lang))$
+  list.select(name,age)$
+  list.stack() []
+```
+
+
 The following example groups the developers by age and for each group it classifies the developers into interest classes and count the number of people in each class.
 
 ```{r}
@@ -69,7 +91,17 @@ devs %>>%
   list.group(age) %>>%
   list.map(group -> group %>>%
       list.class(interest) %>>%
-      list.map(int -> length(int))) %>>%
-  str
+      list.mapv(int -> length(int)))
+```
+
+or equivalently using Pipe object:
+
+```{r}
+Pipe(devs)$
+  list.group(age)$
+  list.map(group -> Pipe(group)$
+      list.class(interest)$
+      list.mapv(int -> length(int))[] 
+    )[]
 ```
 

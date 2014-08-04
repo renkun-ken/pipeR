@@ -13,20 +13,62 @@ library(pipeR)
 
 # Performance
 
-Each operator defined in this package specializes in its work and is made as simple as possible. Therefore the overhead is extremely low and their performance is very close to traditional approach. This allow you to build long and nested pipelines and perform intensive computations without worrying much about the performance cost.
+pipeR operator and Pipe object can achieve high performance especially when they are intensively called.
 
-- If you want to stick to a single operator and do not consider the performance of intensive calling, you may use `%>%` in [magrittr](https://github.com/smbache/magrittr) which also provides additional aliases of basic functions. 
-- If you care about performance issues and are sure which type of piping you are using, it's better to use pipeR operators. Below is a simple test of the performance.
+- If you do not care about the performance of intensive calling and need heuristic distinction between different piping mechanisms, you may use `%>%` in [magrittr](https://github.com/smbache/magrittr) which also provides additional aliases of basic functions. 
+- If you care about performance issues and are sure which type of piping you are using, pipeR can be a helpful choice.
+
+## Simple test case 
+
+Run an experiment for 100000 times. Each time we take a random sample from lower letters (a-z) with replacement, paste these letters together and see whether it equals the string *rstats*.
+
+### Native implementation
 
 ```{r}
-# magrittr::`%>%`
-system.time(lapply(1:50000, function(i) 
-  rnorm(100) %>% c(rnorm(100))))
-
-# pipeR::`%>>%`
-system.time(lapply(1:50000, function(i) 
-  rnorm(100) %>>% c(rnorm(100))))
+system.time(
+  replicate(100000, {
+    paste(sample(letters,6,replace = T),collapse = "") == "rstats"
+    })
+  )
 ```
+
+### Using magrittr's `%>%`
+
+```{r}
+system.time(
+  replicate(100000,{
+    sample(letters,6,replace = T) %>%
+      paste(collapse = "") %>%
+      equals("rstats")
+    })  
+  )
+```
+
+### Using pipeR's `%>>%`
+
+```{r}
+system.time({
+  1:100000 %>>% lapply(function(i) {
+    sample(letters,6,replace = T) %>>%
+      paste(collapse = "") %>>%
+      equals("rstats")
+    })    
+  })
+```
+
+### Using pipeR's Pipe object
+
+```{r}
+system.time(
+  replicate(100000, {
+    Pipe(sample(letters,6,replace = T))$
+      paste(collapse = "")$
+      equals("rstats") []
+    })
+  )
+```
+
+## Nested levels
 
 The more levels the operator is nested in iterations, the larger the performance difference will be.
 
@@ -44,4 +86,4 @@ system.time(lapply(1:1000, function(i)
       rnorm(50) %>>% c(rnorm(50))))))
 ```
 
-These packages use different set of symbols and are thus compatibile with each other. You may choose according to your needs and considerations.
+These packages use different set of symbols and are thus compatible with each other. You may choose according to your needs and considerations.

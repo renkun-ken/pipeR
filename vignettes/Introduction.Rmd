@@ -9,11 +9,13 @@ knitr::opts_chunk$set(comment="#",error=FALSE,tidy=FALSE)
 
 # Introduction to pipeR
 
-pipeR is a set of specialized, high-performance pipeline operators.
+pipeR provides high-performance pipeline operator and object.
 
-## First-argument piping
+## `%>>%`
 
-The first-argument pipe operator `%>>%` inserts the expression on the left-hand side to the first argument of the **function** on the right-hand side. In other words, `x %>>% f(a=1)` will be transformed to and be evaluated as `f(x,a=1)`. This operator accepts both function call, e.g. `plot()` or `plot(col="red")`, and function name, e.g. `log` or `plot`.
+### Pipe as first-argument to function
+
+The pipe operator `%>>%` by default inserts the object on the left-hand side to the first argument of the **function** on the right-hand side. In other words, `x %>>% f(a=1)` will be transformed to and be evaluated as `f(.,a=1)` where `.` takes the value of `x`. It accepts both function call, e.g. `plot()` or `plot(col="red")`, and function name, e.g. `log` or `plot`.
 
 ```r
 rnorm(100) %>>% 
@@ -30,7 +32,7 @@ rnorm(100) %>>%
   hist
 ```
 
-With the first-argument pipe operator `%>>%`, you can write code like
+You can write commands in a chain (or pipeline) like
 
 ```r
 rnorm(10000,mean=10,sd=1) %>>%
@@ -40,73 +42,85 @@ rnorm(10000,mean=10,sd=1) %>>%
   plot(col="red",type="l")
 ```
 
-*Notice: function call within a namespace must end up with parentheses  like `x %>>% namespace::fun()`.
-
-## Free piping
-
-You may not always want to pipe the object to the first argument of the next function. Then you can use free pipe operator `%:>%`, which takes `.` to represent the piped object on the left-hand side and evaluate the *expression* on the right-hand side with `.` as the piped object. In other words, you have the right to decide where the object should be piped to.
+In some cases, the next function needs first-argument piping and uses the piped object elsewhere too. Therefore, you can directly use `.` to represent the piped object within that call.
 
 ```r
-rnorm(100) %:>% 
-  plot(.)
+rnorm(100) %>>%
+  plot(col="red",main=sprintf("Number of points: %d",length(.)))
+```
 
-rnorm(100) %:>% 
-  plot(., col="red")
+*Notice: function call in a namespace must end up with parentheses like `x %>>% base::mean()`.
 
-rnorm(100) %:>% 
-  sample(., size=length(.)*0.5)
+### Pipe as `.` to expression
 
-mtcars %:>% 
+If a function name or call directly follows `%>>%`, it means first-argument piping. If the operator is follows by braces (`{}`), the inner expression will be evaluated with `.` representing the piped object.
+
+```r
+rnorm(100) %>>% 
+  { plot(.) }
+
+rnorm(100) %>>% 
+  { plot(., col="red") }
+
+rnorm(100) %>>% 
+  { sample(., size=length(.)*0.5) }
+
+mtcars %>>% {
   lm(mpg ~ cyl + disp, data=.) %>>% 
   summary
+}
 
-rnorm(100) %:>% 
-  sample(.,length(.)*0.2,FALSE) %:>% 
-  plot(.,main=sprintf("length: %d",length(.)))
-
-rnorm(100) %:>% {
+rnorm(100) %>>% {
   par(mfrow=c(1,2))
   hist(.,main="hist")
   plot(.,col="red",main=sprintf("%d",length(.)))
 }
-
-rnorm(10000,mean=10,sd=1) %:>%
-  sample(.,size=length(.)*0.2,replace=FALSE) %>>%
-  log %>>%
-  diff %:>%
-  plot(.,col="red",type="l",main=sprintf("length: %d",length(.)))
 ```
 
-## Lambda piping
+### Pipe by lambda expression
 
 It can be confusing to see multiple `.` symbols in the same context. In some cases, they may represent different things in the same expression. Even though the expression mostly still works, it may not be a good idea to keep it in that way. Here is an example:
 
 ```r
-mtcars %:>%
-  lm(mpg ~ ., data=.) %>>%
+mtcars %>>%
+  { lm(mpg ~ ., data=.) } %>>%
   summary
 ```
 
-The code above works correctly with `%:>%` and `%>>%`, even though the two dots in the second line have different meanings. `.` in formula `mpg ~ .` represents all variables other than `mpg` in data frame `mtcars`; `.` in `data=.` represents `mtcars` itself. One way to reduce ambiguity is to use *lambda expression* that names the piped object on the left of `~` and specifies the expression to evaluate on the right.
+The code above works correctly even though the two dots in the second line have different meanings. `.` in formula `mpg ~ .` represents all variables other than `mpg` in data frame `mtcars`; `.` in `data=.` represents `mtcars`. One way to reduce ambiguity is to use *lambda expression* that names the piped object on the left of `~` or `->` and specifies the expression to evaluate on the right.
 
-A new pipe operator `%|>%` is defined, which works with lambda expression in the formula form `x ~ f(x)`. More specifically, the expression will be interpreted as *`f(x)` is evaluated with `x` being the piped object*. Therefore, the previous example can be rewritten with `%|>%` like this:
+`%>>%` will assume lambda expression follows when the next expression is enclosed by parentheses `()`. The lambda expression can be in the following forms:
+
+- `expr` where `.` is by default used to represent the piped object.
+- `x -> expr` or `x ~ expr` where `expr` will be evaluated with `x` representing the piped object.
+
+The previous example can be rewritten with lambda expression like this:
 
 ```r
-mtcars %|>%
-  (df ~ lm(mpg ~ ., data=df)) %>>%
+mtcars %>>%
+  (df -> lm(mpg ~ ., data=df)) %>>%
   summary
 ```
 
-Moreover, you can store the lambda expressions by assigning the formula to symbols.
+## Pipe object
+
+`Pipe()` creates a Pipe object where built-in symbols are designed for building pipeline. 
+
+- `$` chains functions by first-argument piping and always returns a Pipe object.
+- `fun()` evaluates an expression with `.` or by lambda expression.
+- `[]` extracts the final value of the Pipe object.
+
+Pipe as first-argument to a function:
 
 ```r
-runlm <- df ~ lm(mpg ~ ., data=df)
-plotlm <- m ~ {
-  par(mfrow=c(2,2))
-  plot(m,ask=FALSE)
-}
+Pipe(rnorm(100,mean=10))$
+  log()$
+  diff()$
+  plot(col="red")
+```
 
-mtcars %|>%
-  runlm %|>%
-  plotlm
-``` 
+```r
+Pipe(1:10)$
+  fun(x -> x + rnorm(1))$
+  mean() []
+```
