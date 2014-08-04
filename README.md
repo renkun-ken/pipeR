@@ -2,9 +2,9 @@
 
 # pipeR
 
-[![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR)
+[![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=0.4)](https://travis-ci.org/renkun-ken/pipeR)
 
-Specialized, high-performance pipeline operators for R: making command chaining clear, fast, readable and flexible.
+High-performance pipeline operator and object
 
 [Release notes](https://github.com/renkun-ken/pipeR/releases)
 
@@ -24,115 +24,71 @@ devtools::install_github("pipeR","renkun-ken")
 
 ## Examples
 
-### First-argument piping
+### `%>>%`
 
-`%>>%` operator inserts the expression on the left-hand side to the first argument of the **function** on the right-hand side.
-
-```r
-rnorm(100) %>>% 
-  plot
-
-rnorm(100) %>>% 
-  plot()
-
-rnorm(100) %>>% 
-  plot(col="red")
-
-rnorm(100) %>>% 
-  sample(size=100,replace=FALSE) %>>% 
-  hist
-```
-
-With the first-argument pipe operator `%>>%`, you can write code like
+Pipe as first-argument to a function:
 
 ```r
-rnorm(10000,mean=10,sd=1) %>>%
-  sample(size=100,replace=FALSE) %>>%
+rnorm(100,mean=10) %>>%
   log %>>%
   diff %>>%
-  plot(col="red",type="l")
+  plot(col="red")
 ```
 
-### Free piping
-
-`%:>%` takes `.` to represent the piped object on the left-hand side and evaluate the *expression* on the right-hand side.
+Pipe as `.` to an expression enclosed by `{}` or `()`:
 
 ```r
-rnorm(100) %:>% 
-  plot(.)
-
-rnorm(100) %:>% 
-  plot(., col="red")
-
-rnorm(100) %:>% 
-  sample(., size=length(.)*0.5)
-
-mtcars %:>% 
-  lm(mpg ~ cyl + disp, data=.) %>>% 
-  summary
-
-rnorm(100) %:>% 
-  sample(.,length(.)*0.2,FALSE) %:>% 
-  plot(.,main=sprintf("length: %d",length(.)))
-
-rnorm(100) %:>% {
-  par(mfrow=c(1,2))
-  hist(.,main="hist")
-  plot(.,col="red",main=sprintf("%d",length(.)))
+rnorm(100) %>>% {
+  x <- .[1:50]
+  y <- .[51:100]
+  lm(y ~ x)
 }
 ```
 
-### Lambda piping
+```r
+mtcars %>>%
+  (lm(mpg ~ ., data = .))
+```
 
-`%|>%` operator evaluates a lambda expression like `x ~ f(x)` in which `x` represents the left-hand side and `f(x)` represents the right-hand side expression about `x`.
+Pipe by lambda expression enclosed by `()`:
 
 ```r
-mtcars %|>%
-  (df ~ lm(mpg ~ ., data=df))
+mtcars %>>%
+  (df -> lm(mpg ~ ., data = df))
+
+mtcars %>>%
+  (df ~ lm(mpg ~ ., data = df))
+```
+
+### `Pipe()`
+
+`Pipe()` creates a Pipe object. 
+
+- `$` chains functions by first-argument piping and always returns a Pipe object.
+- `fun()` evaluates an expression with `.` or by lambda expression.
+- `[]` extracts the final value of the Pipe object.
+
+Pipe as first-argument to a function:
+
+```r
+Pipe(rnorm(100,mean=10))$
+  log()$
+  diff()$
+  plot(col="red")
+```
+
+```r
+Pipe(1:10)$
+  fun(x -> x + rnorm(1))$
+  mean() []
 ```
 
 ## Performance
 
-Since these operators are specialized in their tasks, their performance is very close to traditional approach. 
+[Benchmark tests](http://cran.r-project.org/web/packages/pipeR/vignettes/Performance.html) show that pipeR operator and Pipe object can achieve high performance especially when they are intensively called.
 
-Here is a simple performance test:
-
-
-```r
-library(magrittr)
-system.time({
-  lapply(1:100000, function(i) {
-    sample(letters,6,replace = T) %>%
-      paste(collapse = "") %>%
-      equals("rstats")
-  })
-})
-```
-
-```
-   user  system elapsed 
-  30.12    0.00   30.15 
-```
-
-
-```r
-library(pipeR)
-system.time({
-  lapply(1:100000, function(i) {
-    sample(letters,6,replace = T) %>>%
-      paste(collapse = "") %>>%
-      equals("rstats")
-  })
-})
-```
-
-```
-   user  system elapsed 
-    2.7     0.0     2.7 
-```
-
-- If you want to stick to a single operator and do not consider the performance of intensive calling, you may use `%>%` in [magrittr](https://github.com/smbache/magrittr) which also provides additional aliases of basic functions. 
-- If you care about performance issues and are sure which type of piping you are using, pipeR can be a helpful choice in addition to magrittr.
+- If you do not care about the performance of intensive calling and need heuristic distinction between different piping mechanisms, you may use `%>%` in [magrittr](https://github.com/smbache/magrittr) which also provides additional aliases of basic functions. 
+- If you care about performance issues and are sure which type of piping you are using, pipeR can be a helpful choice.
 
 ## Vignettes
 

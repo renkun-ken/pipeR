@@ -1,3 +1,9 @@
+v0.4 (2014-08-04)
+===
+MAJOR API BREAK: %>>% operator handles all pipeline mechanisms (see README) and other operators are removed.
+Add Pipe object that supports object-based pipeline operation.
+
+
 v0.3-3 (2014-08-02)
 ===
 Resolve issue #16 so that call-using functions will not get the piped object.
