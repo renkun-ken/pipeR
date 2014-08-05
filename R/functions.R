@@ -31,7 +31,7 @@ pipe.lambda <- function(x,expr,envir) {
 pipe.op <- function(x,expr,envir = parent.frame()) {
   expr <- substitute(expr)
   if(is.call(expr)) {
-    symbol <- as.character.default(expr[[1L]])
+    symbol <- as.character(expr[[1L]])
     if(length(symbol) == 1L) {
       if(symbol == "{") {
         return(pipe.dot(x,expr,envir))
