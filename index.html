@@ -38,7 +38,14 @@
 
 <p>High-performance pipeline operator and object</p>
 
-<p><a href="https://github.com/renkun-ken/pipeR/releases">Release notes</a></p>
+<h2>
+<a name="whats-new-in-04" class="anchor" href="#whats-new-in-04"><span class="octicon octicon-link"></span></a>What's new in 0.4?</h2>
+
+<ul>
+<li>
+<strong>Major API Change</strong>: <code>%&gt;&gt;%</code> operator now handles all pipeline mechanisms and other operators are deprecated.</li>
+<li>Add <code>Pipe</code> object that supports object-based pipeline operation.</li>
+</ul><p><a href="https://github.com/renkun-ken/pipeR/releases">Release notes</a></p>
 
 <h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
@@ -54,6 +61,18 @@
 </pre></div>
 
 <h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>The form of the object following <code>%&gt;&gt;%</code> determines which piping mechanism is used. If the operator is followed by, for example, </p>
+
+<ul>
+<li>
+<code>foo</code> or <code>foo(...)</code>: Pipe to its first argument;</li>
+<li>
+<code>{ expression }</code> or <code>( expression )</code>: Pipe to symbol <code>.</code>;</li>
+<li>
+<code>(x -&gt; expression)</code> or <code>(x ~ expression)</code>: Pipe to symbol <code>x</code>.</li>
+</ul><h2>
 <a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
 
 <h3>
