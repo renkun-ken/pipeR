@@ -12,34 +12,33 @@ pipe.dot <- function(.,expr,envir) {
 }
 
 eval.labmda <- function(x,symbol,expr,envir) {
-  eval(expr,setnames(list(x),as.character.default(symbol)),envir)
+  eval(expr,setnames(list(x),as.character(symbol)),envir)
 }
 
 pipe.lambda <- function(x,expr,envir) {
   if(is.call(expr)) {
-    symbol <- as.character.default(expr[[1L]])
+    symbol <- as.character(expr[[1L]])
     if(length(symbol) == 1L) {
-      if(symbol == "~") {
-        return(eval.labmda(x,expr[[2L]],expr[[3L]],envir))
-      } else if(symbol == "<-") {
+      if(symbol == "<-")
         return(eval.labmda(x,expr[[3L]],expr[[2L]],envir))
-      }
+      else if(symbol == "~")
+        return(eval.labmda(x,expr[[2L]],expr[[3L]],envir))
     }
   }
   eval(expr,list(.=x),envir)
 }
 
-pipe.op <- function(x,expr) {
+pipe.op <- function(x,expr,envir = parent.frame()) {
   expr <- substitute(expr)
   if(is.call(expr)) {
     symbol <- as.character.default(expr[[1L]])
     if(length(symbol) == 1L) {
       if(symbol == "{") {
-        return(pipe.dot(x,expr,parent.frame()))
+        return(pipe.dot(x,expr,envir))
       } else if(symbol == "(") {
-        return(pipe.lambda(x,expr[[2L]],parent.frame()))
+        return(pipe.lambda(x,expr[[2L]],envir))
       }
     }
   }
-  pipe.first(x,expr,parent.frame())
+  pipe.first(x,expr,envir)
 }
