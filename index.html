@@ -63,20 +63,84 @@
 <h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
+<h3>
+<a name="" class="anchor" href="#"><span class="octicon octicon-link"></span></a><code>%&gt;&gt;%</code>
+</h3>
+
 <p>The form of the object following <code>%&gt;&gt;%</code> determines which piping mechanism is used. If the operator is followed by, for example, </p>
 
-<ul>
-<li>
-<code>foo</code> or <code>foo(...)</code>: Pipe to its first argument;</li>
-<li>
-<code>{ expression }</code> or <code>( expression )</code>: Pipe to symbol <code>.</code>;</li>
-<li>
-<code>(x -&gt; expression)</code> or <code>(x ~ expression)</code>: Pipe to symbol <code>x</code>.</li>
-</ul><h2>
+<table>
+<thead><tr>
+<th>Usage</th>
+<th>As if</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>x %&gt;&gt;% f</code></td>
+<td><code>f(x)</code></td>
+</tr>
+<tr>
+<td><code>x %&gt;&gt;% f(...)</code></td>
+<td><code>f(x,...)</code></td>
+</tr>
+<tr>
+<td><code>x %&gt;&gt;% { f(.) }</code></td>
+<td><code>f(x)</code></td>
+</tr>
+<tr>
+<td><code>x %&gt;&gt;% ( f(.) )</code></td>
+<td><code>f(x)</code></td>
+</tr>
+<tr>
+<td><code>x %&gt;&gt;% (i -&gt; f(i))</code></td>
+<td><code>f(x)</code></td>
+</tr>
+<tr>
+<td><code>x %&gt;&gt;% (i ~ f(i))</code></td>
+<td><code>f(x)</code></td>
+</tr>
+</tbody>
+</table><h3>
+<a name="pipe" class="anchor" href="#pipe"><span class="octicon octicon-link"></span></a><code>Pipe()</code>
+</h3>
+
+<p><code>Pipe()</code> creates a Pipe object that supports light-weight chaining using internal operators. For example,</p>
+
+<table>
+<thead><tr>
+<th>Usage</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>Pipe(x)$foo()$bar()</code></td>
+<td>Build <code>Pipe</code> object for chaining</td>
+</tr>
+<tr>
+<td><code>Pipe(x)$foo()$bar() []</code></td>
+<td>Extract the final value</td>
+</tr>
+<tr>
+<td><code>Pipe(x)$fun(expr)</code></td>
+<td>Pipe to <code>.</code>
+</td>
+</tr>
+<tr>
+<td><code>Pipe(x)$fun(x -&gt; expr)</code></td>
+<td>Pipe to <code>x</code>
+</td>
+</tr>
+<tr>
+<td><code>Pipe(x)$fun(x ~ expr)</code></td>
+<td>Pipe to <code>x</code>
+</td>
+</tr>
+</tbody>
+</table><h2>
 <a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
 
 <h3>
-<a name="" class="anchor" href="#"><span class="octicon octicon-link"></span></a><code>%&gt;&gt;%</code>
+<a name="-1" class="anchor" href="#-1"><span class="octicon octicon-link"></span></a><code>%&gt;&gt;%</code>
 </h3>
 
 <p>Pipe as first-argument to a function:</p>
@@ -110,7 +174,7 @@ mtcars <span class="o">%&gt;&gt;%</span>
 </pre></div>
 
 <h3>
-<a name="pipe" class="anchor" href="#pipe"><span class="octicon octicon-link"></span></a><code>Pipe()</code>
+<a name="pipe-1" class="anchor" href="#pipe-1"><span class="octicon octicon-link"></span></a><code>Pipe()</code>
 </h3>
 
 <p><code>Pipe()</code> creates a Pipe object. </p>
