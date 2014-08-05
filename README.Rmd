@@ -11,6 +11,11 @@ library(pipeR)
 
 High-performance pipeline operator and object
 
+## What's new in 0.4?
+
+- **Major API Change**: `%>>%` operator now handles all pipeline mechanisms and other operators are deprecated.
+- Add `Pipe` object that supports object-based pipeline operation.
+
 [Release notes](https://github.com/renkun-ken/pipeR/releases)
 
 ## Installation
@@ -26,6 +31,14 @@ Install the development version from GitHub (`devtools` package is required):
 ```r
 devtools::install_github("pipeR","renkun-ken")
 ```
+
+## Usage
+
+The form of the object following `%>>%` determines which piping mechanism is used. If the operator is followed by, for example, 
+
+- `foo` or `foo(...)`: Pipe to its first argument;
+- `{ expression }` or `( expression )`: Pipe to symbol `.`;
+- `(x -> expression)` or `(x ~ expression)`: Pipe to symbol `x`.
 
 ## Examples
 

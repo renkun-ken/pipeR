@@ -1,6 +1,6 @@
 v0.4 (2014-08-04)
 ===
-MAJOR API BREAK: %>>% operator handles all pipeline mechanisms (see README) and other operators are removed.
+MAJOR API BREAK: %>>% operator handles all pipeline mechanisms (see README) and other operators are deprecated.
 Add Pipe object that supports object-based pipeline operation.
 
 
