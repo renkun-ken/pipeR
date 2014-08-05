@@ -34,11 +34,22 @@ devtools::install_github("pipeR","renkun-ken")
 
 ## Usage
 
+### `%>>%`
+
 The form of the object following `%>>%` determines which piping mechanism is used. If the operator is followed by, for example, 
 
 - `foo` or `foo(...)`: Pipe to its first argument;
-- `{ expression }` or `( expression )`: Pipe to symbol `.`;
-- `(x -> expression)` or `(x ~ expression)`: Pipe to symbol `x`.
+- `{ expr }` or `( expr )`: Pipe to symbol `.`;
+- `(x -> expr)` or `(x ~ expr)`: Pipe to symbol `x`.
+
+### `Pipe()`
+
+`Pipe()` creates a Pipe object that supports light-weight chaining using internal operators. For example,
+
+- `Pipe(x)$foo()$bar()`: Pipe along a chain of function calls and get a `Pipe` object for further chaining;
+- `Pipe(x)$foo()$bar() []`: Extract the final value of the `Pipe` object;
+- `Pipe(x)$fun(expr)`: Pipe to `.`;
+- `Pipe(x)$fun(x -> expr)` or `Pipe(x)$fun(x ~ expr)`: Pipe to `x`;
 
 ## Examples
 
