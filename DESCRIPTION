@@ -7,7 +7,7 @@ Maintainer: Kun Ren <renkun@outlook.com>
 Description: Provides high-performance pipeline operator and object.
 Depends:
     R (>= 2.14)
-Date: 2014-08-04
+Date: 2014-08-05
 Suggests:
     testthat,knitr,magrittr,dplyr,rlist
 License: MIT + file LICENSE
