@@ -47,3 +47,13 @@ test_that("function", {
     z(3)
   }, 5)
 })
+
+test_that("scoping", {
+  expect_equal(local({ i <- 1; 1:3 %>>% c(i)}),c(1:3,1))
+  expect_identical(lapply(1:3,function(i) 1:3 %>>% c(i)),
+    lapply(1:3,function(i) c(1:3,i)))
+  expect_equal(local({
+    p <- 2
+    1:3 %>>% (function(x) mean(x + . * p))
+  })(1),5)
+})
