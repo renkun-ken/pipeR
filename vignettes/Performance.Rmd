@@ -20,13 +20,13 @@ pipeR operator and Pipe object can achieve high performance especially when they
 
 ## Simple test case 
 
-Run an experiment for 100000 times. Each time we take a random sample from lower letters (a-z) with replacement, paste these letters together and see whether it equals the string *rstats*.
+Run an experiment for 10000 times. Each time we take a random sample from lower letters (a-z) with replacement, paste these letters together and see whether it equals the string *rstats*.
 
 ### Native implementation
 
 ```{r}
 system.time(
-  replicate(100000, {
+  replicate(10000, {
     paste(sample(letters,6,replace = T),collapse = "") == "rstats"
     })
   )
@@ -36,7 +36,7 @@ system.time(
 
 ```{r}
 system.time(
-  replicate(100000,{
+  replicate(10000,{
     sample(letters,6,replace = T) %>%
       paste(collapse = "") %>%
       equals("rstats")
@@ -48,7 +48,7 @@ system.time(
 
 ```{r}
 system.time({
-  1:100000 %>>% lapply(function(i) {
+  1:10000 %>>% lapply(function(i) {
     sample(letters,6,replace = T) %>>%
       paste(collapse = "") %>>%
       equals("rstats")
@@ -60,7 +60,7 @@ system.time({
 
 ```{r}
 system.time(
-  replicate(100000, {
+  replicate(10000, {
     Pipe(sample(letters,6,replace = T))$
       paste(collapse = "")$
       equals("rstats") []
@@ -74,13 +74,13 @@ The more levels the operator is nested in iterations, the larger the performance
 
 ```{r}
 # magrittr::`%>%`
-system.time(lapply(1:1000, function(i) 
+system.time(lapply(1:100, function(i) 
   rnorm(100) %>% c(rnorm(100),
     sapply(1:100, function(j) 
       rnorm(50) %>% c(rnorm(50))))))
 
 # pipeR::`%>>%`
-system.time(lapply(1:1000, function(i) 
+system.time(lapply(1:100, function(i) 
   rnorm(100) %>>% c(rnorm(100),
     sapply(1:100, function(j) 
       rnorm(50) %>>% c(rnorm(50))))))
