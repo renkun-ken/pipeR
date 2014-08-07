@@ -28,17 +28,17 @@ pipe.lambda <- function(x,expr,envir) {
   eval(expr,list(.=x),envir)
 }
 
-pipe.op <- function(x,expr,envir = parent.frame()) {
+pipe.op <- function(x,expr) {
   expr <- substitute(expr)
   if(is.call(expr)) {
     symbol <- as.character(expr[[1L]])
     if(length(symbol) == 1L) {
       if(symbol == "{") {
-        return(pipe.dot(x,expr,envir))
+        return(pipe.dot(x,expr,parent.frame()))
       } else if(symbol == "(") {
-        return(pipe.lambda(x,expr[[2L]],envir))
+        return(pipe.lambda(x,expr[[2L]],parent.frame()))
       }
     }
   }
-  pipe.first(x,expr,envir)
+  pipe.first(x,expr,parent.frame())
 }
