@@ -4,10 +4,12 @@ Title: High-performance pipeline operator and object
 Version: 0.4
 Author: Kun Ren <renkun@outlook.com>
 Maintainer: Kun Ren <renkun@outlook.com>
-Description: Provides high-performance pipeline operator and object.
+Description: Provides high-performance pipeline operator and object based
+  on a set of simple and intuitive rules, making command chaining definite,
+  readable and fast.
 Depends:
     R (>= 2.14)
-Date: 2014-08-05
+Date: 2014-08-07
 Suggests:
     testthat,knitr,magrittr,dplyr,rlist
 License: MIT + file LICENSE

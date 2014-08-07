@@ -9,7 +9,7 @@ knitr::opts_chunk$set(comment="#",error=FALSE,tidy=FALSE)
 
 # Introduction to pipeR
 
-pipeR provides high-performance pipeline operator and object.
+pipeR provides high-performance pipeline operator and object based on a set of simple and intuitive rules, making command chaining definite, readable and fast.
 
 ## `%>>%`
 
