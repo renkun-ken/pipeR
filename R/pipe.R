@@ -93,7 +93,7 @@ Pipe <- function(value) {
 print.Pipe <- function(x,...) {
   value <- get("value",envir = x,inherits = FALSE)
   if(!is.null(value)) {
-    cat("Pipe\n")
+    cat("<Pipe>\n[] :",class(value),"\n")
     print(value,...)
   }
 }
