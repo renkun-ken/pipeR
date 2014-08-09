@@ -10,8 +10,7 @@
 #' @param envir the environment to evaluate \code{expr}.
 #' @export
 fun <- function(value, expr, envir = parent.frame(2L)) {
-  expr <- substitute(expr)
-  pipe.lambda(value,expr,envir)
+  pipe.lambda(value,substitute(expr),envir)
 }
 
 #' Pipe object
@@ -76,7 +75,7 @@ Pipe <- function(value) {
 
 #' @export
 `$.Pipe` <- function(x,y) {
-  f <-  get(y,envir = parent.frame(),mode = "function")
+  f <-  get(y,envir = parent.frame(),mode = "function",inherits = TRUE)
   value <- get("value",envir = x,inherits = FALSE)
   function(...) {
     value <- f(value,...)
