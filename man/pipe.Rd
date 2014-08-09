@@ -3,10 +3,10 @@
 \alias{Pipe}
 \title{Pipe object}
 \usage{
-Pipe(value)
+Pipe(value = NULL)
 }
 \arguments{
-\item{value}{value to pipe}
+\item{value}{value to pipe (default is \code{NULL})}
 }
 \value{
 Pipe object

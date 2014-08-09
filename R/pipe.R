@@ -25,7 +25,7 @@ fun <- function(value, expr, envir = parent.frame(2L)) {
 #'
 #' A typical usage of Pipe object is to start with \code{Pipe()} and end with
 #' \code{[]}.
-#' @param value value to pipe
+#' @param value value to pipe (default is \code{NULL})
 #' @name Pipe
 #' @return Pipe object
 #' @examples
@@ -68,7 +68,7 @@ fun <- function(value, expr, envir = parent.frame(2L)) {
 #'   list.filter(. <= 5)$
 #'   list.sort(.) []
 #' @export
-Pipe <- function(value) {
+Pipe <- function(value = NULL) {
   envir <- environment()
   setclass(envir, "Pipe")
 }
