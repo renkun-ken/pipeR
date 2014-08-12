@@ -1,18 +1,3 @@
-#' Evaluate a lambda expression for Pipe object
-#' @param value value
-#' @param expr the lambda expression in the following forms:
-#'
-#' 1. An expression with \code{.} representing \code{value}
-#'
-#' 2. \code{x -> f(x)}
-#'
-#' 3. \code{x ~ f(x)}
-#' @param envir the environment to evaluate \code{expr}.
-#' @export
-fun <- function(value, expr, envir = parent.frame(2L)) {
-  pipe.lambda(value,substitute(expr),envir)
-}
-
 #' Pipe object
 #' @details
 #' Pipe object provides object-based mechanism for command chaining, which avoids using
@@ -69,12 +54,18 @@ fun <- function(value, expr, envir = parent.frame(2L)) {
 #'   list.sort(.) []
 #' @export
 Pipe <- function(value = NULL) {
+  fun <- function(expr) {
+    value <- pipe.lambda(value,substitute(expr),parent.frame())
+    Pipe(value)
+  }
   envir <- environment()
   setclass(envir, "Pipe")
 }
 
 #' @export
 `$.Pipe` <- function(x,y) {
+  if(exists(y, envir = x, inherits = FALSE))
+    return(get(y, envir = x, inherits = FALSE))
   f <-  get(y,envir = parent.frame(),mode = "function",inherits = TRUE)
   value <- get("value",envir = x,inherits = FALSE)
   function(...) {
@@ -84,15 +75,15 @@ Pipe <- function(value = NULL) {
 }
 
 #' @export
-`[.Pipe` <- function(x,...)
-  get("value",envir = x,inherits = FALSE)
+`[.Pipe` <- function(x, ...)
+  get("value", envir = x, inherits = FALSE)
 
 
 #' @export
 print.Pipe <- function(x,...) {
   value <- get("value",envir = x,inherits = FALSE)
   if(!is.null(value)) {
-    cat("<Pipe>\n[] :",class(value),"\n")
+    cat("<Pipe>\n$value :",class(value),"\n")
     print(value,...)
   }
 }
