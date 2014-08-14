@@ -80,19 +80,19 @@ Pipe <- function(value = NULL) {
 }
 
 #' @export
-print.Pipe <- function(x,...) {
+print.Pipe <- function(x,...,header=getOption("Pipe.header",TRUE)) {
   value <- get("value",envir = x,inherits = FALSE)
   if(!is.null(value)) {
-    if(getOption("Pipe.header",TRUE))
+    if(header)
       cat("$value :",class(value),"\n")
     print(value,...)
   }
 }
 
 #' @export
-str.Pipe <- function(x,...) {
-  value <- get("value",envir = x,inherits = FALSE)
-  if(getOption("Pipe.header",TRUE))
+str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
+  value <- get("value",envir = object,inherits = FALSE)
+  if(header)
     cat("$value :\n")
   str(value,...)
 }
