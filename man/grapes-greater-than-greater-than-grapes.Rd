@@ -12,8 +12,22 @@ x \%>>\% expr
 }
 \description{
 The \code{\%>>\%} operator pipes the object on the left-hand side to the
-right-hand side as either the first argument or a symbol defined by lambda
-expression.
+right-hand side as either the first argument and \code{.}, or a symbol defined
+by lambda expression.
+}
+\details{
+When a function name or call directly follows the operator in the form
+\code{x \%>>\% f} or \code{x \%>>\% f(...)}, the operator performs first-argument piping,
+that is, \code{f(x,...)} will be evaluated (also with \code{.} representing \code{x}).
+
+When an expression enclosed within \code{\{\}} or \code{()} in the form
+\code{x \%>>\% { expr }} or \code{x \%>>\% ( expr )}, the operator performs
+dot-piping, that is, the expression will be evaluated with \code{.}
+representing \code{x}.
+
+When a lambda expression is supplied in the form \code{x \%>>\% (p -> expr)} or
+\code{x \%>>\% (p ~ expr)}, \code{expr} will be evaluated with \code{p} representing
+\code{x}.
 }
 \examples{
 \dontrun{
@@ -40,11 +54,6 @@ rnorm(100) \%>>\% (plot(.,col="red",main=length(.)))
 lambda expression in the form of x -> f(x) or x ~ f(x).
 rnorm(100) \%>>\% (x -> plot(x,col="red",main=length(x)))
 rnorm(100) \%>>\% (x ~ plot(x,col="red",main=length(x)))
-
-# Pipe to fun to use lambda expression
-rnorm(100) \%>>\% fun(. + 1)
-rnorm(100) \%>>\% fun(x -> x + 1)
-rnorm(100) \%>>\% fun(x ~ x + 1)
 
 # Pipe to an anomymous function
 rnorm(100) \%>>\% (function(x) mean(x))()
