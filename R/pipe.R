@@ -87,3 +87,10 @@ print.Pipe <- function(x,...) {
     print(value,...)
   }
 }
+
+#' @export
+str.Pipe <- function(x,...) {
+  value <- get("value",envir = x,inherits = FALSE)
+  cat("$value :\n")
+  str(value,...)
+}
