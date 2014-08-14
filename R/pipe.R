@@ -75,15 +75,15 @@ Pipe <- function(value = NULL) {
 }
 
 #' @export
-`[.Pipe` <- function(x, ...)
+`[.Pipe` <- function(x, ...) {
   get("value", envir = x, inherits = FALSE)
-
+}
 
 #' @export
 print.Pipe <- function(x,...) {
   value <- get("value",envir = x,inherits = FALSE)
   if(!is.null(value)) {
-    cat("<Pipe>\n$value :",class(value),"\n")
+    cat("$value :",class(value),"\n")
     print(value,...)
   }
 }
