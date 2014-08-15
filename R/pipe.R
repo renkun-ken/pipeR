@@ -107,7 +107,7 @@ print.Pipe <- function(x,...,header=getOption("Pipe.header",TRUE)) {
   value <- get("value",envir = x,inherits = FALSE)
   if(!is.null(value)) {
     if(header)
-      cat("$value :",class(value),"\n")
+      cat("$value :",class(value),"\n------\n")
     print(value,...)
   }
 }
@@ -116,6 +116,6 @@ print.Pipe <- function(x,...,header=getOption("Pipe.header",TRUE)) {
 str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
   value <- get("value",envir = object,inherits = FALSE)
   if(header)
-    cat("$value :\n")
+    cat("$value : ")
   str(value,...)
 }
