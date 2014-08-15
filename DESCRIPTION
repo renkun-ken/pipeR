@@ -2,8 +2,8 @@ Package: pipeR
 Type: Package
 Title: High-performance pipeline operator and Pipe function
 Version: 0.4-1
-Author: Kun Ren <renkun@outlook.com>
-Maintainer: Kun Ren <renkun@outlook.com>
+Author: Kun Ren <ken@renkun.me>
+Maintainer: Kun Ren <ken@renkun.me>
 Description: Provides high-performance pipeline operator and light-weight Pipe
     function based on a set of simple and intuitive rules, making command
     chaining definite, readable and fast.
