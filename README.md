@@ -9,7 +9,7 @@ High-performance pipeline operator and light-weight Pipe function based on a set
 ## What's new in 0.4?
 
 - **Major API Change**: `%>>%` operator now handles all pipeline mechanisms and other operators are deprecated.
-- Add `Pipe` object that supports object-based pipeline operation.
+- Add `Pipe()` function that supports object-based pipeline operation.
 
 [Release notes](https://github.com/renkun-ken/pipeR/releases)
 
@@ -31,120 +31,111 @@ devtools::install_github("pipeR","renkun-ken")
 
 ### `%>>%`
 
-If `%>>%` is followed by
+`%>>%` operator behaves based on a set of rules:
 
-* a function name or call like `f` or `f(...)`, pipe to first argument as `f(x)` or `f(x,...)`;
-* an expression enclosed within `{}` or `()`, pipe to `.` symbol;
-* a lambda expression like `(x -> expr)` or `(x ~ expr)`, pipe to lambda symbol, in this case, `x`.
-
-Here is a cheat-sheet:
+* Pipe to first argument and `.` in a function
 
 ```r
-x %>>% f            # f(x)
-x %>>% f(...)       # f(x,...)
-x %>>% { f(.) }     # f(x)
-x %>>% ( f(.) )     # f(x)
-x %>>% (i -> f(i))  # f(x)
-x %>>% (i ~ f(i))   # f(x)
+rnorm(100) %>>%
+  plot
+
+rnorm(100) %>>%
+  plot(col="red")
+  
+rnorm(100) %>>%
+  plot(col="red", main=length(.))
 ```
 
-### `Pipe()`
+* Pipe to `.` in an expression
 
-`Pipe()` creates a Pipe object that supports light-weight chaining without any external operator. Typically, start with `Pipe()` and end with `$value` or `[]` to extract the final value of the Pipe.
+```r
+mtcars %>>%
+  { lm(mpg ~ cyl + wt, data = .) }
 
-Working with [dplyr](https://github.com/hadley/dplyr):
+mtcars %>>%
+  ( lm(mpg ~ cyl + wt, data = .) )
+```
+
+* Pipe by lambda expression
+
+```r
+mtcars %>>%
+  (df -> lm(mpg ~ cyl + wt, data = df))
+  
+rnorm(100) %>>%
+  (x -> plot(x, col="red", main=length(x)))
+```
+
+* Extract element
+
+```r
+mtcars %>>%
+  (mpg)
+```
+
+Working with [dplyr](https://github.com/hadley/dplyr/):
 
 ```r
 library(dplyr)
-library(pipeR)
-Pipe(mtcars)$
-  filter(mpg >= mean(mpg))$
-  select(mpg, wt, qsec)$
-  fun(lm(mpg ~ ., data = .))$
-  summary()$
-  value
+mtcars %>>%
+  filter(mpg <= mean(mpg)) %>>%
+  select(mpg, wt, qsec) %>>%
+  (lm(mpg ~ ., data = .)) %>>%
+  summary() %>>%
+  (coefficients)
 ```
 
-Working with [ggvis](https://github.com/rstudio/ggvis):
+Working with [ggvis](http://ggvis.rstudio.com/):
 
 ```r
 library(ggvis)
-library(pipeR)
-Pipe(mtcars)$
-  ggvis(~ mpg, ~ wt)$
-  layer_points() []
-```
-
-Here is a cheat-sheet:
-
-```r
-Pipe(x)$foo()$bar()         # build Pipe object for chaining
-Pipe(x)$foo()$bar()$value   # extract the final value
-Pipe(x)$foo()$bar() []      # extract the final value
-Pipe(x)$fun(expr)           # pipe to "."
-Pipe(x)$fun(x -> expr)      # pipe to "x"
-Pipe(x)$fun(x ~ expr)       # pipe to "x"
-```
-
-## Examples
-
-### `%>>%`
-
-Pipe as first-argument to a function:
-
-```r
-rnorm(100,mean=10) %>>%
-  log %>>%
-  diff %>>%
-  plot(col="red")
-```
-
-Pipe as `.` to an expression enclosed by `{}` or `()`:
-
-```r
-rnorm(100) %>>% {
-  x <- .[1:50]
-  y <- .[51:100]
-  lm(y ~ x)
-}
-```
-
-```r
 mtcars %>>%
-  (lm(mpg ~ ., data = .))
+  ggvis(~mpg, ~wt) %>>%
+  layer_points()
 ```
 
-Pipe by lambda expression enclosed by `()`:
+Working with [rlist](http://renkun.me/rlist/):
 
 ```r
-mtcars %>>%
-  (df -> lm(mpg ~ ., data = df))
-
-mtcars %>>%
-  (df ~ lm(mpg ~ ., data = df))
+library(rlist)
+1:100 %>>%
+  list.group(. %% 3) %>>%
+  list.mapv(g -> mean(g))
 ```
 
 ### `Pipe()`
 
-`Pipe()` creates a Pipe object. 
+`Pipe()` creates a Pipe object that supports light-weight chaining without any external operator. Typically, start with `Pipe()` and end with `$value` or `[]` to extract the final value of the Pipe. An internal function `.()` works in the same way with `x %>>% (...)` for dot piping, lambda expression, and element extraction.
 
-- `$` chains functions by first-argument piping and always returns a Pipe object.
-- `fun()` evaluates an expression with `.` or by lambda expression.
-- `$value` or `[]` extracts the final value of the Pipe object.
+Expressions using `%>>%` can be easily translated to `Pipe()`. But `Pipe()` is shipped with more features. See details in vignettes.
 
-Pipe as first-argument to a function:
+Working with dplyr:
 
 ```r
-Pipe(rnorm(100,mean=10))$
-  log()$
-  diff()$
-  plot(col="red") []
+Pipe(mtcars)$
+  filter(mpg >= mean(mpg))$
+  select(mpg, wt, qsec)$
+  .(lm(mpg ~ ., data = .))$
+  summary()$
+  .(coefficients)$
+  value
 ```
 
+Working with ggvis:
+
 ```r
-Pipe(1:10)$
-  fun(x -> x + rnorm(1))$
-  mean() []
+Pipe(mtcars)$
+  ggvis(~ mpg, ~ wt)$
+  layer_points()
+```
+
+Working with rlist:
+
+```r
+Pipe(1:100)$
+  list.group(. %% 3)$
+  list.mapv(g -> mean(g))$
+  value
 ```
 
 ## Performance
