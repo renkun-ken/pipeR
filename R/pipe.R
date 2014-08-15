@@ -88,8 +88,8 @@ Pipe <- function(value = NULL) {
         pipe.lambda(value,expr,parent.frame())
     Pipe(value)
   }
-  envir <- environment()
-  setclass(envir, "Pipe")
+  .envir <- environment()
+  setclass(.envir, "Pipe")
 }
 
 #' @export
