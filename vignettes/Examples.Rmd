@@ -1,8 +1,6 @@
 <!--
 %\VignetteEngine{knitr}
 %\VignetteIndexEntry{Examples}
-%\VignetteDepends{dplyr}
-%\VignetteDepends{rlist}
 -->
 
 ```{r, echo = FALSE, message = FALSE}
@@ -17,7 +15,7 @@ knitr::opts_chunk$set(comment="#",error=FALSE,tidy=FALSE)
 
 The following code demonstrates piping with `dplyr` functions.
 
-```{r}
+```r
 library(dplyr)
 library(pipeR)
 
@@ -33,7 +31,7 @@ mtcars %>>%
 
 Equivalently, Pipe object can do the same thing.
 
-```{r}
+```r
 Pipe(mtcars)$
   select(mpg,cyl,disp,hp)$
   filter(mpg <= median(mpg))$
@@ -49,7 +47,7 @@ Pipe(mtcars)$
 
 The following example deals with the list of developers with names, ages, interests, and programming language they use and the number of years they have been using them.
 
-```{r}
+```r
 library(rlist)
 library(pipeR)
 devs <- 
@@ -67,7 +65,7 @@ devs <-
 
 The following code queries the name of each developer who likes music and uses R, and put stack the results in a data frame.
 
-```{r}
+```r
 devs %>>% 
   list.filter("music" %in% interest & "r" %in% names(lang)) %>>%
   list.select(name,age) %>>%
@@ -76,7 +74,7 @@ devs %>>%
 
 or equivalently using Pipe object:
 
-```{r}
+```r
 Pipe(devs)$
   list.filter("music" %in% interest & "r" %in% names(lang))$
   list.select(name,age)$
@@ -86,7 +84,7 @@ Pipe(devs)$
 
 The following example groups the developers by age and for each group it classifies the developers into interest classes and count the number of people in each class.
 
-```{r}
+```r
 devs %>>%
   list.group(age) %>>%
   list.map(group -> group %>>%
@@ -96,7 +94,7 @@ devs %>>%
 
 or equivalently using Pipe object:
 
-```{r}
+```r
 Pipe(devs)$
   list.group(age)$
   list.map(group -> Pipe(group)$
