@@ -14,6 +14,7 @@
 #' @name Pipe
 #' @return Pipe object
 #' @examples
+#' \dontrun{
 #' # Pipe as first-argument using $
 #' Pipe(rnorm(100))$mean()
 #' Pipe(rnorm(100))$plot(col="red")
@@ -69,6 +70,7 @@
 #' f1 <- Pipe(rnorm(100))$plot
 #' f1(col="red")
 #' f1(col="green")
+#' }
 #' @export
 Pipe <- function(value = NULL) {
   fun <- function(expr) {

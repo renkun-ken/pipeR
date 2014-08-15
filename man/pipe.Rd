@@ -27,6 +27,7 @@ A typical usage of Pipe object is to start with \code{Pipe()} and end with
 \code{[]}.
 }
 \examples{
+\dontrun{
 # Pipe as first-argument using $
 Pipe(rnorm(100))$mean()
 Pipe(rnorm(100))$plot(col="red")
@@ -82,5 +83,6 @@ p1$layer_bars()
 f1 <- Pipe(rnorm(100))$plot
 f1(col="red")
 f1(col="green")
+}
 }
 
