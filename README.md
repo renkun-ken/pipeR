@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR)
 
-High-performance pipeline operator and object based on a set of simple and intuitive rules, making command chaining definite, readable and fast.
+High-performance pipeline operator and light-weight Pipe function based on a set of simple and intuitive rules, making command chaining definite, readable and fast.
 
 ## What's new in 0.4?
 
