@@ -9,7 +9,11 @@
 #' and extracts its final value.
 #'
 #' A typical usage of Pipe object is to start with \code{Pipe()} and end with
-#' \code{[]}.
+#' \code{$value} or \code{[]}.
+#'
+#' \code{print()} and \code{str()} are implemented for \code{Pipe} object.
+#' Use \code{header = FALSE} to suppress Pipe header message in printed results.
+#' Use \code{options(Pipe.header = FASLE)} to suppress it globally.
 #' @param value value to pipe (default is \code{NULL})
 #' @name Pipe
 #' @return Pipe object
