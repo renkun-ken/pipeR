@@ -1,17 +1,18 @@
 Package: pipeR
 Type: Package
-Title: High-performance pipeline operator and object
-Version: 0.4
+Title: High-performance pipeline operator and Pipe function
+Version: 0.4-1
 Author: Kun Ren <renkun@outlook.com>
 Maintainer: Kun Ren <renkun@outlook.com>
-Description: Provides high-performance pipeline operator and object based
-    on a set of simple and intuitive rules, making command chaining definite,
-    readable and fast.
+Description: Provides high-performance pipeline operator and light-weight Pipe
+    function based on a set of simple and intuitive rules, making command
+    chaining definite, readable and fast.
 Depends:
     R (>= 2.14)
 Date: 2014-08-08
 Suggests:
-    testthat,knitr,magrittr,dplyr,rlist
+    testthat,knitr
+Enhances: magrittr
 License: MIT + file LICENSE
 URL: http://renkun.me/pipeR,
     https://github.com/renkun-ken/pipeR

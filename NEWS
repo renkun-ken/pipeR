@@ -1,3 +1,9 @@
+v0.4-1 (2014-08-15)
+===
+Improve Pipe function
+Refine vignettes and documentation
+
+
 v0.4 (2014-08-04)
 ===
 MAJOR API BREAK: %>>% operator handles all pipeline mechanisms (see README) and other operators are deprecated.
