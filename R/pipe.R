@@ -82,8 +82,7 @@ Pipe <- function(value = NULL) {
     Pipe(value)
   }
   . <- function(expr) {
-    expr <- substitute(expr)
-    value <- pipe.fun(value,expr,parent.frame())
+    value <- pipe.fun(value,substitute(expr),parent.frame())
     Pipe(value)
   }
   .envir <- environment()

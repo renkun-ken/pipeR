@@ -57,15 +57,12 @@ pipe.lambda <- function(x,expr,envir) {
 }
 
 pipe.fun <- function(x,expr,envir) {
-  # if (name), then pipe to element
-  # if (atomic), then subset x
+  # if (name), then get element from x
   # otherwise, pipe by lambda expression
   if(is.name(expr)) {
-    return(getElement(x, as.character(expr)))
-  } else if(is.atomic(expr)) {
-    return(x[[expr, exact = TRUE]])
+    getElement(x, as.character(expr))
   } else {
-    return(pipe.lambda(x,expr,envir))
+    pipe.lambda(x,expr,envir)
   }
 }
 
