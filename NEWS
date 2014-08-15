@@ -1,5 +1,6 @@
 v0.4-1 (2014-08-15)
 ===
+Add element extraction syntax
 Improve Pipe function
 Refine vignettes and documentation
 
