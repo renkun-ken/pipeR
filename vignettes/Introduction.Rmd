@@ -102,13 +102,15 @@ mtcars %>>%
   summary
 ```
 
-## Pipe object
+## Pipe function
 
 `Pipe()` creates a Pipe object where built-in symbols are designed for building pipeline. 
 
 - `$` chains functions by first-argument piping and always returns a Pipe object.
 - `fun()` evaluates an expression with `.` or by lambda expression.
-- `[]` extracts the final value of the Pipe object.
+- `$value` or `[]` extracts the final value of the Pipe object.
+
+### Usage
 
 Pipe as first-argument to a function:
 
@@ -124,3 +126,31 @@ Pipe(1:10)$
   fun(x -> x + rnorm(1))$
   mean() []
 ```
+
+### Lazy evaluation
+
+Pipe is lazily evaluated. Consider working with `ggvis`.
+
+```r
+p1 <- Pipe(mtcars)$
+  ggvis(~ mpg, ~ wt)
+```
+
+The plot will not be evaluated until p1 is called or further Pipe is evaluated.
+
+```r
+p1$layer_points() []
+p1$layer_bars() []
+```
+
+### Stored Pipe
+
+Pipe can also be stored as function.
+
+```r
+f1 <- Pipe(rnorm(100))$plot
+f1(col="red")
+f1(col="green")
+```
+
+When the arguments are supplied, `plot()` will be evaluated. Although Pipe is lazy but its value is determined at first evaluation.
