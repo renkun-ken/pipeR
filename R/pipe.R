@@ -83,12 +83,10 @@ Pipe <- function(value = NULL) {
   }
   . <- function(expr) {
     expr <- substitute(expr)
-    if(is.name(expr))
-      Pipe(getElement(value,as.character(expr)))
-    else {
-      value <- pipe.lambda(value,expr,parent.frame())
-      Pipe(value)
-    }
+    value <- if(is.name(expr))
+      getElement(value,as.character(expr)) else
+        pipe.lambda(value,expr,parent.frame())
+    Pipe(value)
   }
   envir <- environment()
   setclass(envir, "Pipe")
