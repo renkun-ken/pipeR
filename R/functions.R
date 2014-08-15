@@ -56,6 +56,19 @@ pipe.lambda <- function(x,expr,envir) {
   pipe.dot(x,expr,envir)
 }
 
+pipe.fun <- function(x,expr,envir) {
+  # if (name), then pipe to element
+  # if (atomic), then subset x
+  # otherwise, pipe by lambda expression
+  if(is.name(expr)) {
+    return(getElement(x, as.character(expr)))
+  } else if(is.atomic(expr)) {
+    return(x[[expr, exact = TRUE]])
+  } else {
+    return(pipe.lambda(x,expr,envir))
+  }
+}
+
 # pipe function that determines the piping mechanism for the expression
 # x : object
 # expr : function name, call, or enclosed expression
@@ -71,16 +84,9 @@ pipe.op <- function(x,expr) {
       # if so, pipe to dot.
       if(symbol == "{") {
         return(pipe.dot(x,expr,parent.frame()))
-      # test if expr is enclosed with ()
+        # test if expr is enclosed with ()
       } else if(symbol == "(") {
-        lexpr <- expr[[2]]
-        # if (name), then pipe to element
-        # otherwise, pipe by lambda expression
-        if(is.name(lexpr)) {
-          return(getElement(x, as.character(lexpr)))
-        } else {
-          return(pipe.lambda(x,lexpr,parent.frame()))
-        }
+        return(pipe.fun(x,expr[[2]],parent.frame()))
       }
     }
   }
