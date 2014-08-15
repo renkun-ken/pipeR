@@ -72,9 +72,14 @@ pipe.op <- function(x,expr) {
       if(symbol == "{") {
         return(pipe.dot(x,expr,parent.frame()))
       # test if expr is enclosed with ()
-      # if so, pipe by lambda expression
       } else if(symbol == "(") {
-        return(pipe.lambda(x,expr[[2L]],parent.frame()))
+        lexpr <- expr[[2]]
+        # if (name), then getElement, otherwise lambda piping
+        if(is.name(lexpr)) {
+          return(getElement(x, as.character(lexpr)))
+        } else {
+          return(pipe.lambda(x,lexpr,parent.frame()))
+        }
       }
     }
   }
