@@ -4,7 +4,7 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="pipeR : High-performance pipeline operator and object">
+    <meta name="description" content="pipeR : High-performance pipeline operator and Pipe function">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -19,7 +19,7 @@
           <a id="forkme_banner" href="https://github.com/renkun-ken/pipeR">View on GitHub</a>
 
           <h1 id="project_title">pipeR</h1>
-          <h2 id="project_tagline">High-performance pipeline operator and object</h2>
+          <h2 id="project_tagline">High-performance pipeline operator and Pipe function</h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/renkun-ken/pipeR/zipball/master">Download this project as a .zip file</a>
@@ -36,7 +36,7 @@
 
 <p><a href="https://travis-ci.org/renkun-ken/pipeR"><img src="https://travis-ci.org/renkun-ken/pipeR.png?branch=master" alt="Build Status"></a></p>
 
-<p>High-performance pipeline operator and object based on a set of simple and intuitive rules, making command chaining definite, readable and fast.</p>
+<p>High-performance pipeline operator and light-weight Pipe function based on a set of simple and intuitive rules, making command chaining definite, readable and fast.</p>
 
 <h2>
 <a name="whats-new-in-04" class="anchor" href="#whats-new-in-04"><span class="octicon octicon-link"></span></a>What's new in 0.4?</h2>
@@ -67,76 +67,60 @@
 <a name="" class="anchor" href="#"><span class="octicon octicon-link"></span></a><code>%&gt;&gt;%</code>
 </h3>
 
-<p>The form of the object following <code>%&gt;&gt;%</code> determines which piping mechanism is used. If the operator is followed by, for example, </p>
+<p>If <code>%&gt;&gt;%</code> is followed by</p>
 
-<table>
-<thead><tr>
-<th>Usage</th>
-<th>As if</th>
-</tr></thead>
-<tbody>
-<tr>
-<td><code>x %&gt;&gt;% f</code></td>
-<td><code>f(x)</code></td>
-</tr>
-<tr>
-<td><code>x %&gt;&gt;% f(...)</code></td>
-<td><code>f(x,...)</code></td>
-</tr>
-<tr>
-<td><code>x %&gt;&gt;% { f(.) }</code></td>
-<td><code>f(x)</code></td>
-</tr>
-<tr>
-<td><code>x %&gt;&gt;% ( f(.) )</code></td>
-<td><code>f(x)</code></td>
-</tr>
-<tr>
-<td><code>x %&gt;&gt;% (i -&gt; f(i))</code></td>
-<td><code>f(x)</code></td>
-</tr>
-<tr>
-<td><code>x %&gt;&gt;% (i ~ f(i))</code></td>
-<td><code>f(x)</code></td>
-</tr>
-</tbody>
-</table><h3>
+<ul>
+<li>a function name or call like <code>f</code> or <code>f(...)</code>, pipe to first argument as <code>f(x)</code> or <code>f(x,...)</code>;</li>
+<li>an expression enclosed within <code>{}</code> or <code>()</code>, pipe to <code>.</code> symbol;</li>
+<li>a lambda expression like <code>(x -&gt; expr)</code> or <code>(x ~ expr)</code>, pipe to lambda symbol, in this case, <code>x</code>.</li>
+</ul><p>Here is a cheat-sheet:</p>
+
+<div class="highlight highlight-r"><pre>x <span class="o">%&gt;&gt;%</span> f            <span class="c1"># f(x)</span>
+x <span class="o">%&gt;&gt;%</span> f<span class="p">(</span><span class="kc">...</span><span class="p">)</span>       <span class="c1"># f(x,...)</span>
+x <span class="o">%&gt;&gt;%</span> <span class="p">{</span> f<span class="p">(</span><span class="m">.</span><span class="p">)</span> <span class="p">}</span>     <span class="c1"># f(x)</span>
+x <span class="o">%&gt;&gt;%</span> <span class="p">(</span> f<span class="p">(</span><span class="m">.</span><span class="p">)</span> <span class="p">)</span>     <span class="c1"># f(x)</span>
+x <span class="o">%&gt;&gt;%</span> <span class="p">(</span>i <span class="o">-&gt;</span> f<span class="p">(</span>i<span class="p">))</span>  <span class="c1"># f(x)</span>
+x <span class="o">%&gt;&gt;%</span> <span class="p">(</span>i <span class="o">~</span> f<span class="p">(</span>i<span class="p">))</span>   <span class="c1"># f(x)</span>
+</pre></div>
+
+<h3>
 <a name="pipe" class="anchor" href="#pipe"><span class="octicon octicon-link"></span></a><code>Pipe()</code>
 </h3>
 
-<p><code>Pipe()</code> creates a Pipe object that supports light-weight chaining using internal operators. For example,</p>
+<p><code>Pipe()</code> creates a Pipe object that supports light-weight chaining without any external operator. Typically, start with <code>Pipe()</code> and end with <code>$value</code> or <code>[]</code> to extract the final value of the Pipe.</p>
 
-<table>
-<thead><tr>
-<th>Usage</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr>
-<td><code>Pipe(x)$foo()$bar()</code></td>
-<td>Build <code>Pipe</code> object for chaining</td>
-</tr>
-<tr>
-<td><code>Pipe(x)$foo()$bar() []</code></td>
-<td>Extract the final value</td>
-</tr>
-<tr>
-<td><code>Pipe(x)$fun(expr)</code></td>
-<td>Pipe to <code>.</code>
-</td>
-</tr>
-<tr>
-<td><code>Pipe(x)$fun(x -&gt; expr)</code></td>
-<td>Pipe to <code>x</code>
-</td>
-</tr>
-<tr>
-<td><code>Pipe(x)$fun(x ~ expr)</code></td>
-<td>Pipe to <code>x</code>
-</td>
-</tr>
-</tbody>
-</table><h2>
+<p>Working with <a href="https://github.com/hadley/dplyr">dplyr</a>:</p>
+
+<div class="highlight highlight-r"><pre><span class="kn">library</span><span class="p">(</span>dplyr<span class="p">)</span>
+<span class="kn">library</span><span class="p">(</span>pipeR<span class="p">)</span>
+Pipe<span class="p">(</span>mtcars<span class="p">)</span><span class="o">$</span>
+  filter<span class="p">(</span>mpg <span class="o">&gt;=</span> <span class="kp">mean</span><span class="p">(</span>mpg<span class="p">))</span><span class="o">$</span>
+  select<span class="p">(</span>mpg<span class="p">,</span> wt<span class="p">,</span> qsec<span class="p">)</span><span class="o">$</span>
+  fun<span class="p">(</span>lm<span class="p">(</span>mpg <span class="o">~</span> <span class="m">.</span><span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">))</span><span class="o">$</span>
+  <span class="kp">summary</span><span class="p">()</span><span class="o">$</span>
+  value
+</pre></div>
+
+<p>Working with <a href="https://github.com/rstudio/ggvis">ggvis</a>:</p>
+
+<div class="highlight highlight-r"><pre><span class="kn">library</span><span class="p">(</span>ggvis<span class="p">)</span>
+<span class="kn">library</span><span class="p">(</span>pipeR<span class="p">)</span>
+Pipe<span class="p">(</span>mtcars<span class="p">)</span><span class="o">$</span>
+  ggvis<span class="p">(</span><span class="o">~</span> mpg<span class="p">,</span> <span class="o">~</span> wt<span class="p">)</span><span class="o">$</span>
+  layer_points<span class="p">()</span> <span class="p">[]</span>
+</pre></div>
+
+<p>Here is a cheat-sheet:</p>
+
+<div class="highlight highlight-r"><pre>Pipe<span class="p">(</span>x<span class="p">)</span><span class="o">$</span>foo<span class="p">()</span><span class="o">$</span>bar<span class="p">()</span>         <span class="c1"># build Pipe object for chaining</span>
+Pipe<span class="p">(</span>x<span class="p">)</span><span class="o">$</span>foo<span class="p">()</span><span class="o">$</span>bar<span class="p">()</span><span class="o">$</span>value   <span class="c1"># extract the final value</span>
+Pipe<span class="p">(</span>x<span class="p">)</span><span class="o">$</span>foo<span class="p">()</span><span class="o">$</span>bar<span class="p">()</span> <span class="p">[]</span>      <span class="c1"># extract the final value</span>
+Pipe<span class="p">(</span>x<span class="p">)</span><span class="o">$</span>fun<span class="p">(</span>expr<span class="p">)</span>           <span class="c1"># pipe to "."</span>
+Pipe<span class="p">(</span>x<span class="p">)</span><span class="o">$</span>fun<span class="p">(</span>x <span class="o">-&gt;</span> expr<span class="p">)</span>      <span class="c1"># pipe to "x"</span>
+Pipe<span class="p">(</span>x<span class="p">)</span><span class="o">$</span>fun<span class="p">(</span>x <span class="o">~</span> expr<span class="p">)</span>       <span class="c1"># pipe to "x"</span>
+</pre></div>
+
+<h2>
 <a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
 
 <h3>
@@ -185,13 +169,13 @@ mtcars <span class="o">%&gt;&gt;%</span>
 <li>
 <code>fun()</code> evaluates an expression with <code>.</code> or by lambda expression.</li>
 <li>
-<code>[]</code> extracts the final value of the Pipe object.</li>
+<code>$value</code> or <code>[]</code> extracts the final value of the Pipe object.</li>
 </ul><p>Pipe as first-argument to a function:</p>
 
 <div class="highlight highlight-r"><pre>Pipe<span class="p">(</span>rnorm<span class="p">(</span><span class="m">100</span><span class="p">,</span>mean<span class="o">=</span><span class="m">10</span><span class="p">))</span><span class="o">$</span>
   <span class="kp">log</span><span class="p">()</span><span class="o">$</span>
   <span class="kp">diff</span><span class="p">()</span><span class="o">$</span>
-  plot<span class="p">(</span>col<span class="o">=</span><span class="s">"red"</span><span class="p">)</span>
+  plot<span class="p">(</span>col<span class="o">=</span><span class="s">"red"</span><span class="p">)</span> <span class="p">[]</span>
 </pre></div>
 
 <div class="highlight highlight-r"><pre>Pipe<span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">10</span><span class="p">)</span><span class="o">$</span>
