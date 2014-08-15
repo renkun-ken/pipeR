@@ -36,28 +36,60 @@ devtools::install_github("pipeR","renkun-ken")
 
 ### `%>>%`
 
-The form of the object following `%>>%` determines which piping mechanism is used. If the operator is followed by, for example, 
+If `%>>%` is followed by
 
-| Usage | As if |
-|-------|-------------|
-| `x %>>% f` | `f(x)` |
-| `x %>>% f(...)` | `f(x,...)` |
-| `x %>>% { f(.) }` | `f(x)` |
-| `x %>>% ( f(.) )` | `f(x)` |
-| `x %>>% (i -> f(i))` | `f(x)` |
-| `x %>>% (i ~ f(i))` | `f(x)` |
+* a function name or call like `f` or `f(...)`, pipe to first argument as `f(x)` or `f(x,...)`;
+* an expression enclosed within `{}` or `()`, pipe to `.` symbol;
+* a lambda expression like `(x -> expr)` or `(x ~ expr)`, pipe to lambda symbol, in this case, `x`.
+
+Here is a cheat-sheet:
+
+```r
+x %>>% f            # f(x)
+x %>>% f(...)       # f(x,...)
+x %>>% { f(.) }     # f(x)
+x %>>% ( f(.) )     # f(x)
+x %>>% (i -> f(i))  # f(x)
+x %>>% (i ~ f(i))   # f(x)
+```
 
 ### `Pipe()`
 
-`Pipe()` creates a Pipe object that supports light-weight chaining using internal operators. For example,
+`Pipe()` creates a Pipe object that supports light-weight chaining without any external operator. Typically, start with `Pipe()` and end with `$value` or `[]` to extract the final value of the Pipe.
 
-| Usage | Description |
-|-------|-------|
-| `Pipe(x)$foo()$bar()` | Build `Pipe` object for chaining |
-| `Pipe(x)$foo()$bar() []` | Extract the final value |
-| `Pipe(x)$fun(expr)` | Pipe to `.` |
-| `Pipe(x)$fun(x -> expr)` | Pipe to `x` |
-| `Pipe(x)$fun(x ~ expr)` | Pipe to `x` |
+Working with [dplyr](https://github.com/hadley/dplyr):
+
+```r
+library(dplyr)
+library(pipeR)
+Pipe(mtcars)$
+  filter(mpg >= mean(mpg))$
+  select(mpg, wt, qsec)$
+  fun(lm(mpg ~ ., data = .))$
+  summary()$
+  value
+```
+
+Working with [ggvis](https://github.com/rstudio/ggvis):
+
+```r
+library(ggvis)
+library(pipeR)
+Pipe(mtcars)$
+  ggvis(~ mpg, ~ wt)$
+  layer_points() []
+```
+
+Here is a cheat-sheet:
+
+```r
+Pipe(x)$foo()$bar()         # build Pipe object for chaining
+Pipe(x)$foo()$bar()$value   # extract the final value
+Pipe(x)$foo()$bar() []      # extract the final value
+Pipe(x)$fun(expr)           # pipe to "."
+Pipe(x)$fun(x -> expr)      # pipe to "x"
+Pipe(x)$fun(x ~ expr)       # pipe to "x"
+```
 
 ## Examples
 
@@ -103,7 +135,7 @@ mtcars %>>%
 
 - `$` chains functions by first-argument piping and always returns a Pipe object.
 - `fun()` evaluates an expression with `.` or by lambda expression.
-- `[]` extracts the final value of the Pipe object.
+- `$value` or `[]` extracts the final value of the Pipe object.
 
 Pipe as first-argument to a function:
 
@@ -111,7 +143,7 @@ Pipe as first-argument to a function:
 Pipe(rnorm(100,mean=10))$
   log()$
   diff()$
-  plot(col="red")
+  plot(col="red") []
 ```
 
 ```r
