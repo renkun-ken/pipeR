@@ -74,7 +74,8 @@ pipe.op <- function(x,expr) {
       # test if expr is enclosed with ()
       } else if(symbol == "(") {
         lexpr <- expr[[2]]
-        # if (name), then getElement, otherwise lambda piping
+        # if (name), then pipe to element
+        # otherwise, pipe by lambda expression
         if(is.name(lexpr)) {
           return(getElement(x, as.character(lexpr)))
         } else {
