@@ -110,7 +110,7 @@ library(rlist)
 
 ### `Pipe()`
 
-`Pipe()` creates a Pipe object that supports light-weight chaining without any external operator. Typically, start with `Pipe()` and end with `$value` or `[]` to extract the final value of the Pipe. An internal function `.()` works in the same way with `x %>>% (...)` for dot piping, lambda expression, and element extraction.
+`Pipe()` creates a Pipe object that supports light-weight chaining without any external operator. Typically, start with `Pipe()` and end with `$value` or `[]` to extract the final value of the Pipe. An internal function `.(...)` works in the same way with `x %>>% (...)` for dot piping, lambda expression, and element extraction.
 
 Expressions using `%>>%` can be easily translated to `Pipe()`. But `Pipe()` is shipped with more features. See details in vignettes.
 
