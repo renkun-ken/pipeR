@@ -81,6 +81,15 @@ Pipe <- function(value = NULL) {
     value <- pipe.lambda(value,substitute(expr),parent.frame())
     Pipe(value)
   }
+  . <- function(expr) {
+    expr <- substitute(expr)
+    if(is.name(expr))
+      Pipe(getElement(value,as.character(expr)))
+    else {
+      value <- pipe.lambda(value,expr,parent.frame())
+      Pipe(value)
+    }
+  }
   envir <- environment()
   setclass(envir, "Pipe")
 }
@@ -89,19 +98,12 @@ Pipe <- function(value = NULL) {
 `$.Pipe` <- function(x,y) {
   if(exists(y, envir = x, inherits = FALSE))
     return(get(y, envir = x, inherits = FALSE))
+  f <-  get(y,envir = parent.frame(),mode = "function",inherits = TRUE)
   value <- get("value",envir = x,inherits = FALSE)
-  if(isS4(value) && y %in% slotNames(value)) {
-    Pipe(slot(value,y))
-  } else if((is.list(value) || is.vector(value)) && y %in% names(value)) {
-    Pipe(value[[y, exact = TRUE]])
-  } else {
-    f <-  get(y,envir = parent.frame(),mode = "function",inherits = TRUE)
-    function(...) {
-      value <- f(value,...)
-      Pipe(value)
-    }
+  function(...) {
+    value <- f(value,...)
+    Pipe(value)
   }
-
 }
 
 #' @export
