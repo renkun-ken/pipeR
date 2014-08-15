@@ -102,12 +102,37 @@ mtcars %>>%
   summary
 ```
 
+### Extract element
+
+If a name is enclosed within `()` following `%>>%`, like `x %>>% (name)`, the operator will extract the element named `name` from `x`.
+
+```r
+mtcars %>>%
+  (mpg)
+
+mtcars %>>%
+  (lm(mpg ~ ., data = .)) %>>%
+  summary() %>>%
+  (coefficients)
+```
+
+The extraction works not only for list and data frame but also for vector, environment, and S4 object.
+
+To evaluate an expression within the piped object if it is a list or environment, use `with()` can be helpful.
+
+```r
+list(a = 1, b = 2) %>>%
+  with(a+2*b)
+```
+
+But this method does not work for vector and S4 object.
+
 ## Pipe function
 
 `Pipe()` creates a Pipe object where built-in symbols are designed for building pipeline. 
 
 - `$` chains functions by first-argument piping and always returns a Pipe object.
-- `fun()` evaluates an expression with `.` or by lambda expression.
+- `.(...)` evaluates an expression with `.` or by lambda expression, or simply extract a named element. The usage is exactly the same with `x %>>% (...)`.
 - `$value` or `[]` extracts the final value of the Pipe object.
 
 ### Usage
@@ -123,7 +148,7 @@ Pipe(rnorm(100,mean=10))$
 
 ```r
 Pipe(1:10)$
-  fun(x -> x + rnorm(1))$
+  .(x -> x + rnorm(1))$
   mean() []
 ```
 
