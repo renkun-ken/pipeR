@@ -1,12 +1,13 @@
-#' Pipe object
+#' Create a Pipe object that stores a value and allows command chaining with \code{$}.
 #' @details
-#' Pipe object provides object-based mechanism for command chaining, which avoids using
-#' external operator and look simpler.
+#' Pipe object provides object-like command chaining mechanism, which avoids using
+#' external operator and can be cleaner than operator-based pipline.
 #'
-#' \code{Pipe()} creates a Pipe object and then we can use \code{$} to perform
-#' first-argument piping, call \code{fun()} to evaluate an expression with \code{.}
-#' or symbol defined by lambda expression. \code{$value} or \code{[]} ends a pipeline
-#' and extracts its final value.
+#' \code{Pipe()} creates a Pipe object that allows using \code{$} to perform
+#' first-argument piping, call \code{.()} to evaluate an expression with \code{.}
+#' or symbol defined by lambda expression, or simply extract an element from the
+#' stored value. \code{$value} or \code{[]} ends a pipeline and extracts its final
+#' value.
 #'
 #' A typical usage of Pipe object is to start with \code{Pipe()} and end with
 #' \code{$value} or \code{[]}.
@@ -28,15 +29,22 @@
 #'
 #' # Pipe to an exrepssion with . or symbol defined in
 #' # lambda expression to represent the object
-#' Pipe(rnorm(100))$fun(1 + .) []
-#' Pipe(rnorm(100))$fun(x -> 1 + x) []
-#' Pipe(rnorm(100))$fun(x ~ 1 + x) []
+#' Pipe(rnorm(100))$.(1 + .) []
+#' Pipe(rnorm(100))$.(x -> 1 + x) []
+#' Pipe(rnorm(100))$.(x ~ 1 + x) []
+#'
+#' # Extract element with \code{.(name)}
+#' Pipe(mtcars)$lm(formula = mpg ~ cyl + wt)$.(coefficients)
 #'
 #' # Command chaining
 #' Pipe(rnorm(100,mean=10))$
 #'   log()$
 #'   diff()$
 #'   plot(col="red")
+#'
+#' Pipe(rnorm(100))$
+#'   density(kernel = "rect")$
+#'   plot(col = "blue")
 #'
 #' # Store an continue piping
 #' pipe1 <- Pipe(rnorm(100,mean=10))$log()$diff()
