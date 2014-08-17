@@ -94,12 +94,9 @@ Pipe <- function(value = NULL) {
 `$.Pipe` <- function(x,y) {
   if(exists(y, envir = x, inherits = FALSE))
     return(get(y, envir = x, inherits = FALSE))
-  f <-  get(y,envir = parent.frame(),mode = "function",inherits = TRUE)
+  f <-  get(y,envir = parent.frame(),mode = "function")
   value <- get("value",envir = x,inherits = FALSE)
-  function(...) {
-    value <- f(value,...)
-    Pipe(value)
-  }
+  function(...) Pipe(f(value,...))
 }
 
 #' @export
