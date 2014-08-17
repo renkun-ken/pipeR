@@ -26,12 +26,28 @@ test_that("first-argument piping", {
   }
 
   expect_identical(Pipe(1:10)$fun2(a=-1,b=1)[], fun1(1:10,a=-1,b=1))
+
+  # working with closures
+  fun1 <- function(p) {
+    f <- function(x) {
+      x+p
+    }
+    Pipe(1:3)$f()$value
+  }
+
+  expect_equal(fun1(1), c(2,3,4))
 })
 
 test_that("lambda piping", {
-  expect_identical(Pipe(1:3)$fun(c(1,2,.))[], c(1,2,1:3))
-  expect_identical(Pipe(1:3)$fun(x -> c(1,2,x))[], c(1,2,1:3))
-  expect_identical(Pipe(1:3)$fun(x ~ c(1,2,x))[], c(1,2,1:3))
+  expect_identical(Pipe(1:3)$.(c(1,2,.))[], c(1,2,1:3))
+  expect_identical(Pipe(1:3)$.(x -> c(1,2,x))[], c(1,2,1:3))
+  expect_identical(Pipe(1:3)$.(x ~ c(1,2,x))[], c(1,2,1:3))
+})
+
+test_that("element extraction", {
+  expect_equal(Pipe(list(a=1))$.(a)$value,1)
+  expect_equal(Pipe(list2env(list(a=1)))$.(a)$value,1)
+  expect_equal(Pipe(c(a=1))$.(a)$value,1)
 })
 
 test_that("function", {

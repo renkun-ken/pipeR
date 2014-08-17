@@ -27,6 +27,16 @@ test_that("first-argument piping", {
   }
 
   expect_identical(1:10 %>>% fun2(a=-1,b=1), fun1(1:10,a=-1,b=1))
+
+  # working with closures
+  fun1 <- function(p) {
+    f <- function(x) {
+      x+p
+    }
+    1:3 %>>% f()
+  }
+
+  expect_equal(fun1(1), c(2,3,4))
 })
 
 test_that("lambda piping", {
@@ -34,6 +44,12 @@ test_that("lambda piping", {
   expect_identical(1:3 %>>% {c(1,2,.)}, c(1,2,1:3))
   expect_identical(1:3 %>>% (x -> c(1,2,x)), c(1,2,1:3))
   expect_identical(1:3 %>>% (x ~ c(1,2,x)), c(1,2,1:3))
+})
+
+test_that("element extraction", {
+  expect_equal(list(a=1)  %>>% (a),1)
+  expect_equal(list2env(list(a=1)) %>>% (a),1)
+  expect_equal(c(a=1) %>>% (a),1)
 })
 
 test_that("function", {
