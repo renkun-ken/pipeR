@@ -11,9 +11,9 @@ test_that("operator", {
     rnorm(100) %>>% (c(.,rnorm(100)))
   )))
 
-  cat("\nx %>>% (p -> c(p,y))\n")
+  cat("\nx %>>% (p ~ c(p,y))\n")
   print(system.time(replicate(10000,
-    rnorm(100) %>>% (c(.,rnorm(100)))
+    rnorm(100) %>>% (p ~ c(p,rnorm(100)))
   )))
 
   cat("\nx %>>% (y)\n")
@@ -33,9 +33,9 @@ test_that("Pipe", {
     Pipe(rnorm(100))$.(c(.,rnorm(100))) []
   )))
 
-  cat("\nPipe(x)$.(p -> c(p,y))\n")
+  cat("\nPipe(x)$.(p ~ c(p,y))\n")
   print(system.time(replicate(10000,
-    Pipe(rnorm(100))$.(p -> c(p,rnorm(100)))
+    Pipe(rnorm(100))$.(p ~ c(p,rnorm(100)))
   )))
 
   cat("\nPipe(x)$.(y)\n")

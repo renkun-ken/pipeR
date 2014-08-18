@@ -42,8 +42,15 @@ test_that("first-argument piping", {
 test_that("lambda piping", {
   expect_identical(1:3 %>>% (c(1,2,.)), c(1,2,1:3))
   expect_identical(1:3 %>>% {c(1,2,.)}, c(1,2,1:3))
-  expect_identical(1:3 %>>% (x -> c(1,2,x)), c(1,2,1:3))
   expect_identical(1:3 %>>% (x ~ c(1,2,x)), c(1,2,1:3))
+})
+
+test_that("side effect", {
+  side <- function(x) {
+    x + 1
+  }
+  expect_equal(1:3 %>>% (~ side(.)), 1:3)
+  expect_equal(1:3 %>>% ((x) ~ side(x)), 1:3)
 })
 
 test_that("element extraction", {
