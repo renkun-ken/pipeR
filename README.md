@@ -132,6 +132,12 @@ library(rlist)
 Expressions using `%>>%` can be easily translated to `Pipe()`. But `Pipe()` is shipped with more features. See details in vignettes.
 
 ```r
+Pipe(rnorm(1000))$
+  density(kernel = "cosine")$
+  plot(col = "blue")
+```
+
+```r
 Pipe(iris)$
   .(~ cat(length(.), "columns","\n"))$
   .(~ plot(.))$
