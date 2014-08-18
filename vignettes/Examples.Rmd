@@ -5,9 +5,44 @@
 
 ```{r, echo = FALSE, message = FALSE}
 knitr::opts_chunk$set(comment="#",error=FALSE,tidy=FALSE)
+set.seed(100)
 ```
 
 # Examples
+
+## Working with basic functions
+
+Density plot:
+
+```r
+rnorm(100) %>>%
+  density(kernel = "cosine") %>>%
+  plot(col = "blue")
+```
+
+Plot some graphics, run a linear regression, and see the summary of the estimates of linear coefficients.
+
+```r
+mtcars %>>%
+  (~ par(mfrow=c(1,2))) %>>%
+  (~ plot(mpg ~ cyl, data = .)) %>>%
+  (~ plot(mpg ~ wt, data = .)) %>>%
+  (lm(mpg ~ cyl + wt, data = .)) %>>%
+  summary() %>>%
+  (coefficients)
+```
+
+The `Pipe` version:
+
+```r
+Pipe(mtcars)$
+  .(~ par(mfrow=c(1,2)))$
+  .(~ plot(mpg ~ cyl, data = .))$
+  .(~ plot(mpg ~ wt, data = .))$
+  .(lm(mpg ~ cyl + wt, data = .))$
+  summary()$
+  .(coefficients)
+```
 
 ## Working with dplyr
 

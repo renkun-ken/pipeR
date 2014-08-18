@@ -87,22 +87,42 @@ mtcars %>>%
   summary
 ```
 
-The code above works correctly even though the two dots in the second line have different meanings. `.` in formula `mpg ~ .` represents all variables other than `mpg` in data frame `mtcars`; `.` in `data=.` represents `mtcars`. One way to reduce ambiguity is to use *lambda expression* that names the piped object on the left of `~` or `->` and specifies the expression to evaluate on the right.
+The code above works correctly even though the two dots in the second line have different meanings. `.` in formula `mpg ~ .` represents all variables other than `mpg` in data frame `mtcars`; `.` in `data=.` represents `mtcars`. One way to reduce ambiguity is to use *lambda expression* that names the piped object on the left of `~` and specifies the expression to evaluate on the right.
 
 `%>>%` will assume lambda expression follows when the next expression is enclosed by parentheses `()`. The lambda expression can be in the following forms:
 
 - `expr` where `.` is by default used to represent the piped object.
-- `x -> expr` or `x ~ expr` where `expr` will be evaluated with `x` representing the piped object.
+- `x ~ expr` where `expr` will be evaluated with `x` representing the piped object.
 
 The previous example can be rewritten with lambda expression like this:
 
 ```r
 mtcars %>>%
-  (df -> lm(mpg ~ ., data=df)) %>>%
+  (df ~ lm(mpg ~ ., data=df)) %>>%
   summary
 ```
+### Pipe for side effect
 
-### Extract element
+In some cases we may only need the side effect of an expression given the previous object. For example, we may want to print some message by `cat()`  in the console and continue piping with the input object rather than the output of `cat()` which is actually `NULL`.
+
+The following syntax is interpreted as side-effect piping:
+
+```r
+x %>>% (~ expr)
+x %>>% ((p) ~ expr)
+```
+
+The syntax is a lambda expression with only one side stressed. The right-hand side is the expression to evaluate only for its side effect, and the left-hand side can be missing or a name enclosed within `()`. 
+
+Both lines are evaluated by lambda expression but the output of the expression will be ignored and `x` are returned instead.
+
+```r
+rnorm(100) %>>%
+  (~ cat("number of points:",length(.),"\n")) %>>%
+  summary()
+```
+
+### Pipe for element extraction
 
 If a name is enclosed within `()` following `%>>%`, like `x %>>% (name)`, the operator will extract the element named `name` from `x`.
 
@@ -132,7 +152,7 @@ But this method does not work for vector and S4 object.
 `Pipe()` creates a Pipe object where built-in symbols are designed for building pipeline. 
 
 - `$` chains functions by first-argument piping and always returns a Pipe object.
-- `.(...)` evaluates an expression with `.` or by lambda expression, or simply extract a named element. The usage is exactly the same with `x %>>% (...)`.
+- `.(...)` evaluates an expression with `.` or by lambda expression, or for side effect, or simply extract a named element. The usage is exactly the same with `x %>>% (...)`.
 - `$value` or `[]` extracts the final value of the Pipe object.
 
 ### Usage
