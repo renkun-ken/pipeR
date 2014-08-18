@@ -27,6 +27,9 @@ pipe.dot <- function(.,expr,envir) {
 # expr : expression part
 # envir : environment for evaluation
 eval.labmda <- function(x,symbol,expr,envir) {
+  if(!is.name(symbol))
+    stop("Invalid symbol \"",deparse(symbol),
+      "\" in lambda expression", call. = FALSE)
   eval(expr,setnames(list(x),as.character(symbol)),envir)
 }
 
@@ -40,14 +43,33 @@ pipe.lambda <- function(x,expr,envir) {
   if(is.call(expr)) {
     symbol <- as.character(expr[[1L]])
     # if symbol is an anonymous function, length(symbol) > 1L
-    # to make a valid lambda expression, its lambda symbol must be of length 1
+    # to make a valid lambda expression,
+    # its lambda symbol must be of length 1
     if(length(symbol) == 1L) {
       # (x -> expr) will be parsed as (expr <- x)
-      if(symbol == "<-")
+      if(symbol == "<-") {
         return(eval.labmda(x,expr[[3L]],expr[[2L]],envir))
-      # (x ~ expr)
-      else if(symbol == "~")
-        return(eval.labmda(x,expr[[2L]],expr[[3L]],envir))
+      }
+      # formula
+      else if(symbol == "~") {
+        if(length(expr) == 3L) {
+          # (symbol ~ expr)
+          lhs <- expr[[2L]]
+          if(length(lhs) == 2L) {
+            # symbol (x): side effect
+            eval.labmda(x,lhs[[2L]],expr[[3L]],envir)
+            return(x)
+          } else {
+            # symbol x: lambda piping
+            return(eval.labmda(x,lhs,expr[[3L]],envir))
+          }
+        } else {
+          # ( ~ expr ): side effect
+          pipe.dot(x,expr[[2L]],envir)
+          return(x)
+        }
+      }
+
     }
   }
 
@@ -57,11 +79,11 @@ pipe.lambda <- function(x,expr,envir) {
 }
 
 pipe.fun <- function(x,expr,envir) {
-  # if (name), then get element from x
-  # otherwise, pipe by lambda expression
   if(is.name(expr)) {
+    # if (name), then get element from x
     getElement(x, as.character(expr))
   } else {
+    # otherwise, pipe by lambda expression
     pipe.lambda(x,expr,envir)
   }
 }
@@ -77,12 +99,11 @@ pipe.op <- function(x,expr) {
   if(is.call(expr)) {
     symbol <- as.character(expr[[1L]])
     if(length(symbol) == 1L) {
-      # test if expr is enclosed with {},
-      # if so, pipe to dot.
       if(symbol == "{") {
+        # expr is enclosed with {}: pipe to dot.
         return(pipe.dot(x,expr,parent.frame()))
-        # test if expr is enclosed with ()
       } else if(symbol == "(") {
+        # expr is enclosed with (): more syntax
         return(pipe.fun(x,expr[[2]],parent.frame()))
       }
     }
