@@ -43,8 +43,15 @@ Pipe(rnorm(100))$c(4,5) []
 # Pipe to an exrepssion with . or symbol defined in
 # lambda expression to represent the object
 Pipe(rnorm(100))$.(1 + .) []
-Pipe(rnorm(100))$.(x -> 1 + x) []
 Pipe(rnorm(100))$.(x ~ 1 + x) []
+
+# Pipe for side effect
+Pipe(rnorm(100))$
+  .(~ cat("number:",length(.),"\\n"))$
+  summary()
+Pipe(rnorm(100))$
+  .((x)~ cat("number:",length(x),"\\n"))$
+  summary()
 
 # Extract element with \\code{.(name)}
 Pipe(mtcars)$lm(formula = mpg ~ cyl + wt)$.(coefficients)

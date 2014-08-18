@@ -1,24 +1,42 @@
 #' Pipe an object forward
 #'
 #' The \code{\%>>\%} operator pipes the object on the left-hand side to the
-#' right-hand side as either the first argument and \code{.}, or a symbol defined
-#' by lambda expression.
+#' right-hand side as either the first argument and \code{.}, or a symbol
+#' defined by lambda expression.
 #'
 #' @param x object
 #' @param expr expression
 #' @details
-#' When a function name or call directly follows the operator in the form
-#' \code{x \%>>\% f} or \code{x \%>>\% f(...)}, the operator performs first-argument piping,
-#' that is, \code{f(x,...)} will be evaluated (also with \code{.} representing \code{x}).
+#' \code{\%>>\%} supports the following pipline mechanisms:
 #'
-#' When an expression enclosed within \code{\{\}} or \code{()} in the form
-#' \code{x \%>>\% { expr }} or \code{x \%>>\% ( expr )}, the operator performs
-#' dot-piping, that is, the expression will be evaluated with \code{.}
-#' representing \code{x}.
+#' 1. Pipe to first argument:
 #'
-#' When a lambda expression is supplied in the form \code{x \%>>\% (p -> expr)} or
-#' \code{x \%>>\% (p ~ expr)}, \code{expr} will be evaluated with \code{p} representing
-#' \code{x}.
+#' \code{x \%>>\% f} as \code{f(x)}
+#'
+#' \code{x \%>>\% f(...)} as \code{f(x,...)}
+#'
+#' 2. Pipe to dot (\code{.}):
+#'
+#' \code{x \%>>\% { expr }} as \code{\{ expr \}} given \code{. = x}
+#'
+#' \code{x \%>>\% ( expr )} as \code{expr} given \code{. = x}
+#'
+#' 3. Pipe by lambda expression:
+#'
+#' \code{x \%>>\% (p ~ expr)} as \code{expr} given \code{p = x}
+#'
+#' 4. Pipe for side-effect:
+#'
+#' \code{x \%>>\% (~ expr)} as \code{expr; x} given \code{. = x}
+#'
+#' \code{(x) \%>>\% ((p) ~ expr)} as \code{expr; x} given \code{p = x}
+#'
+#' 5. Pipe for element extraction:
+#'
+#' \code{x \%>>\% (name)} as \code{x[["name"]]} when \code{x} is
+#' \code{list}, \code{environment}, \code{data.frame}, etc; and
+#' \code{x@@name} when \code{x} is S4 object.
+#'
 #' @export
 #' @examples
 #' \dontrun{
@@ -31,6 +49,7 @@
 #' rnorm(100) %>>% plot(col="red",main=length(.))
 #'
 #' # Pipe as first-argument to a function call in namespace
+#' # (in this case, parentheses are required)
 #' rnorm(100) %>>% base::mean()
 #'
 #' # Pipe to an expression enclosed by braces with .
@@ -42,9 +61,21 @@
 #' rnorm(100) %>>% (plot(.,col="red",main=length(.)))
 #'
 #' # Pipe to an expression enclosed by parentheses with
-#' lambda expression in the form of x -> f(x) or x ~ f(x).
-#' rnorm(100) %>>% (x -> plot(x,col="red",main=length(x)))
+#' lambda expression in the form of x ~ f(x).
 #' rnorm(100) %>>% (x ~ plot(x,col="red",main=length(x)))
+#'
+#' # Pipe to an expression for side effect and return
+#' # the input object
+#' rnorm(100) %>>%
+#'   (~ cat("Number of points:",length(.))) %>>%
+#'   summary()
+#'
+#' rnorm(100) %>>%
+#'   ((x) ~ cat("Number of points:",length(x))) %>>%
+#'   summary()
+#'
+#' # Pipe for element extraction
+#' mtcars %>>% (mpg)
 #'
 #' # Pipe to an anomymous function
 #' rnorm(100) %>>% (function(x) mean(x))()
