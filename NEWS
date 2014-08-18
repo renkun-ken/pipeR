@@ -1,7 +1,7 @@
-v0.4-2 (2014-08-16)
+v0.4-2 (2014-08-18)
 ===
 Resolve compatibility issues with data.table (#28)
-
+Add side-effect piping
 
 v0.4-1 (2014-08-15)
 ===

@@ -65,13 +65,35 @@ mtcars %>>%
 
 ```r
 mtcars %>>%
-  (df -> lm(mpg ~ cyl + wt, data = df))
+  (df ~ lm(mpg ~ cyl + wt, data = df))
   
 rnorm(100) %>>%
-  (x -> plot(x, col="red", main=length(x)))
+  (x ~ plot(x, col="red", main=length(x)))
 ```
 
-* Extract element
+* Pipe for side effect (dev only)
+
+```r
+rnorm(100) %>>%
+  (~ cat("number:",length(.),"\n")) %>>%
+  summary() %>>%
+```
+
+```r
+mtcars %>>%
+  (~ par(mfrow=c(1,2))) %>>%
+  (~ plot(mpg ~ cyl, data = .)) %>>%
+  (~ plot(mpg ~ wt, data = .)) %>>%
+  summary()
+```
+
+```r
+mtcars %>>%
+  ((df) ~ plot(mpg ~ ., data = df)) %>>%
+  summary()
+```  
+
+* Pipe for extracting element
 
 ```r
 mtcars %>>%
@@ -110,9 +132,16 @@ library(rlist)
 
 ### `Pipe()`
 
-`Pipe()` creates a Pipe object that supports light-weight chaining without any external operator. Typically, start with `Pipe()` and end with `$value` or `[]` to extract the final value of the Pipe. An internal function `.(...)` works in the same way with `x %>>% (...)` for dot piping, lambda expression, and element extraction.
+`Pipe()` creates a Pipe object that supports light-weight chaining without any external operator. Typically, start with `Pipe()` and end with `$value` or `[]` to extract the final value of the Pipe. An internal function `.(...)` works in the same way with `x %>>% (...)` for dot piping, by lambda expression, for side effect, and element extraction.
 
 Expressions using `%>>%` can be easily translated to `Pipe()`. But `Pipe()` is shipped with more features. See details in vignettes.
+
+```r
+Pipe(iris)$
+  .(~ cat(length(.), "columns","\n"))$
+  .(~ plot(.))$
+  summary()
+```
 
 Working with dplyr:
 
@@ -145,10 +174,10 @@ Pipe(1:100)$
 
 ## Performance
 
-[Benchmark tests](http://cran.r-project.org/web/packages/pipeR/vignettes/Performance.html) show that pipeR operator and Pipe object can achieve high performance especially when they are intensively called.
+[Benchmark tests](http://cran.r-project.org/web/packages/pipeR/vignettes/Performance.html) show that pipeR operator and Pipe object has higher performance especially when they are intensively called compared to alternative packages.
 
 - If you do not care about the performance of intensive calling and need heuristic distinction between different piping mechanisms, you may use `%>%` in [magrittr](https://github.com/smbache/magrittr) which also provides additional aliases of basic functions. 
-- If you care about performance issues and are sure which type of piping you are using, pipeR can be a helpful choice.
+- If you care about performance issues, want uniform operator, or need full control of the piping mechanism, pipeR can be a helpful choice.
 
 ## Vignettes
 
