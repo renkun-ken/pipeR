@@ -1,3 +1,6 @@
+# compatibility for data.table functions
+.datatable.aware <- TRUE
+
 #' Create a Pipe object that stores a value and allows command chaining with \code{$}.
 #' @details
 #' Pipe object provides object-like command chaining mechanism, which avoids using
