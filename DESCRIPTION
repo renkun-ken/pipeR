@@ -1,7 +1,7 @@
 Package: pipeR
 Type: Package
 Title: High-performance pipeline operator and Pipe function
-Version: 0.4-1
+Version: 0.4-2
 Author: Kun Ren <ken@renkun.me>
 Maintainer: Kun Ren <ken@renkun.me>
 Description: Provides high-performance pipeline operator and light-weight Pipe
@@ -9,7 +9,7 @@ Description: Provides high-performance pipeline operator and light-weight Pipe
     chaining definite, readable and fast.
 Depends:
     R (>= 2.14)
-Date: 2014-08-15
+Date: 2014-08-18
 Suggests:
     testthat,knitr,magrittr
 License: MIT + file LICENSE

@@ -1,3 +1,8 @@
+v0.4-2 (2014-08-16)
+===
+Resolve compatibility issues with data.table (#28)
+
+
 v0.4-1 (2014-08-15)
 ===
 Add element extraction syntax
