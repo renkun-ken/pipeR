@@ -74,20 +74,6 @@ rnorm(100) %>>%
   summary() %>>%
 ```
 
-```r
-mtcars %>>%
-  (~ par(mfrow=c(1,2))) %>>%
-  (~ plot(mpg ~ cyl, data = .)) %>>%
-  (~ plot(mpg ~ wt, data = .)) %>>%
-  summary()
-```
-
-```r
-mtcars %>>%
-  ((df) ~ plot(mpg ~ ., data = df)) %>>%
-  summary()
-```  
-
 * Pipe for extracting element
 
 ```r
@@ -137,13 +123,6 @@ Pipe(rnorm(1000))$
   plot(col = "blue")
 ```
 
-```r
-Pipe(iris)$
-  .(~ cat(length(.), "columns","\n"))$
-  .(~ plot(.))$
-  summary()
-```
-
 Working with dplyr:
 
 ```r
@@ -171,6 +150,15 @@ Pipe(1:100)$
   list.group(. %% 3)$
   list.mapv(g -> mean(g))$
   value
+```
+
+For side effect:
+
+```r
+Pipe(iris)$
+  .(~ cat(length(.), "columns","\n"))$
+  .(~ plot(.))$
+  summary()
 ```
 
 ## Performance
