@@ -46,13 +46,8 @@ pipe.lambda <- function(x,expr,envir) {
     # to make a valid lambda expression,
     # its lambda symbol must be of length 1
     if(length(symbol) == 1L) {
-      # (x -> expr) will be parsed as (expr <- x)
-      if(symbol == "<-") {
-        warning("lambda expression in form of \"x -> expr\" has been deprecated, please use \"x ~ expr\" instead, which also supports side-effect-only piping.", call. = FALSE)
-        return(eval.labmda(x,expr[[3L]],expr[[2L]],envir))
-      }
-      # formula
-      else if(symbol == "~") {
+      if(symbol == "~") {
+        # formula
         if(length(expr) == 3L) {
           # (symbol ~ expr)
           lhs <- expr[[2L]]
@@ -69,8 +64,11 @@ pipe.lambda <- function(x,expr,envir) {
           pipe.dot(x,expr[[2L]],envir)
           return(x)
         }
+      } else if(symbol == "<-") {
+        # (x -> expr) will be parsed as (expr <- x)
+        warning("lambda expression in form of \"x -> expr\" has been deprecated, please use \"x ~ expr\" instead, which also supports side-effect-only piping.", call. = FALSE)
+        return(eval.labmda(x,expr[[3L]],expr[[2L]],envir))
       }
-
     }
   }
 
