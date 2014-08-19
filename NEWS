@@ -1,7 +1,9 @@
-v0.4-2 (2014-08-18)
+v0.4-2 (2014-08-19)
 ===
 Resolve compatibility issues with data.table (#28)
 Add side-effect piping
+Deprecate fun() in Pipe object, use .() instead.
+Deprecate lambda expression like (x -> expr), use (x ~ expr) instead.
 
 v0.4-1 (2014-08-15)
 ===
@@ -44,7 +46,6 @@ Free piping: `%:>%`
 Lambda piping: `%|>%`
 
 Now this package can perfectly coexist with magritter and dplyr but is not backward compatible with previous code if old operators are used, please notify the potential issues and upgrade to the new set of operators if possible.
-
 
 
 v0.2-4 (2014-05-31)

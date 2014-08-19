@@ -13,8 +13,13 @@ High-performance pipeline operator and light-weight Pipe function based on a set
 
 ## What's new in 0.4?
 
-- **Major API Change**: `%>>%` operator now handles all pipeline mechanisms and other operators are deprecated.
-- Add `Pipe()` function that supports object-based pipeline operation.
+- (0.4-2) Add side-effect piping: `x %>>% (~ expr)`
+- (0.4-2) **API Change**: 
+    * lambda expression like `(x -> expr)` is deprecated, use `(x ~ expr)` instead.
+    * `fun()` in `Pipe` object is deprecated, use `.()` instead.
+- (0.4-1) Add element extraction with `x %>>% (name)`.
+- (0.4) **Major API Change**: `%>>%` operator now handles all pipeline mechanisms and other operators are deprecated.
+- (0.4) Add `Pipe()` function that supports object-based pipeline operation.
 
 [Release notes](https://github.com/renkun-ken/pipeR/releases)
 
