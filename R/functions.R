@@ -48,6 +48,7 @@ pipe.lambda <- function(x,expr,envir) {
     if(length(symbol) == 1L) {
       # (x -> expr) will be parsed as (expr <- x)
       if(symbol == "<-") {
+        warning("lambda expression in form of \"x -> expr\" has been deprecated, please use \"x ~ expr\" instead, which also supports side-effect-only piping.", call. = FALSE)
         return(eval.labmda(x,expr[[3L]],expr[[2L]],envir))
       }
       # formula
