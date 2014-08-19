@@ -109,10 +109,10 @@ The following syntax is interpreted as side-effect piping:
 
 ```r
 x %>>% (~ expr)
-x %>>% ((p) ~ expr)
+x %>>% (~ p ~ expr)
 ```
 
-The syntax is a lambda expression with only one side stressed. The right-hand side is the expression to evaluate only for its side effect, and the left-hand side can be missing or a name enclosed within `()`. 
+The syntax starts with `(~` and is easy to distinguish from non-side-effect lines. The right-hand side is the expression to evaluate only for its side effect. `~ p ~ expr` will interpreted as to evaluated `expr` for side-effect with `p = x` and return `x`.
 
 Both lines are evaluated by lambda expression but the output of the expression will be ignored and `x` are returned instead.
 
@@ -168,7 +168,7 @@ Pipe(rnorm(100,mean=10))$
 
 ```r
 Pipe(1:10)$
-  .(x -> x + rnorm(1))$
+  .(x ~ x + rnorm(1))$
   mean() []
 ```
 

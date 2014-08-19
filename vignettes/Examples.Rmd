@@ -122,9 +122,9 @@ The following example groups the developers by age and for each group it classif
 ```r
 devs %>>%
   list.group(age) %>>%
-  list.map(group -> group %>>%
+  list.map(group ~ group %>>%
       list.class(interest) %>>%
-      list.mapv(int -> length(int)))
+      list.mapv(int ~ length(int)))
 ```
 
 or equivalently using Pipe object:
@@ -132,9 +132,12 @@ or equivalently using Pipe object:
 ```r
 Pipe(devs)$
   list.group(age)$
-  list.map(group -> Pipe(group)$
+  list.map(group ~ 
+    Pipe(group)$
       list.class(interest)$
-      list.mapv(int -> length(int))[] 
-    )[]
+      list.mapv(int ~ length(int))$
+      value
+    )$
+  value
 ```
 
