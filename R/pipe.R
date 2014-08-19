@@ -40,7 +40,7 @@
 #'   .(~ cat("number:",length(.),"\n"))$
 #'   summary()
 #' Pipe(rnorm(100))$
-#'   .((x)~ cat("number:",length(x),"\n"))$
+#'   .(~ x ~ cat("number:",length(x),"\n"))$
 #'   summary()
 #'
 #' # Extract element with \code{.(name)}

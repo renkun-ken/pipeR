@@ -56,7 +56,7 @@ pipe.lambda <- function(x,expr,envir) {
           # (symbol ~ expr)
           lhs <- expr[[2L]]
           if(length(lhs) == 2L) {
-            # symbol (x): side effect
+            # symbol ~x: side effect
             eval.labmda(x,lhs[[2L]],expr[[3L]],envir)
             return(x)
           } else {

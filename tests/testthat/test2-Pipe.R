@@ -48,7 +48,7 @@ test_that("side effect", {
     x + 1
   }
   expect_equal(Pipe(1:3)$.(~ side(.))$value, 1:3)
-  expect_equal(Pipe(1:3)$.((x) ~ side(x))$value, 1:3)
+  expect_equal(Pipe(1:3)$.(~ x ~ side(x))$value, 1:3)
 })
 
 test_that("element extraction", {

@@ -29,7 +29,7 @@
 #'
 #' \code{x \%>>\% (~ expr)} as \code{expr; x} given \code{. = x}
 #'
-#' \code{(x) \%>>\% ((p) ~ expr)} as \code{expr; x} given \code{p = x}
+#' \code{x \%>>\% (~ p ~ expr)} as \code{expr; x} given \code{p = x}
 #'
 #' 5. Pipe for element extraction:
 #'
@@ -71,7 +71,7 @@
 #'   summary()
 #'
 #' rnorm(100) %>>%
-#'   ((x) ~ cat("Number of points:",length(x))) %>>%
+#'   (~ x ~ cat("Number of points:",length(x))) %>>%
 #'   summary()
 #'
 #' # Pipe for element extraction
