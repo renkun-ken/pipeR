@@ -66,12 +66,18 @@ rnorm(100) %>>%
   (x ~ plot(x, col="red", main=length(x)))
 ```
 
-* Pipe for side effect (dev only)
+* Pipe for side effect
 
 ```r
 rnorm(100) %>>%
   (~ cat("number:",length(.),"\n")) %>>%
-  summary() %>>%
+  summary()
+```
+
+```r
+rnorm(100) %>>%
+  (~ x ~ cat("number:",length(x),"\n")) %>>%
+  summary()
 ```
 
 * Pipe for extracting element
@@ -108,7 +114,7 @@ Working with [rlist](http://renkun.me/rlist/):
 library(rlist)
 1:100 %>>%
   list.group(. %% 3) %>>%
-  list.mapv(g -> mean(g))
+  list.mapv(g ~ mean(g))
 ```
 
 ### `Pipe()`
