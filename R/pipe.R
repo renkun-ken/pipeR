@@ -109,18 +109,22 @@ Pipe <- function(value = NULL) {
   setclass(.envir, "Pipe")
 }
 
+getValue <- function(x) {
+  get("value", envir = x, inherits = FALSE)
+}
+
 #' @export
 `$.Pipe` <- function(x,y) {
   if(exists(y, envir = x, inherits = FALSE))
     return(get(y, envir = x, inherits = FALSE))
   f <-  get(y, envir = parent.frame(), mode = "function")
-  value <- get("value", envir = x, inherits = FALSE)
+  value <- getValue(x)
   function(...) Pipe(f(value,...))
 }
 
 #' @export
 `[.Pipe` <- function(x, ...) {
-  value <- get("value",envir = x,inherits = FALSE)
+  value <- getValue(x)
   dots <- match.call(expand.dots = FALSE)$`...`
   if(length(dots) > 1L || any(nzchar(dots))) Pipe(value[...])
   else value
@@ -128,7 +132,7 @@ Pipe <- function(value = NULL) {
 
 #' @export
 `[[.Pipe` <- function(x, ...) {
-  value <- get("value",envir = x,inherits = FALSE)
+  value <- getValue(x)
   dots <- match.call(expand.dots = FALSE)$`...`
   if(length(dots) > 1L || any(nzchar(dots))) Pipe(value[[...]])
   else value
@@ -136,7 +140,7 @@ Pipe <- function(value = NULL) {
 
 #' @export
 print.Pipe <- function(x,...,header=getOption("Pipe.header",TRUE)) {
-  value <- get("value",envir = x,inherits = FALSE)
+  value <- getValue(x)
   if(!is.null(value)) {
     if(header) cat("$value :",class(value),"\n------\n")
     print(value,...)
@@ -145,26 +149,26 @@ print.Pipe <- function(x,...,header=getOption("Pipe.header",TRUE)) {
 
 #' @export
 str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
-  value <- get("value",envir = object,inherits = FALSE)
   if(header) cat("$value : ")
-  str(value,...)
+  str(getValue(object),...)
 }
 
 #' @export
-`$<-.Pipe` <- function(x,y,value) {
-  Pipe(setelement(get("value",envir = x,inherits = FALSE),y,value))
+`$<-.Pipe` <- function(x,...,value) {
+  x <- getValue(x)
+  Pipe(do.call("$<-",list(x,...,value)))
 }
 
 #' @export
 `[<-.Pipe` <- function(x,...,value) {
-  x <- get("value",envir = x,inherits = FALSE)
+  x <- getValue(x)
   x[...] <- value
   Pipe(x)
 }
 
 #' @export
 `[[<-.Pipe` <- function(x,...,value) {
-  x <- get("value",envir = x,inherits = FALSE)
+  x <- getValue(x)
   x[[...]] <- value
   Pipe(x)
 }
