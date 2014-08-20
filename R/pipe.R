@@ -113,14 +113,23 @@ Pipe <- function(value = NULL) {
 `$.Pipe` <- function(x,y) {
   if(exists(y, envir = x, inherits = FALSE))
     return(get(y, envir = x, inherits = FALSE))
-  f <-  get(y,envir = parent.frame(),mode = "function")
-  value <- get("value",envir = x,inherits = FALSE)
+  f <-  get(y, envir = parent.frame(), mode = "function")
+  value <- get("value", envir = x, inherits = FALSE)
   function(...) Pipe(f(value,...))
 }
 
 #' @export
 `[.Pipe` <- function(x, ...) {
-  get("value", envir = x, inherits = FALSE)
+  value <- get("value",envir = x,inherits = FALSE)
+  if(any(nzchar(substitute(...)))) Pipe(value[...])
+  else value
+}
+
+#' @export
+`[[.Pipe` <- function(x, ...) {
+  value <- get("value",envir = x,inherits = FALSE)
+  if(any(nzchar(substitute(...)))) Pipe(value[[...]])
+  else value
 }
 
 #' @export
@@ -137,4 +146,23 @@ str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
   value <- get("value",envir = object,inherits = FALSE)
   if(header) cat("$value : ")
   str(value,...)
+}
+
+#' @export
+`$<-.Pipe` <- function(x,...,value) {
+  Pipe(`$<-`(get("value",envir = x,inherits = FALSE),...,value))
+}
+
+#' @export
+`[<-.Pipe` <- function(x,...,value) {
+  x <- get("value",envir = x,inherits = FALSE)
+  x[...] <- value
+  Pipe(x)
+}
+
+#' @export
+`[[<-.Pipe` <- function(x,...,value) {
+  x <- get("value",envir = x,inherits = FALSE)
+  x[[...]] <- value
+  Pipe(x)
 }
