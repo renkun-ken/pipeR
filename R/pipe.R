@@ -121,14 +121,16 @@ Pipe <- function(value = NULL) {
 #' @export
 `[.Pipe` <- function(x, ...) {
   value <- get("value",envir = x,inherits = FALSE)
-  if(any(nzchar(substitute(...)))) Pipe(value[...])
+  dots <- match.call(expand.dots = FALSE)$`...`
+  if(length(dots) > 1L || any(nzchar(dots))) Pipe(value[...])
   else value
 }
 
 #' @export
 `[[.Pipe` <- function(x, ...) {
   value <- get("value",envir = x,inherits = FALSE)
-  if(any(nzchar(substitute(...)))) Pipe(value[[...]])
+  dots <- match.call(expand.dots = FALSE)$`...`
+  if(length(dots) > 1L || any(nzchar(dots))) Pipe(value[[...]])
   else value
 }
 
@@ -149,8 +151,8 @@ str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
 }
 
 #' @export
-`$<-.Pipe` <- function(x,...,value) {
-  Pipe(`$<-`(get("value",envir = x,inherits = FALSE),...,value))
+`$<-.Pipe` <- function(x,y,value) {
+  Pipe(setelement(get("value",envir = x,inherits = FALSE),y,value))
 }
 
 #' @export
