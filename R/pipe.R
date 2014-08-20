@@ -156,7 +156,7 @@ str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
 #' @export
 `$<-.Pipe` <- function(x,...,value) {
   x <- getValue(x)
-  Pipe(do.call("$<-",list(x,...,value)))
+  Pipe(do.call("$<-",list(x,...,value),envir = parent.frame()))
 }
 
 #' @export
