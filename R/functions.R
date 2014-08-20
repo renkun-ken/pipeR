@@ -1,6 +1,3 @@
-setnames <- `names<-`
-setclass <- `class<-`
-
 # pipe to first argument
 # x : object
 # fun : the function name or call
