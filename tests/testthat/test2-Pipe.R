@@ -57,6 +57,42 @@ test_that("element extraction", {
   expect_equal(Pipe(c(a=1))$.(a)$value,1)
 })
 
+test_that("subsetting", {
+  expect_identical(Pipe(list(a=1,b=2))["a"]$value,list(a=1))
+  expect_equal(Pipe(c(a=1,b=2))["a"]$value,c(a=1))
+})
+
+test_that("extracting", {
+  expect_equal(Pipe(list(a=1,b=2))[["a"]]$value,1)
+  expect_equal(Pipe(list2env(list(a=1,b=2)))[["a"]]$value,1)
+})
+
+test_that("assignment", {
+  expect_identical({
+    z <- Pipe(list(a=1,b=2))
+    z$a <- 2
+    z$b <- NULL
+    z$value
+  },list(a=2))
+  expect_equal({
+    z <- new.env()
+    env <- Pipe(z)
+    env$a <- 1
+    env$value$a
+  },1)
+  expect_identical({
+    z <- Pipe(c(a=1,b=2))
+    z["a"] <- 2
+    z$value
+  },c(a=2,b=2))
+  expect_identical({
+    z <- Pipe(c(a=1,b=2))
+    z[["a"]] <- 2
+    z$value
+  },c(a=2,b=2))
+})
+
+
 test_that("function", {
   # closure
   expect_identical({
