@@ -136,22 +136,24 @@ Pipe.get <- function(f, value, dots, envir) {
 `[.Pipe` <- function(x, ...) {
   value <- Pipe.value(x)
   dots <- match.call(expand.dots = FALSE)$`...`
-  if(length(dots) > 1L || any(nzchar(dots))) {
+  if(ndots(dots)) {
     value <- Pipe.get(`[`,value,dots,parent.frame())
     Pipe(value)
+  } else {
+    value
   }
-  else value
 }
 
 #' @export
 `[[.Pipe` <- function(x, ...) {
   value <- Pipe.value(x)
   dots <- match.call(expand.dots = FALSE)$`...`
-  if(length(dots) > 1L || any(nzchar(dots))) {
+  if(ndots(dots)) {
     value <- Pipe.get(`[[`,value,dots,parent.frame())
     Pipe(value)
+  } else {
+    value
   }
-  else value
 }
 
 #' @export
@@ -178,20 +180,23 @@ Pipe.set <- function(f, x, dots, value, envir) {
 #' @export
 `$<-.Pipe` <- function(x,...,value) {
   dots <- match.call(expand.dots = FALSE)$`...`
-  value <- Pipe.set(`$<-`, Pipe.value(x), dots, value, parent.frame())
+  if(ndots(dots))
+    value <- Pipe.set(`$<-`, Pipe.value(x), dots, value, parent.frame())
   Pipe(value)
 }
 
 #' @export
 `[<-.Pipe` <- function(x,...,value) {
   dots <- match.call(expand.dots = FALSE)$`...`
-  value <- Pipe.set(`[<-`, Pipe.value(x), dots, value, parent.frame())
+  if(ndots(dots))
+    value <- Pipe.set(`[<-`, Pipe.value(x), dots, value, parent.frame())
   Pipe(value)
 }
 
 #' @export
 `[[<-.Pipe` <- function(x,...,value) {
   dots <- match.call(expand.dots = FALSE)$`...`
-  value <- Pipe.set(`[[<-`, Pipe.value(x), dots, value, parent.frame())
+  if(ndots(dots))
+    value <- Pipe.set(`[[<-`, Pipe.value(x), dots, value, parent.frame())
   Pipe(value)
 }
