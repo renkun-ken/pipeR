@@ -15,7 +15,8 @@ Pipeline operator and Pipe function based on intuitive syntax
 - **API Change**: 
     * lambda expression like `(x -> expr)` is deprecated, use `(x ~ expr)` instead.
     * `fun()` in `Pipe` object is deprecated, use `.()` instead.
-- Add side-effect piping: `x %>>% (~ expr)` or `x %>>% (~ i ~ expr)`
+- Add side-effect piping: `x %>>% (~ expr)` or `x %>>% (~ i ~ expr)`. `expr` will only be evaluated for its side effect and still result in `x`.
+- Add question piping: `x %>>% (? expr)` where `expr` is an expression or a lambda expression. `expr` will only be printed and still result in `x`.
 
 #### 0.4-1
 
@@ -93,11 +94,19 @@ rnorm(100) %>>%
   summary()
 ```
 
-* Pipe for extracting element
+* Extracting element
 
 ```r
 mtcars %>>%
   (mpg)
+```
+
+* Questioning
+
+```r
+iris %>>% 
+  (? ncol(.)) %>>%
+  summary()
 ```
 
 * Working with [dplyr](https://github.com/hadley/dplyr/):
