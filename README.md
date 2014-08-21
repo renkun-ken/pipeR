@@ -98,8 +98,7 @@ mtcars %>>%
 library(dplyr)
 mtcars %>>%
   filter(mpg <= mean(mpg)) %>>%
-  select(mpg, wt, qsec) %>>%
-  (lm(mpg ~ ., data = .)) %>>%
+  (lm(mpg ~ wt + cyl, data = .)) %>>%
   summary() %>>%
   (coefficients)
 ```
@@ -171,8 +170,7 @@ df$b <- NULL
 ```r
 Pipe(mtcars)$
   filter(mpg >= mean(mpg))$
-  select(mpg, wt, qsec)$
-  .(lm(mpg ~ ., data = .))$
+  .(lm(mpg ~ wt + cyl, data = .))$
   summary()$
   .(coefficients)$
   value
@@ -203,13 +201,6 @@ Pipe(iris)$
   .(~ plot(.))$
   summary()
 ```
-
-## Performance
-
-[Benchmark tests](http://cran.r-project.org/web/packages/pipeR/vignettes/Performance.html) show that pipeR operator and Pipe object has higher performance especially when they are intensively called compared to alternative packages.
-
-- If you do not care about the performance of intensive calling and need heuristic distinction between different piping mechanisms, you may use `%>%` in [magrittr](https://github.com/smbache/magrittr) which also provides additional aliases of basic functions. 
-- If you care about performance issues, want uniform operator, or need full control of the piping mechanism, pipeR can be a helpful choice.
 
 ## Vignettes
 
