@@ -121,8 +121,8 @@ getValue <- function(x) {
   value <- getValue(x)
   function(...) {
     dots <- match.call(expand.dots = FALSE)$`...`
-    rcall <- as.call(c(list(f,value),dots))
-    value <- eval(rcall, envir = parent.frame())
+    rcall <- as.call(c(f,quote(value),dots))
+    value <- eval(rcall,list(value = value),parent.frame())
     Pipe(value)
   }
 }
@@ -132,8 +132,8 @@ getValue <- function(x) {
   value <- getValue(x)
   dots <- match.call(expand.dots = FALSE)$`...`
   if(length(dots) > 1L || any(nzchar(dots))) {
-    rcall <- as.call(c(list(quote(`[`),value),dots))
-    value <- eval(rcall,parent.frame())
+    rcall <- as.call(c(quote(`[`),quote(value),dots))
+    value <- eval(rcall,list(value = value),parent.frame())
     Pipe(value)
   }
   else value
@@ -144,8 +144,8 @@ getValue <- function(x) {
   value <- getValue(x)
   dots <- match.call(expand.dots = FALSE)$`...`
   if(length(dots) > 1L || any(nzchar(dots))) {
-    rcall <- as.call(c(list(quote(`[[`),value),dots))
-    value <- eval(rcall,parent.frame())
+    rcall <- as.call(c(quote(`[[`),quote(value),dots))
+    value <- eval(rcall,list(value = value),parent.frame())
     Pipe(value)
   }
   else value
@@ -170,8 +170,8 @@ str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
 `$<-.Pipe` <- function(x,...,value) {
   x <- getValue(x)
   dots <- match.call(expand.dots = FALSE)$`...`
-  rcall <- as.call(c(list(quote(`$<-`),x),dots,list(value)))
-  value <- eval(rcall, parent.frame())
+  rcall <- as.call(c(quote(`$<-`),quote(x),dots,quote(value)))
+  value <- eval(rcall,list(x = x, value = value),parent.frame())
   Pipe(value)
 }
 
@@ -179,8 +179,8 @@ str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
 `[<-.Pipe` <- function(x,...,value) {
   x <- getValue(x)
   dots <- match.call(expand.dots = FALSE)$`...`
-  rcall <- as.call(c(list(quote(`[<-`),x),dots,list(value)))
-  value <- eval(rcall, parent.frame())
+  rcall <- as.call(c(quote(`[<-`),quote(x),dots,quote(value)))
+  value <- eval(rcall,list(x = x, value = value),parent.frame())
   Pipe(value)
 }
 
@@ -188,7 +188,7 @@ str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
 `[[<-.Pipe` <- function(x,...,value) {
   x <- getValue(x)
   dots <- match.call(expand.dots = FALSE)$`...`
-  rcall <- as.call(c(list(quote(`[[<-`),x),dots,list(value)))
-  value <- eval(rcall, parent.frame())
+  rcall <- as.call(c(quote(`[[<-`),quote(x),dots,quote(value)))
+  value <- eval(rcall,list(x = x, value = value),parent.frame())
   Pipe(value)
 }
