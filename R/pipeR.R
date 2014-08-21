@@ -37,6 +37,11 @@
 #' \code{list}, \code{environment}, \code{data.frame}, etc; and
 #' \code{x@@name} when \code{x} is S4 object.
 #'
+#' 6. Pipe for questioning:
+#'
+#' \code{x \%>>\% (? expr)} will print the value of \code{expr} and
+#' return \code{x}, just like a question.
+#'
 #' @export
 #' @examples
 #' \dontrun{
@@ -76,6 +81,11 @@
 #'
 #' # Pipe for element extraction
 #' mtcars %>>% (mpg)
+#'
+#' # Pipe for questioning
+#' rnorm(100) %>>%
+#'   (? summary(.)) %>>%
+#'   plot(col="red")
 #'
 #' # Pipe to an anomymous function
 #' rnorm(100) %>>% (function(x) mean(x))()
