@@ -153,6 +153,7 @@ But this method does not work for vector and S4 object.
 
 - `$` chains functions by first-argument piping and always returns a Pipe object.
 - `.(...)` evaluates an expression with `.` or by lambda expression, or for side effect, or simply extract a named element. The usage is exactly the same with `x %>>% (...)`.
+- Subsetting, extracing, and assigning with Pipe on its inner value and Pipe object is preserved.
 - `$value` or `[]` extracts the final value of the Pipe object.
 
 ### Usage
@@ -171,6 +172,64 @@ Pipe(1:10)$
   .(x ~ x + rnorm(1))$
   mean() []
 ```
+
+Pipe by lambda expression
+
+```r
+Pipe(mtcars)$
+  .(lm(mpg ~ ., data = .))$
+  summary() []
+```
+
+```r
+Pipe(mtcars)$
+  .(df ~ lm(mpg ~ ., data = df))$
+  summary() []
+```
+
+Pipe for extracting element
+
+```r
+Pipe(mtcars)$
+  .(mpg)$
+  summary() []
+```
+
+Pipe for side effect
+
+```r
+Pipe(iris)$
+  .(~ cat(length(.), "columns","\n"))$
+  .(~ plot(.))$
+  summary()
+```
+
+Subsetting Pipe object
+
+```r
+Pipe(mtcars)["mpg"]
+```
+
+Extracting from Pipe object
+
+```r
+Pipe(mtcars)[["mpg"]]
+```
+
+Assigning to Pipe object's element
+
+```r
+p <- Pipe(list(a=1,b=2))
+p$a <- 0
+p$b <- NULL
+```
+
+```r
+p <- Pipe(list(a=1,b=2))
+p["a"] <- 2
+p[["b"]] <- 3
+```
+
 
 ### Lazy evaluation
 
