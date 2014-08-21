@@ -107,14 +107,7 @@ rnorm(100) %>>%
   summary()
 ```
 
-* Extract element if followed by name in `()`
-
-```r
-mtcars %>>%
-  (mpg)
-```
-
-* Questioning if lambda expression starts by `?`
+* Ask question if lambda expression starts by `?`
 
 ```r
 iris %>>% 
@@ -126,6 +119,13 @@ iris %>>%
 iris %>>% 
   (? df ~ ncol(df)) %>>%
   summary()
+```
+
+* Extract element if followed by name in `()`
+
+```r
+mtcars %>>%
+  (mpg)
 ```
 
 * Working with [dplyr](https://github.com/hadley/dplyr/):
