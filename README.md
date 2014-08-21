@@ -8,15 +8,23 @@ Pipeline operator and Pipe function based on intuitive syntax
 
 ## What's new in 0.4?
 
-- (0.4-2) Add side-effect piping: `x %>>% (~ expr)`
-- (0.4-2) **API Change**: 
+[Release notes](https://github.com/renkun-ken/pipeR/releases)
+
+#### 0.4-2
+
+- **API Change**: 
     * lambda expression like `(x -> expr)` is deprecated, use `(x ~ expr)` instead.
     * `fun()` in `Pipe` object is deprecated, use `.()` instead.
-- (0.4-1) Add element extraction with `x %>>% (name)`.
-- (0.4) **Major API Change**: `%>>%` operator now handles all pipeline mechanisms and other operators are deprecated.
-- (0.4) Add `Pipe()` function that supports object-based pipeline operation.
+- Add side-effect piping: `x %>>% (~ expr)` or `x %>>% (~ i ~ expr)`
 
-[Release notes](https://github.com/renkun-ken/pipeR/releases)
+#### 0.4-1
+
+- Add element extraction with `x %>>% (name)`.
+
+#### 0.4
+
+- **Major API Change**: `%>>%` operator now handles all pipeline mechanisms and other operators are deprecated.
+- Add `Pipe()` function that supports object-based pipeline operation.
 
 ## Installation
 
