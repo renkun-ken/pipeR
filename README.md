@@ -45,17 +45,21 @@ devtools::install_github("pipeR","renkun-ken")
 
 ### `%>>%`
 
-`%>>%` operator behaves based on a set of rules:
+`%>>%` operator behaves based on a set of syntax:
 
 * Pipe to first argument and `.` in a function
 
 ```r
 rnorm(100) %>>%
   plot
+```
 
+```r
 rnorm(100) %>>%
   plot(col="red")
-  
+```
+
+```r
 rnorm(100) %>>%
   plot(col="red", main=length(.))
 ```
@@ -65,7 +69,9 @@ rnorm(100) %>>%
 ```r
 mtcars %>>%
   { lm(mpg ~ cyl + wt, data = .) }
+```
 
+```r
 mtcars %>>%
   ( lm(mpg ~ cyl + wt, data = .) )
 ```
@@ -75,7 +81,9 @@ mtcars %>>%
 ```r
 mtcars %>>%
   (df ~ lm(mpg ~ cyl + wt, data = df))
-  
+```
+
+```r
 rnorm(100) %>>%
   (x ~ plot(x, col="red", main=length(x)))
 ```
@@ -106,6 +114,12 @@ mtcars %>>%
 ```r
 iris %>>% 
   (? ncol(.)) %>>%
+  summary()
+```
+
+```r
+iris %>>% 
+  (? df ~ ncol(df)) %>>%
   summary()
 ```
 
