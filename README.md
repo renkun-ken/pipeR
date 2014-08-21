@@ -47,7 +47,7 @@ devtools::install_github("pipeR","renkun-ken")
 
 `%>>%` operator behaves based on a set of syntax:
 
-* Pipe to first argument and `.` in a function
+* Pipe to first argument and `.` in a function if followed by a function name or call
 
 ```r
 rnorm(100) %>>%
@@ -64,7 +64,7 @@ rnorm(100) %>>%
   plot(col="red", main=length(.))
 ```
 
-* Pipe to `.` in an expression
+* Pipe to `.` in an expression if it is enclosed within `{}` or `()`
 
 ```r
 mtcars %>>%
@@ -76,7 +76,7 @@ mtcars %>>%
   ( lm(mpg ~ cyl + wt, data = .) )
 ```
 
-* Pipe by lambda expression
+* Pipe by lambda expression if followed by `(x ~ expr)`
 
 ```r
 mtcars %>>%
@@ -88,7 +88,7 @@ rnorm(100) %>>%
   (x ~ plot(x, col="red", main=length(x)))
 ```
 
-* Pipe for side effect
+* Pipe for side effect if lambda expression starts by `~`
 
 ```r
 rnorm(100) %>>%
@@ -102,14 +102,14 @@ rnorm(100) %>>%
   summary()
 ```
 
-* Extracting element
+* Extract element if followed by name in `()`
 
 ```r
 mtcars %>>%
   (mpg)
 ```
 
-* Questioning
+* Questioning if lambda expression starts by `?`
 
 ```r
 iris %>>% 
