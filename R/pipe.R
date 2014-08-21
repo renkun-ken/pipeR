@@ -119,14 +119,23 @@ getValue <- function(x) {
     return(get(y, envir = x, inherits = FALSE))
   f <-  get(y, envir = parent.frame(), mode = "function")
   value <- getValue(x)
-  function(...) Pipe(f(value,...))
+  function(...) {
+    dots <- match.call(expand.dots = FALSE)$`...`
+    rcall <- as.call(c(list(f,value),dots))
+    value <- eval(rcall, envir = parent.frame())
+    Pipe(value)
+  }
 }
 
 #' @export
 `[.Pipe` <- function(x, ...) {
   value <- getValue(x)
   dots <- match.call(expand.dots = FALSE)$`...`
-  if(length(dots) > 1L || any(nzchar(dots))) Pipe(value[...])
+  if(length(dots) > 1L || any(nzchar(dots))) {
+    rcall <- as.call(c(list(`[`,value),dots))
+    value <- eval(rcall,parent.frame())
+    Pipe(value)
+  }
   else value
 }
 
@@ -134,7 +143,11 @@ getValue <- function(x) {
 `[[.Pipe` <- function(x, ...) {
   value <- getValue(x)
   dots <- match.call(expand.dots = FALSE)$`...`
-  if(length(dots) > 1L || any(nzchar(dots))) Pipe(value[[...]])
+  if(length(dots) > 1L || any(nzchar(dots))) {
+    rcall <- as.call(c(list(`[[`,value),dots))
+    value <- eval(rcall,parent.frame())
+    Pipe(value)
+  }
   else value
 }
 
@@ -156,19 +169,26 @@ str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
 #' @export
 `$<-.Pipe` <- function(x,...,value) {
   x <- getValue(x)
-  Pipe(do.call("$<-",list(x,...,value),envir = parent.frame()))
+  dots <- match.call(expand.dots = FALSE)$`...`
+  rcall <- as.call(c(list(`$<-`,x),dots,list(value)))
+  value <- eval(rcall, parent.frame())
+  Pipe(value)
 }
 
 #' @export
 `[<-.Pipe` <- function(x,...,value) {
   x <- getValue(x)
-  x[...] <- value
-  Pipe(x)
+  dots <- match.call(expand.dots = FALSE)$`...`
+  rcall <- as.call(c(list(`[<-`,x),dots,list(value)))
+  value <- eval(rcall, parent.frame())
+  Pipe(value)
 }
 
 #' @export
 `[[<-.Pipe` <- function(x,...,value) {
   x <- getValue(x)
-  x[[...]] <- value
-  Pipe(x)
+  dots <- match.call(expand.dots = FALSE)$`...`
+  rcall <- as.call(c(list(`[[<-`,x),dots,list(value)))
+  value <- eval(rcall, parent.frame())
+  Pipe(value)
 }
