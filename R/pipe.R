@@ -60,6 +60,15 @@
 #' pipe1 <- Pipe(rnorm(100,mean=10))$log()$diff()
 #' pipe1$plot(col="red")
 #'
+#' # Subsetting, extracting, and assigning
+#'
+#' p <- Pipe(list(a=1,b=2))
+#' p["a"]
+#' p[["a"]]
+#' p$a <- 2
+#' p["b"] <- NULL
+#' p[["a"]] <- 3
+#'
 #' # Data manipulation with dplyr
 #' library(dplyr)
 #' Pipe(mtcars)$
