@@ -196,7 +196,7 @@ Pipe(mtcars)$
 ```r
 Pipe(1:100)$
   list.group(. %% 3)$
-  list.mapv(g -> mean(g))$
+  list.mapv(g ~ mean(g))$
   value
 ```
 
