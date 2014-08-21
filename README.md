@@ -92,7 +92,7 @@ mtcars %>>%
   (mpg)
 ```
 
-Working with [dplyr](https://github.com/hadley/dplyr/):
+* Working with [dplyr](https://github.com/hadley/dplyr/):
 
 ```r
 library(dplyr)
@@ -104,7 +104,7 @@ mtcars %>>%
   (coefficients)
 ```
 
-Working with [ggvis](http://ggvis.rstudio.com/):
+* Working with [ggvis](http://ggvis.rstudio.com/):
 
 ```r
 library(ggvis)
@@ -113,7 +113,7 @@ mtcars %>>%
   layer_points()
 ```
 
-Working with [rlist](http://renkun.me/rlist/):
+* Working with [rlist](http://renkun.me/rlist/):
 
 ```r
 library(rlist)
@@ -124,9 +124,11 @@ library(rlist)
 
 ### `Pipe()`
 
-`Pipe()` creates a Pipe object that supports light-weight chaining without any external operator. Typically, start with `Pipe()` and end with `$value` or `[]` to extract the final value of the Pipe. An internal function `.(...)` works in the same way with `x %>>% (...)` for dot piping, by lambda expression, for side effect, and element extraction.
+`Pipe()` creates a Pipe object that supports light-weight chaining without any external operator. Typically, start with `Pipe()` and end with `$value` or `[]` to extract the final value of the Pipe. 
 
-Expressions using `%>>%` can be easily translated to `Pipe()`. But `Pipe()` is shipped with more features. See details in vignettes.
+An internal function `.(...)` works in the same way with `x %>>% (...)` for dot piping, by lambda expression, for side effect, and element extraction.
+
+* Examples
 
 ```r
 Pipe(rnorm(1000))$
@@ -134,7 +136,37 @@ Pipe(rnorm(1000))$
   plot(col = "blue")
 ```
 
-Working with dplyr:
+```r
+Pipe(mtcars)$
+  .(mpg)$
+  summary()
+```
+
+```r
+Pipe(mtcars)$
+  .(~ cat("number of columns:", ncol(.), "\n"))$
+  lm(formula = mpg ~ wt + cyl)$
+  summary()$
+  .(coefficients)
+```
+
+* Subsetting and extracting
+
+```r
+df <- Pipe(mtcars)
+df[c("mpg","wt")]$lm(formula = mpg ~ wt)
+df[["mpg"]]$mean()
+```
+
+* Assigning values
+
+```r
+df <- Pipe(list(a=1,b=2))
+df$a <- 0
+df$b <- NULL
+```
+
+* Working with dplyr:
 
 ```r
 Pipe(mtcars)$
@@ -146,7 +178,7 @@ Pipe(mtcars)$
   value
 ```
 
-Working with ggvis:
+* Working with ggvis:
 
 ```r
 Pipe(mtcars)$
@@ -154,7 +186,7 @@ Pipe(mtcars)$
   layer_points()
 ```
 
-Working with rlist:
+* Working with rlist:
 
 ```r
 Pipe(1:100)$
