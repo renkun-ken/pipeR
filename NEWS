@@ -1,6 +1,7 @@
-v0.4-2 (2014-08-19)
+v0.4-2 (2014-08-21)
 ===
 Resolve compatibility issues with data.table (#28)
+Resolve evaluation environment issues (#20, #34)
 Add side-effect piping
 Deprecate fun() in Pipe object, use .() instead.
 Deprecate lambda expression like (x -> expr), use (x ~ expr) instead.

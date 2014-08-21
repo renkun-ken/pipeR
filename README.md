@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR)
 
-High-performance pipeline operator and light-weight Pipe function based on a set of simple and intuitive rules, making command chaining definite, readable and fast.
+Pipeline operator and Pipe function based on intuitive syntax
 
 ## What's new in 0.4?
 
@@ -191,7 +191,7 @@ Pipe(mtcars)$
 ```r
 Pipe(1:100)$
   list.group(. %% 3)$
-  list.mapv(g -> mean(g))$
+  list.mapv(g ~ mean(g))$
   value
 ```
 
