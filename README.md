@@ -195,7 +195,7 @@ Pipe(1:100)$
   value
 ```
 
-For side effect:
+* For side effect:
 
 ```r
 Pipe(iris)$
