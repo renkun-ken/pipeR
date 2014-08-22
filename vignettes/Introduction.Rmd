@@ -9,7 +9,7 @@ knitr::opts_chunk$set(comment="#",error=FALSE,tidy=FALSE)
 
 # Introduction to pipeR
 
-pipeR provides pipeline operator and Pipe function based on intuitive syntax.
+pipeR provides Pipe operator and function based on intuitive syntax.
 
 ## `%>>%`
 

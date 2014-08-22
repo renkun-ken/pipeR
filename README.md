@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR)
 
-Pipeline operator and Pipe function based on intuitive syntax
+Pipe operator and function based on intuitive syntax
 
 ## What's new in 0.4?
 
