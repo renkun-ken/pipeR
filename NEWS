@@ -4,6 +4,7 @@ Deprecate fun() in Pipe object, use .() instead.
 Deprecate lambda expression like (x -> expr), use (x ~ expr) instead.
 Add side-effect piping
 Add question piping
+Add subsetting, extracting, assigning to Pipe object
 Resolve compatibility issues with data.table (#28)
 Resolve evaluation environment issues (#20, #34)
 

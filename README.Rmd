@@ -20,8 +20,9 @@ Pipe operator and function based on intuitive syntax
 - **API Change**: 
     * lambda expression like `(x -> expr)` is deprecated, use `(x ~ expr)` instead.
     * `fun()` in `Pipe` object is deprecated, use `.()` instead.
-- Add side-effect piping: `x %>>% (~ expr)` or `x %>>% (~ i ~ expr)`. `expr` will only be evaluated for its side effect and still result in `x`.
-- Add question piping: `x %>>% (? expr)` where `expr` is an expression or a lambda expression. `expr` will only be printed and still result in `x`.
+- Add side-effect piping: `x %>>% (~ expr)` or `x %>>% (~ i ~ expr)`. `expr` will only be evaluated for its side effect and return `x`.
+- Add question piping: `x %>>% (? expr)` where `expr` is an expression or a lambda expression. `expr` will only be printed and return `x`.
+- Pipe object now supports subsetting, extracting, and assigning, and preserves Pipe object.
 
 #### 0.4-1
 
