@@ -80,6 +80,7 @@ pipe.lambda <- function(x,expr,envir) {
   pipe.dot(x,expr,envir)
 }
 
+# pre-processing lambda expression
 pipe.fun <- function(x,expr,envir) {
   if(is.name(expr)) {
     # if (name), then get element from x

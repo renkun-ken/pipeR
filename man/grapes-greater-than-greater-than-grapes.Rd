@@ -16,9 +16,16 @@ right-hand side as either the first argument and \code{.}, or a symbol
 defined by lambda expression.
 }
 \details{
-\code{\%>>\%} supports the following pipline mechanisms:
+Pipe operator \code{\%>>\%} determines the piping mechanism by the syntax
+of the expression on the right-hand side.
+
+#' \code{\%>>\%} supports the following piping mechanisms:
 
 1. Pipe to first argument:
+
+Whenever a function name or call with parameters follows the operator,
+the left-hand side value will be piped to the right-hand side function
+as the first unnamed argument.
 
 \code{x \%>>\% f} as \code{f(x)}
 
@@ -26,15 +33,28 @@ defined by lambda expression.
 
 2. Pipe to dot (\code{.}):
 
+Whenever an expression following the operator is enclosed with \code{\{\}},
+the expression will be evaluated with \code{.} representing the left-hand
+side value. It is the same with expression enclosed with \code{()} unless
+a lambda expression follows.
+
 \code{x \%>>\% { expr }} as \code{\{ expr \}} given \code{. = x}
 
 \code{x \%>>\% ( expr )} as \code{expr} given \code{. = x}
 
 3. Pipe by lambda expression:
 
+A lambda expression is a formula whose left-hand side is a symbol used to
+represent the value being piped and right-hand side is an expression to be
+evaluated with the symbol.
+
 \code{x \%>>\% (p ~ expr)} as \code{expr} given \code{p = x}
 
 4. Pipe for side-effect:
+
+If one only cares about the side effect (e.g. printing intermediate
+results, plotting graphics) of an expression rather than its returned
+value, write a lambda expression that starts with \code{~}.
 
 \code{x \%>>\% (~ expr)} as \code{\{expr; x\}} given \code{. = x}
 
@@ -42,11 +62,21 @@ defined by lambda expression.
 
 5. Pipe for element extraction:
 
+If a symbol is enclosed within \code{()}, it tells the operator to
+extract element from the left-hand side value. It works with vector,
+list, environment and all other objects for which \code{[[]]}
+is defined. Moreover, it also works with S4 object.
+
 \code{x \%>>\% (name)} as \code{x[["name"]]} when \code{x} is
 \code{list}, \code{environment}, \code{data.frame}, etc; and
 \code{x@name} when \code{x} is S4 object.
 
 6. Pipe for questioning:
+
+If a lambda expression start with \code{?}, the expression will be a side
+effect printing the syntax and the value of the expression. This is a
+light-weight version of side-effect piping and can be useful for simple
+inspection and debugging for pipeline operations.
 
 \code{x \%>>\% (? expr)} will print the value of \code{expr} and
 return \code{x}, just like a question.
