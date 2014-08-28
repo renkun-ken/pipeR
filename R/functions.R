@@ -34,7 +34,8 @@ eval.labmda <- function(x,symbol,expr,envir) {
 # x : object
 # expr : lambda expression
 # envir : environment for evaluation
-pipe.lambda <- function(x,expr,envir) {
+# side_effect: TRUE to turn on side effect piping
+pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
   # an explict lambda expression should be a call in forms of either
   # (x -> expr) or (x ~ expr)
   if(is.call(expr)) {
@@ -48,18 +49,29 @@ pipe.lambda <- function(x,expr,envir) {
         if(length(expr) == 3L) {
           # (symbol ~ expr)
           lhs <- expr[[2L]]
-          if(length(lhs) == 2L) {
+          rhs <- expr[[3L]]
+          if(is.name(rhs)) {
+            value <- pipe.lambda(x, lhs, envir, FALSE)
+            assign(as.character(rhs), value, envir = envir)
+            if(side_effect) return(x) else return(value)
+          } else if(length(lhs) == 2L) {
             # symbol ~x: side effect
-            eval.labmda(x,lhs[[2L]],expr[[3L]],envir)
-            return(x)
+            value <- eval.labmda(x,lhs[[2L]],rhs,envir)
+            if(side_effect) return(x) else return(value)
           } else {
             # symbol x: lambda piping
-            return(eval.labmda(x,lhs,expr[[3L]],envir))
+            return(eval.labmda(x,lhs,rhs,envir))
           }
         } else {
           # ( ~ expr ): side effect
-          pipe.dot(x,expr[[2L]],envir)
-          return(x)
+          expr <- expr[[2L]]
+          if(is.name(expr)) {
+            assign(as.character(expr), x, envir = envir)
+            return(x)
+          } else {
+            value <- pipe.dot(x,expr,envir)
+            if(side_effect) return(x) else value
+          }
         }
       } else if(symbol == "<-") {
         # (x -> expr) will be parsed as (expr <- x)

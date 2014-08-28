@@ -53,6 +53,21 @@ test_that("side effect", {
   expect_equal(1:3 %>>% (~ x ~ side(x)), 1:3)
 })
 
+test_that("assignment", {
+  expect_identical({
+    x <- 1:3 %>>% (~ p) %>>% mean()
+    list(x,p)
+  },list(2,1:3))
+  expect_identical({
+    x <- 1:3 %>>% (~ .+1L ~ p) %>>% mean()
+    list(x,p)
+  },list(2,2:4))
+  expect_identical({
+    x <- 1:3 %>>% (~ m ~ m + 1L ~ p) %>>% mean()
+    list(x,p)
+  },list(2,2:4))
+})
+
 test_that("element extraction", {
   expect_equal(list(a=1)  %>>% (a),1)
   expect_equal(list2env(list(a=1)) %>>% (a),1)
