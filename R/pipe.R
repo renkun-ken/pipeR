@@ -3,14 +3,20 @@
 
 #' Create a Pipe object that stores a value and allows command chaining with \code{$}.
 #' @details
-#' Pipe object provides object-like command chaining mechanism, which avoids using
-#' external operator and can be cleaner than operator-based pipline.
+#' \code{Pipe()} function creates a Pipe object that provides object-like command
+#' chaining mechanism, which avoids using external operator and can be cleaner than
+#' operator-based pipline.
 #'
 #' \code{Pipe()} creates a Pipe object that allows using \code{$} to perform
 #' first-argument piping, call \code{.()} to evaluate an expression with \code{.}
-#' or symbol defined by lambda expression, or simply extract an element from the
-#' stored value. \code{$value} or \code{[]} ends a pipeline and extracts its final
-#' value.
+#' or symbol defined by lambda expression, for side effect, or simply extract an
+#' element from the stored value. \code{$value} or \code{[]} ends a pipeline and
+#' extracts its final value.
+#'
+#' The functionality of Pipe object fully covers that of the pipe operator \code{\%>>\%}
+#' and provides more features. For example, Pipe object supports directly subsetting
+#' \code{$value} by \code{[...]}, extracting element by \code{[[...]]}, and assigning value
+#' by \code{$value <-}, \code{[...] <-}, and \code{[[...]] <-}.
 #'
 #' A typical usage of Pipe object is to start with \code{Pipe()} and end with
 #' \code{$value} or \code{[]}.
@@ -18,6 +24,10 @@
 #' \code{print()} and \code{str()} are implemented for \code{Pipe} object.
 #' Use \code{header = FALSE} to suppress Pipe header message in printed results.
 #' Use \code{options(Pipe.header = FASLE)} to suppress it globally.
+#'
+#' If the Pipe object is used in more than one pipelines, a recommended usage is to name the
+#' object specially so that it is easy to distinguish the Pipe object from the value it
+#' stores. For example, it can start with \code{p}.
 #' @param value value to pipe (default is \code{NULL})
 #' @name Pipe
 #' @return Pipe object
