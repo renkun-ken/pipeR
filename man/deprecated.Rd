@@ -3,7 +3,7 @@
 \alias{\%:>\%}
 \alias{\%|>\%}
 \alias{deprecated}
-\title{Pipe an object forward to expression (deprecated)}
+\title{[Deprecated] Pipe an object forward to expression}
 \usage{
 . \%:>\% expr
 
@@ -15,6 +15,6 @@
 \item{expr}{expression}
 }
 \description{
-Pipe an object forward to expression (deprecated)
+[Deprecated] Pipe an object forward to expression
 }
 

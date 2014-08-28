@@ -10,7 +10,7 @@
 #' Pipe operator \code{\%>>\%} determines the piping mechanism by the syntax
 #' of the expression on the right-hand side.
 #'
-#' #' \code{\%>>\%} supports the following piping mechanisms:
+#' \code{\%>>\%} supports the following piping mechanisms:
 #'
 #' 1. Pipe to first argument:
 #'

@@ -1,4 +1,4 @@
-#' Pipe an object forward to expression (deprecated)
+#' [Deprecated] Pipe an object forward to expression
 #' @param . object
 #' @param expr expression
 #' @name deprecated
