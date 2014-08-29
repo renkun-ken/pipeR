@@ -51,24 +51,25 @@ pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
           lhs <- expr[[2L]]
           rhs <- expr[[3L]]
           if(is.name(rhs)) {
-            value <- pipe.lambda(x, lhs, envir, FALSE)
+            # ~expr ~ symbol: assign
+            value <- Recall(x, lhs, envir, FALSE)
             assign(as.character(rhs), value, envir = envir)
             if(side_effect) return(x) else return(value)
           } else if(length(lhs) == 2L) {
-            # symbol ~x: side effect
+            # ~ expr: side effect
             value <- eval.labmda(x,lhs[[2L]],rhs,envir)
             if(side_effect) return(x) else return(value)
           } else {
-            # symbol x: lambda piping
+            # expr: lambda piping
             return(eval.labmda(x,lhs,rhs,envir))
           }
         } else {
-          # ( ~ expr ): side effect
           expr <- expr[[2L]]
           if(is.name(expr)) {
-            assign(as.character(expr), x, envir = envir)
-            return(x)
+            # ~ symbol: assign
+            return(assign(as.character(expr), x, envir = envir))
           } else {
+            # ~ expr: side effect
             value <- pipe.dot(x,expr,envir)
             if(side_effect) return(x) else value
           }
@@ -78,7 +79,7 @@ pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
         warning("lambda expression in form of \"x -> expr\" has been deprecated, please use \"x ~ expr\" instead, which also supports side-effect-only piping.", call. = FALSE)
         return(eval.labmda(x,expr[[3L]],expr[[2L]],envir))
       } else if(symbol == "?") {
-        value <- pipe.lambda(x,expr[[2L]],envir)
+        value <- Recall(x,expr[[2L]],envir)
         cat("? ")
         print(expr[[2L]])
         print(value)

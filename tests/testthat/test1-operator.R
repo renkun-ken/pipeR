@@ -46,14 +46,22 @@ test_that("lambda piping", {
 })
 
 test_that("side effect", {
+  env <- new.env()
   side <- function(x) {
-    x + 1
+    assign("x",x+1,envir = env)
   }
-  expect_equal(1:3 %>>% (~ side(.)), 1:3)
-  expect_equal(1:3 %>>% (~ x ~ side(x)), 1:3)
+  expect_equal({
+    x <- 1:3 %>>% (~ side(.))
+    c(x,env$x)
+  }, c(1:3,2:4))
+  expect_equal({
+    x <- 1:3 %>>% (~ x ~ side(x))
+    c(x,env$x)
+  }, c(1:3,2:4))
 })
 
 test_that("assignment", {
+  # assignment as side-effect
   expect_identical({
     x <- 1:3 %>>% (~ p) %>>% mean()
     list(x,p)
@@ -66,6 +74,16 @@ test_that("assignment", {
     x <- 1:3 %>>% (~ m ~ m + 1L ~ p) %>>% mean()
     list(x,p)
   },list(2,2:4))
+
+  # assignment as non-side-effect
+  expect_identical({
+    x <- 1:3 %>>% (. + 1L ~ p) %>>% mean()
+    list(x,p)
+  },list(3,2:4))
+  expect_identical({
+    x <- 1:3 %>>% (m ~ m + 1L ~ p) %>>% mean()
+    list(x,p)
+  },list(3,2:4))
 })
 
 test_that("element extraction", {
