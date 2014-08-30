@@ -121,7 +121,7 @@ Pipe <- function(value = NULL) {
   }
   . <- function(expr) {
     if(!missing(expr))
-      value <- pipe.fun(value,substitute(expr),parent.frame())
+      value <- pipe.lambda(value,substitute(expr),parent.frame())
     Pipe(value)
   }
   .envir <- environment()
