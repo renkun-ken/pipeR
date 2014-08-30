@@ -1,7 +1,7 @@
-v0.4-3 (2014-08-27)
+v0.4-3 (2014-08-30)
 ===
+Add syntax for assignment: Side effect with a symbol
 Update documentation.
-
 
 v0.4-2 (2014-08-22)
 ===

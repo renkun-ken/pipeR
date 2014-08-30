@@ -12,8 +12,8 @@ x \%>>\% expr
 }
 \description{
 The \code{\%>>\%} operator pipes the object on the left-hand side to the
-right-hand side as either the first argument and \code{.}, or a symbol
-defined by lambda expression.
+right-hand side as either the first unnamed argument and \code{.}, to
+\code{.} in an enclosed expression, or by lambda expression.
 }
 \details{
 Pipe operator \code{\%>>\%} determines the piping mechanism by the syntax
@@ -23,24 +23,24 @@ of the expression on the right-hand side.
 
 1. Pipe to first argument:
 
-Whenever a function name or call with parameters follows the operator,
-the left-hand side value will be piped to the right-hand side function
-as the first unnamed argument.
+Whenever a function name or call with or without parameters follows
+the operator, the left-hand side value will be piped to the right-hand
+side function as the first unnamed argument.
 
-\code{x \%>>\% f} as \code{f(x)}
+\code{x \%>>\% f} evaluated as \code{f(x)}
 
-\code{x \%>>\% f(...)} as \code{f(x,...)}
+\code{x \%>>\% f(...)} evaluated as \code{f(x,...)}
 
-2. Pipe to dot (\code{.}):
+2. Pipe to \code{.} in enclosed expression (\code{.}):
 
-Whenever an expression following the operator is enclosed with \code{\{\}},
+Whenever an expression following the operator is enclosed by \code{\{\}},
 the expression will be evaluated with \code{.} representing the left-hand
 side value. It is the same with expression enclosed with \code{()} unless
-a lambda expression follows.
+it contains a lambda expression.
 
-\code{x \%>>\% { expr }} as \code{\{ expr \}} given \code{. = x}
+\code{x \%>>\% { expr }} evaluated as \code{\{ expr \}} given \code{. = x}
 
-\code{x \%>>\% ( expr )} as \code{expr} given \code{. = x}
+\code{x \%>>\% ( expr )} evaluated as \code{expr} given \code{. = x}
 
 3. Pipe by lambda expression:
 
@@ -53,12 +53,24 @@ evaluated with the symbol.
 4. Pipe for side-effect:
 
 If one only cares about the side effect (e.g. printing intermediate
-results, plotting graphics) of an expression rather than its returned
-value, write a lambda expression that starts with \code{~}.
+results, plotting graphics, assigning value to symbol) of an expression
+rather than its returned value, write a lambda expression that starts
+with \code{~} indicating side effect (or branching, in the sense of
+pipeline building).
 
-\code{x \%>>\% (~ expr)} as \code{\{expr; x\}} given \code{. = x}
+\code{x \%>>\% (~ f(.))} evaluated as \code{\{f(x); x\}}.
 
-\code{x \%>>\% (~ p ~ expr)} as \code{\{expr; x\}} given \code{p = x}
+\code{x \%>>\% (~ p ~ f(p))} evaluated as \code{\{f(x); x\}}
+
+If the side effect expression ends up with a symbol, it performs assignment
+in calling environment. This is particularly useful when one needs to save
+an intermediate value in the middle of a pipeline without breaking it.
+
+\code{x \%>>\% (~ y)} evaluated as \code{y <- x}.
+
+\code{x \%>>\% (~ f(.) ~ y)} evaluated as \code{y <- f(x)}.
+
+\code{x \%>>\% (~ p ~ f(p) ~ y)} evaluated as \code{y <- f(x)}.
 
 5. Pipe for element extraction:
 
@@ -95,11 +107,11 @@ rnorm(100) \%>>\% plot(col="red",main=length(.))
 # (in this case, parentheses are required)
 rnorm(100) \%>>\% base::mean()
 
-# Pipe to an expression enclosed by braces with .
+# Pipe to . in an expression enclosed by braces
 representing the piped object
 rnorm(100) \%>>\% { plot(.,col="red",main=length(.)) }
 
-# Pipe to an expression enclosed by parentheses with .
+# Pipe to . in an expression enclosed by parentheses
 representing the piped object
 rnorm(100) \%>>\% (plot(.,col="red",main=length(.)))
 
@@ -108,14 +120,29 @@ lambda expression in the form of x ~ f(x).
 rnorm(100) \%>>\% (x ~ plot(x,col="red",main=length(x)))
 
 # Pipe to an expression for side effect and return
-# the input object
+# the input value
 rnorm(100) \%>>\%
   (~ cat("Number of points:",length(.))) \%>>\%
-  summary()
+  summary
 
 rnorm(100) \%>>\%
   (~ x ~ cat("Number of points:",length(x))) \%>>\%
-  summary()
+  summary
+
+# Assign the input value to a symbol in calling environment
+# as side-effect
+mtcars \%>>\%
+  subset(mpg <= mean(mpg)) \%>>\%
+  (~ sub_mtcars) \%>>\%
+  summary
+
+# Assign to a symbol the value calculated by lambda expression
+# as side effect
+mtcars \%>>\%
+  (~ summary(.) ~ summary_mtcars) \%>>\%
+  (~ df ~ lm(mpg ~ ., data = df) ~ lm_mtcars) \%>>\%
+  subset(mpg <= mean(mpg)) \%>>\%
+  summary
 
 # Pipe for element extraction
 mtcars \%>>\% (mpg)
