@@ -34,8 +34,7 @@ eval.labmda <- function(x,symbol,expr,envir) {
 # x : object
 # expr : lambda expression
 # envir : environment for evaluation
-# side_effect: TRUE to turn on side effect piping
-pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
+pipe.lambda <- function(x,expr,envir) {
   # ( symbol ): extract element
   if(is.symbol(expr)) return(getElement(x, as.character(expr)))
 
@@ -52,15 +51,10 @@ pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
         # (symbol ~ expr)
         lhs <- expr[[2L]]
         rhs <- expr[[3L]]
-        if(is.symbol(rhs)) {
-          # ~expr ~ symbol: assign
-          value <- Recall(x, lhs, envir, FALSE)
-          assign(as.character(rhs), value, envir = envir)
-          if(side_effect) return(x) else return(value)
-        } else if(length(lhs) == 2L) {
+        if(length(lhs) == 2L && as.character(lhs) == "~") {
           # ~ expr: side effect
-          value <- eval.labmda(x,lhs[[2L]],rhs,envir)
-          if(side_effect) return(x) else return(value)
+          eval.labmda(x,lhs[[2L]],rhs,envir)
+          return(x)
         } else {
           # expr: lambda piping
           return(eval.labmda(x,lhs,rhs,envir))
@@ -69,12 +63,12 @@ pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
         expr <- expr[[2L]]
         if(is.symbol(expr)) {
           # ~ symbol: assign
-          return(assign(as.character(expr), x, envir = envir))
+          assign(as.character(expr), x, envir = envir)
         } else {
           # ~ expr: side effect
-          value <- pipe.dot(x,expr,envir)
-          if(side_effect) return(x) else value
+          pipe.dot(x,expr,envir)
         }
+        return(x)
       }
     } else if(symbol == "<-") {
       # (x -> expr) will be parsed as (expr <- x)
@@ -86,6 +80,22 @@ pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
       print(expr[[2L]])
       print(value)
       return(x)
+    } else if(symbol == "=") {
+      lhs <- expr[[2L]]
+      rhs <- expr[[3L]]
+      if(is.symbol(lhs)) {
+        # (y = expr)
+        return(assign(as.character(lhs),
+          Recall(x, rhs, envir), envir = envir))
+      } else if(length(lhs) == 2L &&
+          as.character(lhs) == "~" && is.symbol(lhs[[2L]])) {
+        # (~ y = expr)
+        assign(as.character(lhs[[2L]]),
+          Recall(x, rhs, envir), envir = envir)
+        return(x)
+      } else {
+        stop("Invalid assignment expression")
+      }
     }
   }
 
