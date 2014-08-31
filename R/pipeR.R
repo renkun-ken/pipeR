@@ -2,7 +2,8 @@
 #'
 #' The \code{\%>>\%} operator pipes the object on the left-hand side to the
 #' right-hand side as either the first unnamed argument and \code{.}, to
-#' \code{.} in an enclosed expression, or by lambda expression.
+#' \code{.} in an enclosed expression, by lambda expression, or to a symbol
+#' for assignment.
 #'
 #' @param x object
 #' @param expr expression
@@ -22,12 +23,12 @@
 #'
 #' \code{x \%>>\% f(...)} evaluated as \code{f(x,...)}
 #'
-#' 2. Pipe to \code{.} in enclosed expression (\code{.}):
+#' 2. Pipe to \code{.} in enclosed expression:
 #'
 #' Whenever an expression following the operator is enclosed by \code{\{\}},
 #' the expression will be evaluated with \code{.} representing the left-hand
 #' side value. It is the same with expression enclosed with \code{()} unless
-#' it contains a lambda expression.
+#' it contains a lambda expression or assignment expression.
 #'
 #' \code{x \%>>\% { expr }} evaluated as \code{\{ expr \}} given \code{. = x}
 #'
@@ -53,17 +54,38 @@
 #'
 #' \code{x \%>>\% (~ p ~ f(p))} evaluated as \code{\{f(x); x\}}
 #'
-#' If the side effect expression ends up with a symbol, it performs assignment
-#' in calling environment. This is particularly useful when one needs to save
-#' an intermediate value in the middle of a pipeline without breaking it.
+#' 5. Pipe for assignment
 #'
-#' \code{x \%>>\% (~ y)} evaluated as \code{y <- x}.
+#' Equal operator (\code{=}) indicates assignment. This is particularly
+#' useful when one needs to save an intermediate value in the middle
+#' of a pipeline without breaking it.
 #'
-#' \code{x \%>>\% (~ f(.) ~ y)} evaluated as \code{y <- f(x)}.
+#' Assignment as side-effect
 #'
-#' \code{x \%>>\% (~ p ~ f(p) ~ y)} evaluated as \code{y <- f(x)}.
+#' In general, \code{x \%>>\% (~ y = ...)} is evaluated as
+#' \code{y <- x \%>>\% (...)} and returns \code{x}.
 #'
-#' 5. Pipe for element extraction:
+#' \code{x \%>>\% (~ y)} evaluated as \code{y <- x} and returns \code{x},
+#' where \code{y} must be a symbol.
+#'
+#' \code{x \%>>\% (~ y = f(.))} evaluated as \code{y <- f(x)} and returns
+#' \code{x}.
+#'
+#' \code{x \%>>\% (~ y = p ~ f(p))} evaluated as \code{y <- f(x)} and
+#' returns \code{x}.
+#'
+#' Piping with assignment
+#'
+#' In general, \code{x \%>>\% (y = ...)} is evaluated as
+#' \code{y <- x \%>>\% (...)}.
+#'
+#' \code{x \%>>\% (y = f(.))} evaluated as \code{y <- f(x)} and returns
+#' \code{f(x)}.
+#'
+#' \code{x \%>>\% (y = p ~ f(p))} evaluated as \code{y <- f(x)} and returns
+#' \code{f(x)}.
+#'
+#' 6. Pipe for element extraction:
 #'
 #' If a symbol is enclosed within \code{()}, it tells the operator to
 #' extract element from the left-hand side value. It works with vector,
@@ -74,7 +96,7 @@
 #' \code{list}, \code{environment}, \code{data.frame}, etc; and
 #' \code{x@@name} when \code{x} is S4 object.
 #'
-#' 6. Pipe for questioning:
+#' 7. Pipe for questioning:
 #'
 #' If a lambda expression start with \code{?}, the expression will be a side
 #' effect printing the syntax and the value of the expression. This is a
@@ -131,8 +153,8 @@
 #' # Assign to a symbol the value calculated by lambda expression
 #' # as side effect
 #' mtcars %>>%
-#'   (~ summary(.) ~ summary_mtcars) %>>%
-#'   (~ df ~ lm(mpg ~ ., data = df) ~ lm_mtcars) %>>%
+#'   (~ summary_mtcars = summary(.)) %>>%
+#'   (~ lm_mtcars = df ~ lm(mpg ~ ., data = df)) %>>%
 #'   subset(mpg <= mean(mpg)) %>>%
 #'   summary
 #'
