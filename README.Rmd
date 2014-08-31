@@ -115,9 +115,8 @@ rnorm(100) %>>%
 
 * Assign intermediate value to symbol
 
-    * Assign as side effect (always returns input value)
-
 ```r
+# assign as side-effect
 rnorm(100) %>>%
   (~ x) %>>%
   mean
@@ -129,15 +128,13 @@ rnorm(100) %>>%
   mean
 ```
 
-    * Pipe by lambda expression whose value is assigned to symbol.
-
 ```r
+# pipe & assign
 mtcars %>>%
   (model = lm(mpg ~ wt + cyl, data = .)) %>>%
   (summ = summary(.)) %>>%
   coef
 ```
-
 
 * Ask question if lambda expression starts by `?`
 
