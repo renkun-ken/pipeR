@@ -82,19 +82,14 @@ pipe.lambda <- function(x,expr,envir) {
       return(x)
     } else if(symbol == "=") {
       lhs <- expr[[2L]]
-      rhs <- expr[[3L]]
-      if(is.symbol(lhs)) {
-        # (y = expr)
-        return(assign(as.character(lhs),
-          Recall(x, rhs, envir), envir = envir))
-      } else if(length(lhs) == 2L &&
-          as.character(lhs) == "~" && is.symbol(lhs[[2L]])) {
-        # (~ y = expr)
-        assign(as.character(lhs[[2L]]),
-          Recall(x, rhs, envir), envir = envir)
+      value <- Recall(x, expr[[3L]], envir)
+      if(length(lhs) == 2L &&  as.character(lhs) == "~") {
+        call <- as.call(list(quote(`<-`),lhs[[2L]],value))
+        eval(call,envir)
         return(x)
       } else {
-        stop("Invalid assignment expression")
+        call <- as.call(list(quote(`<-`),lhs,value))
+        return(eval(call,envir))
       }
     }
   }
