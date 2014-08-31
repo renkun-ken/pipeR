@@ -10,6 +10,11 @@ Pipe operator and function based on intuitive syntax
 
 [Release notes](https://github.com/renkun-ken/pipeR/releases)
 
+#### 0.4-3
+
+- Support assignment expression: `x %>>% (y = expr)` and `x %>>% (~ y = expr)` where `expr` is a lambda expression.
+
+
 #### 0.4-2
 
 - **API Change**: 
@@ -103,21 +108,46 @@ rnorm(100) %>>%
   summary()
 ```
 
+* Assigning intermediate value to symbol with `~ symbol` or `=`
+
+Pipe by lambda expression whose value is assigned to symbol.
+
+```r
+mtcars %>>%
+  (model = lm(mpg ~ wt + cyl, data = .)) %>>%
+  (summ = summary(.)) %>>%
+  coef
+```
+
+Assignment as side effect (always returns input value)
+
+```r
+rnorm(100) %>>%
+  (~ summ) %>>%
+  mean
+```
+
+```r
+rnorm(100) %>>%
+  (~ summ = summary(.)) %>>%
+  mean
+```
+
 * Ask question if lambda expression starts by `?`
 
 ```r
 iris %>>% 
   (? ncol(.)) %>>%
-  summary()
+  summary
 ```
 
 ```r
 iris %>>% 
   (? df ~ ncol(df)) %>>%
-  summary()
+  summary
 ```
 
-* Extract element if followed by name in `()`
+* Extract element if followed by symbol in `()`
 
 ```r
 mtcars %>>%
@@ -130,8 +160,9 @@ mtcars %>>%
 library(dplyr)
 mtcars %>>%
   filter(mpg <= mean(mpg)) %>>%
-  (lm(mpg ~ wt + cyl, data = .)) %>>%
-  summary() %>>%
+  select(mpg, wt, cyl) %>>%
+  (model = lm(mpg ~ wt + cyl, data = .)) %>>%
+  (summ = summary(.)) %>>%
   (coefficients)
 ```
 
@@ -202,7 +233,8 @@ df$b <- NULL
 ```r
 Pipe(mtcars)$
   filter(mpg >= mean(mpg))$
-  .(lm(mpg ~ wt + cyl, data = .))$
+  select(mpg, wt, cyl)$
+  lm(formula = mpg ~ wt + cyl)$
   summary()$
   .(coefficients)$
   value

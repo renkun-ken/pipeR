@@ -59,9 +59,23 @@ Pipe(rnorm(100))$.(x ~ 1 + x) []
 Pipe(rnorm(100))$
   .(~ cat("number:",length(.),"\\n"))$
   summary()
+
 Pipe(rnorm(100))$
   .(~ x ~ cat("number:",length(x),"\\n"))$
   summary()
+
+# Assignment
+Pipe(rnorm(100))$
+  .(~ x)$
+  mean()
+
+Pipe(rnorm(100))$
+  .(~ x <- length(.))$
+  mean()
+
+Pipe(rnorm(100))\%
+  .(x <- c(min(.),max(.)))$
+  mean()
 
 # Extract element with \\code{.(name)}
 Pipe(mtcars)$lm(formula = mpg ~ cyl + wt)$.(coefficients)
