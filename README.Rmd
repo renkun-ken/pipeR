@@ -113,22 +113,13 @@ rnorm(100) %>>%
   summary()
 ```
 
-* Assigning intermediate value to symbol with `~ symbol` or `=`
+* Assign intermediate value to symbol
 
-Pipe by lambda expression whose value is assigned to symbol.
-
-```r
-mtcars %>>%
-  (model = lm(mpg ~ wt + cyl, data = .)) %>>%
-  (summ = summary(.)) %>>%
-  coef
-```
-
-Assignment as side effect (always returns input value)
+    * Assign as side effect (always returns input value)
 
 ```r
 rnorm(100) %>>%
-  (~ summ) %>>%
+  (~ x) %>>%
   mean
 ```
 
@@ -137,6 +128,16 @@ rnorm(100) %>>%
   (~ summ = summary(.)) %>>%
   mean
 ```
+
+    * Pipe by lambda expression whose value is assigned to symbol.
+
+```r
+mtcars %>>%
+  (model = lm(mpg ~ wt + cyl, data = .)) %>>%
+  (summ = summary(.)) %>>%
+  coef
+```
+
 
 * Ask question if lambda expression starts by `?`
 
