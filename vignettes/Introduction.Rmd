@@ -101,6 +101,7 @@ mtcars %>>%
   (df ~ lm(mpg ~ ., data=df)) %>>%
   summary
 ```
+
 ### Pipe for side effect
 
 In some cases we may only need the side effect of an expression given the previous object. For example, we may want to print some message by `cat()`  in the console and continue piping with the input object rather than the output of `cat()` which is actually `NULL`.
@@ -146,6 +147,43 @@ list(a = 1, b = 2) %>>%
 ```
 
 But this method does not work for vector and S4 object.
+
+### Assigning intermediate value to symbol
+
+Intermediate values in the middle of a pipeline can be assigned to symbols, which is done by the syntax using `=`. For example,
+
+`x %>>% (~ y)` indicates that the input value `x` will be assigned to `y` as side-effect (that's why it starts with `~`).
+
+```r
+rnorm(100) %>>%
+  (~ y) %>>%
+  mean
+```
+
+`x %>>% (~ y = f(.))` indicates that the value of `f(x)` will be assigned to `y` as a side-effect, which returns the input value `x` and thus does not influence the pipeline.
+
+```r
+rnorm(100) %>>%
+  (~ y = length(.)) %>>%
+  mean
+```
+
+One is allowed to use lambda expression on the right-hand side of `=`.
+
+```r
+rnorm(100) %>>%
+  (~ y = x ~ length(x)) %>>%
+  mean
+```
+
+In other cases, one may need to assign to a symbol the value of an intermediate step of the pipeline. To do this, one need to remove `~` before the enclosed expression to indicate that its value should be piped.
+
+```r
+mtcars %>>%
+  (model = lm(mpg ~ ., data = .)) %>>%
+  summary %>>%
+  coef
+```
 
 ## Pipe function
 
