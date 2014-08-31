@@ -35,12 +35,9 @@ eval.labmda <- function(x,symbol,expr,envir) {
 # expr : lambda expression
 # envir : environment for evaluation
 pipe.lambda <- function(x,expr,envir) {
-  # ( symbol ): extract element
-  if(is.symbol(expr)) return(getElement(x, as.character(expr)))
-
   # an explict lambda expression should be a call in forms of either
   # (x -> expr) or (x ~ expr)
-  symbol <- as.character(expr[[1L]])
+  symbol <- as.character(expr)[[1L]]
   # if symbol is an anonymous function, length(symbol) > 1L
   # to make a valid lambda expression,
   # its lambda symbol must be of length 1
@@ -99,6 +96,15 @@ pipe.lambda <- function(x,expr,envir) {
   pipe.dot(x,expr,envir)
 }
 
+pipe.fun <- function(x,expr,envir) {
+  if(is.symbol(expr))
+    # ( symbol ): extract element
+    getElement(x, as.character(expr))
+  else
+    # ( call ): pipe by lambda expression
+    pipe.lambda(x,expr,envir)
+}
+
 # pipe function that determines the piping mechanism for the expression
 # x : object
 # expr : function name, call, or enclosed expression
@@ -116,7 +122,7 @@ pipe.op <- function(x,expr) {
         return(pipe.dot(x,expr,envir))
       } else if(symbol == "(") {
         # expr is enclosed with (): more syntax
-        return(pipe.lambda(x,expr[[2]],envir))
+        return(pipe.fun(x,expr[[2]],envir))
       }
     }
   }
