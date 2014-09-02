@@ -150,12 +150,13 @@ Pipe.value <- function(x) {
 `$.Pipe` <- function(x,y) {
   if(exists(y, envir = x, inherits = FALSE))
     return(get(y, envir = x, inherits = FALSE))
-  f <-  get(y, envir = parent.frame(), mode = "function")
-  value <- Pipe.value(x)
+  f <- get(y,envir = parent.frame(),mode = "function")
+  fname <- as.symbol(y)
+  args <- setnames(list(f,Pipe.value(x)),c(y,"value"))
   function(...) {
     dots <- match.call(expand.dots = FALSE)$`...`
-    rcall <- as.call(c(f,quote(value),dots))
-    value <- eval(rcall,list(value = value),parent.frame())
+    rcall <- as.call(c(fname,quote(value),dots))
+    value <- eval(rcall,args,parent.frame())
     Pipe(value)
   }
 }
