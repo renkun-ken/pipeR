@@ -24,7 +24,7 @@ devtools::install_github("pipeR","renkun-ken")
 
 The following code is an example written in traditional approach:
 
-It basically performs bootstrap on `mpg` values in built-in dataset `mtcars` and plot its density function estimated by Gaussian kernel.
+It basically performs bootstrap on `mpg` values in built-in dataset `mtcars` and plots  its density function estimated by Gaussian kernel.
 
 ```r
 plot(density(sample(mtcars$mpg, size = 10000, replace = TRUE), 
