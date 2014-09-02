@@ -191,8 +191,9 @@ mtcars %>>%
 ```r
 library(dplyr)
 mtcars %>>%
-  filter(mpg <= mean(mpg)) %>>%
+  filter(mpg <= mean(mpg)) %>>%  
   select(mpg, wt, cyl) %>>%
+  (~ plot(.)) %>>%
   (model = lm(mpg ~ wt + cyl, data = .)) %>>%
   (summ = summary(.)) %>>%
   (coefficients)
