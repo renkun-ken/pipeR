@@ -100,3 +100,11 @@ test_that("function", {
     z(3)
   }, 5)
 })
+
+test_that("scoping", {
+  p <- function(x) 1L
+  pobj <- Pipe(0)$p
+  expect_identical(pobj()$value,1L)
+  expect_identical(local({p <- function(x) 0L; pobj()$value}),1L)
+  expect_identical(local({p <- function(x) 0L; Pipe(0)$p()$value}),0L)
+})
