@@ -4,10 +4,13 @@ Title: Pipe operator and function
 Version: 0.4-3
 Author: Kun Ren <ken@renkun.me>
 Maintainer: Kun Ren <ken@renkun.me>
-Description: Pipe operator and function based on intuitive syntax.
+Description: Provides Pipe operator and function based on syntax which support
+  to pipe value to first-argument of a function, to dot in expression,
+  by formula as lambda expression, for side-effect, and with assignment.
+  The set of syntax is designed to make the pipeline highly readable.
 Depends:
     R (>= 2.14)
-Date: 2014-08-27
+Date: 2014-09-02
 Suggests:
     testthat,knitr
 License: MIT + file LICENSE
