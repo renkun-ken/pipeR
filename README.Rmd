@@ -116,7 +116,7 @@ mtcars %>>%
 
 #### Pipe for side effect
 
-In a pipeline, one may be interested not only by the final outcome but sometimes by intermediate results. To print, plot or save the intermediate results, it must be a side-effect to avoid breaking the mainstream pipeline. For example, calling `plot()` to draw scatter plot returns `NULL`, and if one directly calls `plot()` in the middle of a pipeline, it would break the pipeline by changing the subsequent input to `NULL`.
+In a pipeline, one may be interested not only in the final outcome but sometimes also in intermediate results. To print, plot or save the intermediate results, it must be a side-effect to avoid breaking the mainstream pipeline. For example, calling `plot()` to draw scatter plot returns `NULL`, and if one directly calls `plot()` in the middle of a pipeline, it would break the pipeline by changing the subsequent input to `NULL`.
 
 One-sided formula that starts with `~` indicates that the right-hand side expression will only be evaluated for its side-effect, its value will be ignored, and the input value will be returned instead.
 
@@ -267,6 +267,19 @@ plist$a <- 0
 plist$b <- NULL
 ```
 
+#### Side effect
+
+```r
+Pipe(mtcars)$
+  .(? ncol(.))$
+  .(~ plot(mpg ~ ., data = .))$    # side effect: plot
+  lm(formula = mpg ~ .)$
+  .(~ lm_mtcars)$                  # side effect: assign
+  summary()$
+```
+
+#### Compatibility
+
 * Working with dplyr:
 
 ```r
@@ -294,15 +307,6 @@ Pipe(1:100)$
   list.group(. %% 3)$
   list.mapv(g ~ mean(g))$
   value
-```
-
-* For side effect:
-
-```r
-Pipe(mtcars)$
-  .(? ncol(.))$
-  .(~ plot(mpg ~ ., data = .))$
-  summary()
 ```
 
 ## Vignettes
