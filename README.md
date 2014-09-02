@@ -132,7 +132,7 @@ mtcars %>>%
 
 With `~`, side-effect operations can be easily distinguished from mainstream pipeline.
 
-A easier way to print the intermediate value it to use `(? expr)` syntax like asking question.
+An easier way to print the intermediate value it to use `(? expr)` syntax like asking question.
 
 ```r
 mtcars %>>% 
