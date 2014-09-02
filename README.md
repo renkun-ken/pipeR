@@ -153,7 +153,7 @@ mtcars %>>%
   summary
 ```
 
-If the input value is not directly to be saved but after some transformation, then one can use `=` to specify a lambda expression to tell what to be saved.
+If the input value is not directly to be saved but after some transformation, then one can use `=` to specify a lambda expression to tell what to be saved (thanks @yanlinlin82 for suggestion).
 
 ```r
 mtcars %>>%
