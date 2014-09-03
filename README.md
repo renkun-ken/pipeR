@@ -8,13 +8,13 @@ pipeR provides Pipe operator and function based on syntax which support to pipe 
 
 ## Installation
 
-Install from CRAN:
+Install from CRAN (v0.4-2):
 
 ```r
 install.packages("pipeR")
 ```
 
-Install the development version from GitHub:
+Install the development version (v0.4-3) from GitHub:
 
 ```r
 devtools::install_github("pipeR","renkun-ken")
