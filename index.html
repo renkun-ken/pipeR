@@ -4,7 +4,7 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="pipeR : Pipe operator and function based on intuitive syntax">
+    <meta name="description" content="pipeR : Pipe operator and function based on syntax">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -19,7 +19,7 @@
           <a id="forkme_banner" href="https://github.com/renkun-ken/pipeR">View on GitHub</a>
 
           <h1 id="project_title">pipeR</h1>
-          <h2 id="project_tagline">Pipe operator and function based on intuitive syntax</h2>
+          <h2 id="project_tagline">Pipe operator and function based on syntax</h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/renkun-ken/pipeR/zipball/master">Download this project as a .zip file</a>
@@ -36,53 +36,41 @@
 
 <p><a href="https://travis-ci.org/renkun-ken/pipeR"><img src="https://travis-ci.org/renkun-ken/pipeR.png?branch=master" alt="Build Status"></a></p>
 
-<p>Pipe operator and function based on intuitive syntax</p>
+<p>pipeR provides Pipe operator and function based on syntax which support to pipe value to first-argument of a function, to dot in expression, by formula as lambda expression, for side-effect, and with assignment. The set of syntax is designed to make the pipeline highly readable.</p>
 
 <h2>
-<a name="whats-new-in-04" class="anchor" href="#whats-new-in-04"><span class="octicon octicon-link"></span></a>What's new in 0.4?</h2>
-
-<p><a href="https://github.com/renkun-ken/pipeR/releases">Release notes</a></p>
-
-<h4>
-<a name="04-2" class="anchor" href="#04-2"><span class="octicon octicon-link"></span></a>0.4-2</h4>
-
-<ul>
-<li>
-<strong>API Change</strong>: 
-
-<ul>
-<li>lambda expression like <code>(x -&gt; expr)</code> is deprecated, use <code>(x ~ expr)</code> instead.</li>
-<li>
-<code>fun()</code> in <code>Pipe</code> object is deprecated, use <code>.()</code> instead.</li>
-</ul>
-</li>
-<li>Add side-effect piping: <code>x %&gt;&gt;% (~ expr)</code> or <code>x %&gt;&gt;% (~ i ~ expr)</code>. <code>expr</code> will only be evaluated for its side effect and return <code>x</code>.</li>
-<li>Add question piping: <code>x %&gt;&gt;% (? expr)</code> where <code>expr</code> is an expression or a lambda expression. <code>expr</code> will only be printed and return <code>x</code>.</li>
-<li>Pipe object now supports subsetting, extracting, and assigning, and preserves Pipe object.</li>
-</ul><h4>
-<a name="04-1" class="anchor" href="#04-1"><span class="octicon octicon-link"></span></a>0.4-1</h4>
-
-<ul>
-<li>Add element extraction with <code>x %&gt;&gt;% (name)</code>.</li>
-</ul><h4>
-<a name="04" class="anchor" href="#04"><span class="octicon octicon-link"></span></a>0.4</h4>
-
-<ul>
-<li>
-<strong>Major API Change</strong>: <code>%&gt;&gt;%</code> operator now handles all pipeline mechanisms and other operators are deprecated.</li>
-<li>Add <code>Pipe()</code> function that supports object-based pipeline operation.</li>
-</ul><h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
-<p>Install from CRAN:</p>
+<p>Install from CRAN (v0.4-2):</p>
 
 <div class="highlight highlight-r"><pre>install.packages<span class="p">(</span><span class="s">"pipeR"</span><span class="p">)</span>
 </pre></div>
 
-<p>Install the development version from GitHub (<code>devtools</code> package is required):</p>
+<p>Install the development version (v0.4-3) from GitHub:</p>
 
 <div class="highlight highlight-r"><pre>devtools<span class="o">::</span>install_github<span class="p">(</span><span class="s">"pipeR"</span><span class="p">,</span><span class="s">"renkun-ken"</span><span class="p">)</span>
 </pre></div>
+
+<h2>
+<a name="motivation" class="anchor" href="#motivation"><span class="octicon octicon-link"></span></a>Motivation</h2>
+
+<p>The following code is an example written in traditional approach:</p>
+
+<p>It basically performs bootstrap on <code>mpg</code> values in built-in dataset <code>mtcars</code> and plots  its density function estimated by Gaussian kernel.</p>
+
+<div class="highlight highlight-r"><pre>plot<span class="p">(</span>density<span class="p">(</span><span class="kp">sample</span><span class="p">(</span>mtcars<span class="o">$</span>mpg<span class="p">,</span> size <span class="o">=</span> <span class="m">10000</span><span class="p">,</span> replace <span class="o">=</span> <span class="kc">TRUE</span><span class="p">),</span> 
+  kernel <span class="o">=</span> <span class="s">"gaussian"</span><span class="p">),</span> col <span class="o">=</span> <span class="s">"red"</span><span class="p">,</span> main<span class="o">=</span><span class="s">"density of mpg (bootstrap)"</span><span class="p">)</span>
+</pre></div>
+
+<p>The code is deeply nested and can be hard to read and maintain. With Pipe operator, it can be reorganized to</p>
+
+<div class="highlight highlight-r"><pre>mtcars<span class="o">$</span>mpg <span class="o">%&gt;&gt;%</span>
+  <span class="kp">sample</span><span class="p">(</span>size <span class="o">=</span> <span class="m">10000</span><span class="p">,</span> replace <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+  density<span class="p">(</span>kernel <span class="o">=</span> <span class="s">"gaussian"</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+  plot<span class="p">(</span>col <span class="o">=</span> <span class="s">"red"</span><span class="p">,</span> main <span class="o">=</span> <span class="s">"density of mpg (bootstrap)"</span><span class="p">)</span>
+</pre></div>
+
+<p>The code becomes much cleaner, more readable and more maintainable.</p>
 
 <h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
@@ -91,11 +79,16 @@
 <a name="" class="anchor" href="#"><span class="octicon octicon-link"></span></a><code>%&gt;&gt;%</code>
 </h3>
 
-<p><code>%&gt;&gt;%</code> operator behaves based on a set of syntax:</p>
+<p>Pipe operator <code>%&gt;&gt;%</code> basically pipes the left-hand side value forward to the right-hand side expression which is evaluated according to its syntax.</p>
 
-<ul>
-<li>Pipe to first argument and <code>.</code> in a function if followed by a function name or call</li>
-</ul><div class="highlight highlight-r"><pre>rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+<h4>
+<a name="pipe-to-first-argument-of-function" class="anchor" href="#pipe-to-first-argument-of-function"><span class="octicon octicon-link"></span></a>Pipe to first-argument of function</h4>
+
+<p>Many R functions are pipe-friendly: they take some data by the first argument and transform it in a certain way. This arrangement allows operations to be streamlined by pipes, that is, one data source can be put to the first argument of a function, get transformed, and put to the first argument of the next function. In this way, a chain of commands are connected, and it is called a pipeline.</p>
+
+<p>On the right-hand side of <code>%&gt;&gt;%</code>, whenever a function name or call is supplied, the left-hand side value will always be put to the first unnamed argument to that function.</p>
+
+<div class="highlight highlight-r"><pre>rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
   plot
 </pre></div>
 
@@ -103,14 +96,18 @@
   plot<span class="p">(</span>col<span class="o">=</span><span class="s">"red"</span><span class="p">)</span>
 </pre></div>
 
+<p>Sometimes the value on the left is needed at multiple places. One can use <code>.</code> to represent it anywhere in the function call.</p>
+
 <div class="highlight highlight-r"><pre>rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
   plot<span class="p">(</span>col<span class="o">=</span><span class="s">"red"</span><span class="p">,</span> main<span class="o">=</span><span class="kp">length</span><span class="p">(</span><span class="m">.</span><span class="p">))</span>
 </pre></div>
 
-<ul>
-<li>Pipe to <code>.</code> in an expression if it is enclosed within <code>{}</code> or <code>()</code>
-</li>
-</ul><div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
+<h4>
+<a name="pipe-to--in-an-expression" class="anchor" href="#pipe-to--in-an-expression"><span class="octicon octicon-link"></span></a>Pipe to <code>.</code> in an expression</h4>
+
+<p>Not all functions are pipe-friendly in every case: You may find some functions do not take your data produced by a pipeline as the first argument. In this case, you can enclose your expression by <code>{}</code> or <code>()</code> so that <code>%&gt;&gt;%</code> will use <code>.</code> to represent the value on the left.</p>
+
+<div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
   <span class="p">{</span> lm<span class="p">(</span>mpg <span class="o">~</span> cyl <span class="o">+</span> wt<span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">)</span> <span class="p">}</span>
 </pre></div>
 
@@ -118,57 +115,111 @@
   <span class="p">(</span> lm<span class="p">(</span>mpg <span class="o">~</span> cyl <span class="o">+</span> wt<span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">)</span> <span class="p">)</span>
 </pre></div>
 
-<ul>
-<li>Pipe by lambda expression if followed by <code>(x ~ expr)</code>
-</li>
-</ul><div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
-  <span class="p">(</span>df <span class="o">~</span> lm<span class="p">(</span>mpg <span class="o">~</span> cyl <span class="o">+</span> wt<span class="p">,</span> data <span class="o">=</span> df<span class="p">))</span>
+<h4>
+<a name="pipe-by-formula-as-lambda-expression" class="anchor" href="#pipe-by-formula-as-lambda-expression"><span class="octicon octicon-link"></span></a>Pipe by formula as lambda expression</h4>
+
+<p>Sometimes, it may look confusing to use <code>.</code> to represent the value being piped. For example,</p>
+
+<div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span>lm<span class="p">(</span>mpg <span class="o">~</span> <span class="m">.</span><span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">))</span>
 </pre></div>
 
-<div class="highlight highlight-r"><pre>rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
-  <span class="p">(</span>x <span class="o">~</span> plot<span class="p">(</span>x<span class="p">,</span> col<span class="o">=</span><span class="s">"red"</span><span class="p">,</span> main<span class="o">=</span><span class="kp">length</span><span class="p">(</span>x<span class="p">)))</span>
+<p>Although it works perfectly, it may look ambiguous if <code>.</code> has several meanings in one line of code. </p>
+
+<p><code>%&gt;&gt;%</code> accepts lambda expression to direct its piping behavior. Lambda expression is characterized by a formula enclosed within <code>()</code>, for example, <code>(x ~ f(x))</code>. It contains a user-defined symbol to represent the value being piped and the expression to be evaluated.</p>
+
+<div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span>df <span class="o">~</span> lm<span class="p">(</span>mpg <span class="o">~</span> <span class="m">.</span><span class="p">,</span> data <span class="o">=</span> df<span class="p">))</span>
 </pre></div>
 
-<ul>
-<li>Pipe for side effect if lambda expression starts by <code>~</code>
-</li>
-</ul><div class="highlight highlight-r"><pre>rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
-  <span class="p">(</span><span class="o">~</span> <span class="kp">cat</span><span class="p">(</span><span class="s">"number:"</span><span class="p">,</span><span class="kp">length</span><span class="p">(</span><span class="m">.</span><span class="p">),</span><span class="s">"\n"</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
+<div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
+  <span class="kp">subset</span><span class="p">(</span>select <span class="o">=</span> <span class="kt">c</span><span class="p">(</span>mpg<span class="p">,</span> wt<span class="p">,</span> cyl<span class="p">))</span> <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span>x <span class="o">~</span> plot<span class="p">(</span>mpg <span class="o">~</span> <span class="m">.</span><span class="p">,</span> data <span class="o">=</span> x<span class="p">))</span>
+</pre></div>
+
+<h4>
+<a name="pipe-for-side-effect" class="anchor" href="#pipe-for-side-effect"><span class="octicon octicon-link"></span></a>Pipe for side effect</h4>
+
+<p>In a pipeline, one may be interested not only in the final outcome but sometimes also in intermediate results. To print, plot or save the intermediate results, it must be a side-effect to avoid breaking the mainstream pipeline. For example, calling <code>plot()</code> to draw scatter plot returns <code>NULL</code>, and if one directly calls <code>plot()</code> in the middle of a pipeline, it would break the pipeline by changing the subsequent input to <code>NULL</code>.</p>
+
+<p>One-sided formula that starts with <code>~</code> indicates that the right-hand side expression will only be evaluated for its side-effect, its value will be ignored, and the input value will be returned instead.</p>
+
+<div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
+  <span class="kp">subset</span><span class="p">(</span>mpg <span class="o">&gt;=</span> quantile<span class="p">(</span>mpg<span class="p">,</span> <span class="m">0.05</span><span class="p">)</span> <span class="o">&amp;</span> mpg <span class="o">&lt;=</span> quantile<span class="p">(</span>mpg<span class="p">,</span> <span class="m">0.95</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span><span class="o">~</span> <span class="kp">cat</span><span class="p">(</span><span class="s">"rows:"</span><span class="p">,</span><span class="kp">nrow</span><span class="p">(</span><span class="m">.</span><span class="p">),</span><span class="s">"\n"</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>   <span class="c1"># cat() returns NULL</span>
+  <span class="kp">summary</span>
+</pre></div>
+
+<div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
+  <span class="kp">subset</span><span class="p">(</span>mpg <span class="o">&gt;=</span> quantile<span class="p">(</span>mpg<span class="p">,</span> <span class="m">0.05</span><span class="p">)</span> <span class="o">&amp;</span> mpg <span class="o">&lt;=</span> quantile<span class="p">(</span>mpg<span class="p">,</span> <span class="m">0.95</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span><span class="o">~</span> plot<span class="p">(</span>mpg <span class="o">~</span> wt<span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>    <span class="c1"># plot() returns NULL</span>
+  <span class="p">(</span>lm<span class="p">(</span>mpg <span class="o">~</span> wt<span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
   <span class="kp">summary</span><span class="p">()</span>
 </pre></div>
 
-<div class="highlight highlight-r"><pre>rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
-  <span class="p">(</span><span class="o">~</span> x <span class="o">~</span> <span class="kp">cat</span><span class="p">(</span><span class="s">"number:"</span><span class="p">,</span><span class="kp">length</span><span class="p">(</span>x<span class="p">),</span><span class="s">"\n"</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
-  <span class="kp">summary</span><span class="p">()</span>
-</pre></div>
+<p>With <code>~</code>, side-effect operations can be easily distinguished from mainstream pipeline.</p>
 
-<ul>
-<li>Ask question if lambda expression starts by <code>?</code>
-</li>
-</ul><div class="highlight highlight-r"><pre>iris <span class="o">%&gt;&gt;%</span> 
+<p>An easier way to print the intermediate value it to use <code>(? expr)</code> syntax like asking question.</p>
+
+<div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span> 
   <span class="p">(</span><span class="o">?</span> <span class="kp">ncol</span><span class="p">(</span><span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
-  <span class="kp">summary</span><span class="p">()</span>
+  <span class="kp">summary</span>
 </pre></div>
 
-<div class="highlight highlight-r"><pre>iris <span class="o">%&gt;&gt;%</span> 
-  <span class="p">(</span><span class="o">?</span> df <span class="o">~</span> <span class="kp">ncol</span><span class="p">(</span>df<span class="p">))</span> <span class="o">%&gt;&gt;%</span>
-  <span class="kp">summary</span><span class="p">()</span>
+<h4>
+<a name="pipe-with-assignment" class="anchor" href="#pipe-with-assignment"><span class="octicon octicon-link"></span></a>Pipe with assignment</h4>
+
+<p>In addition to printing and plotting, one may need to save an intermediate value to the environment by assigning the value to a variable (symbol).</p>
+
+<p>If one needs to assign the value to a symbol, just insert a step like <code>(~ symbol)</code>, then the input value of that step will be assigned to <code>symbol</code> in the current environment.</p>
+
+<div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span>lm<span class="p">(</span>formula <span class="o">=</span> mpg <span class="o">~</span> wt <span class="o">+</span> cyl<span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span><span class="o">~</span> lm_mtcars<span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+  <span class="kp">summary</span>
 </pre></div>
 
-<ul>
-<li>Extract element if followed by name in <code>()</code>
-</li>
-</ul><div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
-  <span class="p">(</span>mpg<span class="p">)</span>
+<p>If the input value is not directly to be saved but after some transformation, then one can use <code>=</code> to specify a lambda expression to tell what to be saved (thanks <a href="https://github.com/yanlinlin82" class="user-mention">@yanlinlin82</a> for suggestion).</p>
+
+<div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span><span class="o">~</span> summ <span class="o">=</span> <span class="kp">summary</span><span class="p">(</span><span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>  <span class="c1"># side-effect assignment</span>
+  <span class="p">(</span>lm<span class="p">(</span>formula <span class="o">=</span> mpg <span class="o">~</span> wt <span class="o">+</span> cyl<span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span><span class="o">~</span> lm_mtcars<span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+  <span class="kp">summary</span>
 </pre></div>
+
+<p>An easier way to saving intermediate value that is to be further piped is to use <code>(symbol = expression)</code> syntax.</p>
+
+<div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span><span class="o">~</span> summ <span class="o">=</span> <span class="kp">summary</span><span class="p">(</span><span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>  <span class="c1"># side-effect assignment</span>
+  <span class="p">(</span>lm_mtcars <span class="o">=</span> lm<span class="p">(</span>formula <span class="o">=</span> mpg <span class="o">~</span> wt <span class="o">+</span> cyl<span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>  <span class="c1"># continue piping</span>
+  <span class="kp">summary</span>
+</pre></div>
+
+<h4>
+<a name="extract-element-from-an-object" class="anchor" href="#extract-element-from-an-object"><span class="octicon octicon-link"></span></a>Extract element from an object</h4>
+
+<p><code>x %&gt;&gt;% (y)</code> means extracting the element named <code>y</code> from object <code>x</code> where <code>y</code> must be a valid symbol name and <code>x</code> can be a vector, list, environment or anything else for which <code>[[]]</code> is defined, or S4 object.</p>
+
+<div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span>lm<span class="p">(</span>mpg <span class="o">~</span> wt <span class="o">+</span> cyl<span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span><span class="o">~</span> lm_mtcars<span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+  summary <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span>r.squared<span class="p">)</span>
+</pre></div>
+
+<h4>
+<a name="compatibility" class="anchor" href="#compatibility"><span class="octicon octicon-link"></span></a>Compatibility</h4>
 
 <ul>
 <li>Working with <a href="https://github.com/hadley/dplyr/">dplyr</a>:</li>
 </ul><div class="highlight highlight-r"><pre><span class="kn">library</span><span class="p">(</span>dplyr<span class="p">)</span>
 mtcars <span class="o">%&gt;&gt;%</span>
-  filter<span class="p">(</span>mpg <span class="o">&lt;=</span> <span class="kp">mean</span><span class="p">(</span>mpg<span class="p">))</span> <span class="o">%&gt;&gt;%</span>
-  <span class="p">(</span>lm<span class="p">(</span>mpg <span class="o">~</span> wt <span class="o">+</span> cyl<span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
-  <span class="kp">summary</span><span class="p">()</span> <span class="o">%&gt;&gt;%</span>
+  filter<span class="p">(</span>mpg <span class="o">&lt;=</span> <span class="kp">mean</span><span class="p">(</span>mpg<span class="p">))</span> <span class="o">%&gt;&gt;%</span>  
+  select<span class="p">(</span>mpg<span class="p">,</span> wt<span class="p">,</span> cyl<span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span><span class="o">~</span> plot<span class="p">(</span><span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span>model <span class="o">=</span> lm<span class="p">(</span>mpg <span class="o">~</span> wt <span class="o">+</span> cyl<span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span>summ <span class="o">=</span> <span class="kp">summary</span><span class="p">(</span><span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
   <span class="p">(</span>coefficients<span class="p">)</span>
 </pre></div>
 
@@ -194,11 +245,12 @@ mtcars <span class="o">%&gt;&gt;%</span>
 
 <p><code>Pipe()</code> creates a Pipe object that supports light-weight chaining without any external operator. Typically, start with <code>Pipe()</code> and end with <code>$value</code> or <code>[]</code> to extract the final value of the Pipe. </p>
 
-<p>An internal function <code>.(...)</code> works in the same way with <code>x %&gt;&gt;% (...)</code> for dot piping, by lambda expression, for side effect, and element extraction.</p>
+<p>Pipe object provides an internal function <code>.(...)</code> that work exactly in the same way with <code>x %&gt;&gt;% (...)</code>, and it has more features than <code>%&gt;&gt;%</code>.</p>
 
-<ul>
-<li>Examples</li>
-</ul><div class="highlight highlight-r"><pre>Pipe<span class="p">(</span>rnorm<span class="p">(</span><span class="m">1000</span><span class="p">))</span><span class="o">$</span>
+<h4>
+<a name="piping" class="anchor" href="#piping"><span class="octicon octicon-link"></span></a>Piping</h4>
+
+<div class="highlight highlight-r"><pre>Pipe<span class="p">(</span>rnorm<span class="p">(</span><span class="m">1000</span><span class="p">))</span><span class="o">$</span>
   density<span class="p">(</span>kernel <span class="o">=</span> <span class="s">"cosine"</span><span class="p">)</span><span class="o">$</span>
   plot<span class="p">(</span>col <span class="o">=</span> <span class="s">"blue"</span><span class="p">)</span>
 </pre></div>
@@ -215,25 +267,44 @@ mtcars <span class="o">%&gt;&gt;%</span>
   <span class="m">.</span><span class="p">(</span>coefficients<span class="p">)</span>
 </pre></div>
 
-<ul>
-<li>Subsetting and extracting</li>
-</ul><div class="highlight highlight-r"><pre>df <span class="o">&lt;-</span> Pipe<span class="p">(</span>mtcars<span class="p">)</span>
-df<span class="p">[</span><span class="kt">c</span><span class="p">(</span><span class="s">"mpg"</span><span class="p">,</span><span class="s">"wt"</span><span class="p">)]</span><span class="o">$</span>lm<span class="p">(</span>formula <span class="o">=</span> mpg <span class="o">~</span> wt<span class="p">)</span>
-df<span class="p">[[</span><span class="s">"mpg"</span><span class="p">]]</span><span class="o">$</span><span class="kp">mean</span><span class="p">()</span>
+<h4>
+<a name="subsetting-and-extracting" class="anchor" href="#subsetting-and-extracting"><span class="octicon octicon-link"></span></a>Subsetting and extracting</h4>
+
+<div class="highlight highlight-r"><pre>pmtcars <span class="o">&lt;-</span> Pipe<span class="p">(</span>mtcars<span class="p">)</span>
+pmtcars<span class="p">[</span><span class="kt">c</span><span class="p">(</span><span class="s">"mpg"</span><span class="p">,</span><span class="s">"wt"</span><span class="p">)]</span><span class="o">$</span>
+  lm<span class="p">(</span>formula <span class="o">=</span> mpg <span class="o">~</span> wt<span class="p">)</span><span class="o">$</span>
+  <span class="kp">summary</span><span class="p">()</span>
+pmtcars<span class="p">[[</span><span class="s">"mpg"</span><span class="p">]]</span><span class="o">$</span><span class="kp">mean</span><span class="p">()</span>
 </pre></div>
 
-<ul>
-<li>Assigning values</li>
-</ul><div class="highlight highlight-r"><pre>df <span class="o">&lt;-</span> Pipe<span class="p">(</span><span class="kt">list</span><span class="p">(</span>a<span class="o">=</span><span class="m">1</span><span class="p">,</span>b<span class="o">=</span><span class="m">2</span><span class="p">))</span>
-df<span class="o">$</span>a <span class="o">&lt;-</span> <span class="m">0</span>
-df<span class="o">$</span>b <span class="o">&lt;-</span> <span class="kc">NULL</span>
+<h4>
+<a name="assigning-values" class="anchor" href="#assigning-values"><span class="octicon octicon-link"></span></a>Assigning values</h4>
+
+<div class="highlight highlight-r"><pre>plist <span class="o">&lt;-</span> Pipe<span class="p">(</span><span class="kt">list</span><span class="p">(</span>a<span class="o">=</span><span class="m">1</span><span class="p">,</span>b<span class="o">=</span><span class="m">2</span><span class="p">))</span>
+plist<span class="o">$</span>a <span class="o">&lt;-</span> <span class="m">0</span>
+plist<span class="o">$</span>b <span class="o">&lt;-</span> <span class="kc">NULL</span>
 </pre></div>
+
+<h4>
+<a name="side-effect" class="anchor" href="#side-effect"><span class="octicon octicon-link"></span></a>Side effect</h4>
+
+<div class="highlight highlight-r"><pre>Pipe<span class="p">(</span>mtcars<span class="p">)</span><span class="o">$</span>
+  <span class="m">.</span><span class="p">(</span><span class="o">?</span> <span class="kp">ncol</span><span class="p">(</span><span class="m">.</span><span class="p">))</span><span class="o">$</span>
+  <span class="m">.</span><span class="p">(</span><span class="o">~</span> plot<span class="p">(</span>mpg <span class="o">~</span> <span class="m">.</span><span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">))</span><span class="o">$</span>    <span class="c1"># side effect: plot</span>
+  lm<span class="p">(</span>formula <span class="o">=</span> mpg <span class="o">~</span> <span class="m">.</span><span class="p">)</span><span class="o">$</span>
+  <span class="m">.</span><span class="p">(</span><span class="o">~</span> lm_mtcars<span class="p">)</span><span class="o">$</span>                  <span class="c1"># side effect: assign</span>
+  <span class="kp">summary</span><span class="p">()</span><span class="o">$</span>
+</pre></div>
+
+<h4>
+<a name="compatibility-1" class="anchor" href="#compatibility-1"><span class="octicon octicon-link"></span></a>Compatibility</h4>
 
 <ul>
 <li>Working with dplyr:</li>
 </ul><div class="highlight highlight-r"><pre>Pipe<span class="p">(</span>mtcars<span class="p">)</span><span class="o">$</span>
   filter<span class="p">(</span>mpg <span class="o">&gt;=</span> <span class="kp">mean</span><span class="p">(</span>mpg<span class="p">))</span><span class="o">$</span>
-  <span class="m">.</span><span class="p">(</span>lm<span class="p">(</span>mpg <span class="o">~</span> wt <span class="o">+</span> cyl<span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">))</span><span class="o">$</span>
+  select<span class="p">(</span>mpg<span class="p">,</span> wt<span class="p">,</span> cyl<span class="p">)</span><span class="o">$</span>
+  lm<span class="p">(</span>formula <span class="o">=</span> mpg <span class="o">~</span> wt <span class="o">+</span> cyl<span class="p">)</span><span class="o">$</span>
   <span class="kp">summary</span><span class="p">()</span><span class="o">$</span>
   <span class="m">.</span><span class="p">(</span>coefficients<span class="p">)</span><span class="o">$</span>
   value
@@ -252,14 +323,6 @@ df<span class="o">$</span>b <span class="o">&lt;-</span> <span class="kc">NULL</
   list.group<span class="p">(</span><span class="m">.</span> <span class="o">%%</span> <span class="m">3</span><span class="p">)</span><span class="o">$</span>
   list.mapv<span class="p">(</span>g <span class="o">~</span> <span class="kp">mean</span><span class="p">(</span>g<span class="p">))</span><span class="o">$</span>
   value
-</pre></div>
-
-<ul>
-<li>For side effect:</li>
-</ul><div class="highlight highlight-r"><pre>Pipe<span class="p">(</span>iris<span class="p">)</span><span class="o">$</span>
-  <span class="m">.</span><span class="p">(</span><span class="o">~</span> <span class="kp">cat</span><span class="p">(</span><span class="kp">length</span><span class="p">(</span><span class="m">.</span><span class="p">),</span> <span class="s">"columns"</span><span class="p">,</span><span class="s">"\n"</span><span class="p">))</span><span class="o">$</span>
-  <span class="m">.</span><span class="p">(</span><span class="o">~</span> plot<span class="p">(</span><span class="m">.</span><span class="p">))</span><span class="o">$</span>
-  <span class="kp">summary</span><span class="p">()</span>
 </pre></div>
 
 <h2>
