@@ -147,12 +147,12 @@ Pipe.value <- function(x) {
 }
 
 #' @export
-`$.Pipe` <- function(x,y) {
-  if(exists(y, envir = x, inherits = FALSE))
-    return(get(y, envir = x, inherits = FALSE))
-  f <- get(y,envir = parent.frame(),mode = "function")
-  fname <- as.symbol(y)
-  args <- setnames(list(f,Pipe.value(x)),c(y,"value"))
+`$.Pipe` <- function(x,i) {
+  if(exists(i, envir = x, inherits = FALSE))
+    return(get(i, envir = x, inherits = FALSE))
+  f <- get(i,envir = parent.frame(),mode = "function")
+  fname <- as.symbol(i)
+  args <- setnames(list(f,Pipe.value(x)),c(i,"value"))
   function(...) {
     dots <- match.call(expand.dots = FALSE)$`...`
     rcall <- as.call(c(fname,quote(value),dots))
