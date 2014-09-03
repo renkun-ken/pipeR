@@ -9,27 +9,58 @@ knitr::opts_chunk$set(comment="#",error=FALSE,tidy=FALSE)
 
 # Introduction to pipeR
 
-pipeR provides Pipe operator and function based on intuitive syntax.
+pipeR provides Pipe operator and function based on syntax which support to pipe value to first-argument of a function, to dot in expression, by formula as lambda expression, for side-effect, and with assignment. The set of syntax is designed to make the pipeline highly readable.
+
+## Motivation
+
+The following code is an example written in traditional approach:
+
+It basically performs bootstrap on `mpg` values in built-in dataset `mtcars` and plots  its density function estimated by Gaussian kernel.
+
+```r
+plot(density(sample(mtcars$mpg, size = 10000, replace = TRUE), 
+  kernel = "gaussian"), col = "red", main="density of mpg (bootstrap)")
+```
+
+The code is deeply nested and can be hard to read and maintain. With Pipe operator, it can be reorganized to
+
+```r
+mtcars$mpg %>>%
+  sample(size = 10000, replace = TRUE) %>>%
+  density(kernel = "gaussian") %>>%
+  plot(col = "red", main = "density of mpg (bootstrap)")
+```
+
+The code becomes much cleaner, more readable and more maintainable.
 
 ## `%>>%`
 
-### Pipe as first-argument to function
+Pipe operator `%>>%` basically pipes the left-hand side value forward to the right-hand side expression which is evaluated according to its syntax.
 
-The pipe operator `%>>%` by default inserts the object on the left-hand side to the first argument of the **function** on the right-hand side. In other words, `x %>>% f(a=1)` will be transformed to and be evaluated as `f(.,a=1)` where `.` takes the value of `x`. It accepts both function call, e.g. `plot()` or `plot(col="red")`, and function name, e.g. `log` or `plot`.
+### Pipe to first-argument of function
+
+Many R functions are pipe-friendly: they take some data by the first argument and transform it in a certain way. This arrangement allows operations to be streamlined by pipes, that is, one data source can be put to the first argument of a function, get transformed, and put to the first argument of the next function. In this way, a chain of commands are connected, and it is called a pipeline.
+
+On the right-hand side of `%>>%`, whenever a function name or call is supplied, the left-hand side value will always be put to the first unnamed argument to that function.
+
+
+More specifically, the Pipe operator `%>>%` by default inserts the object on the left-hand side to the first argument of the **function** on the right-hand side. In other words, `x %>>% f(a=1)` will be transformed to and be evaluated as `f(.,a=1)` where `.` takes the value of `x`. It accepts both function call, e.g. `plot()` or `plot(col="red")`, and function name, e.g. `log` or `plot`.
 
 ```r
-rnorm(100) %>>% 
+rnorm(100) %>>%
   plot
+```
 
-rnorm(100) %>>% 
-  plot()
-
-rnorm(100) %>>% 
+```r
+rnorm(100) %>>%
   plot(col="red")
+```
 
-rnorm(100) %>>% 
-  sample(size=100,replace=FALSE) %>>% 
-  hist
+Sometimes the value on the left is needed at multiple places. One can use `.` to represent it anywhere in the function call.
+
+```r
+rnorm(100) %>>%
+  plot(col="red",main=sprintf("Number of points: %d",length(.)))
 ```
 
 You can write commands in a chain (or pipeline) like
@@ -42,18 +73,22 @@ rnorm(10000,mean=10,sd=1) %>>%
   plot(col="red",type="l")
 ```
 
-In some cases, the next function needs first-argument piping and uses the piped object elsewhere too. Therefore, you can directly use `.` to represent the piped object within that call.
+
+*Notice: function name in a namespace must end up with parentheses like `x %>>% base::mean()`.
+
+### Pipe to `.` in an expression
+
+Not all functions are pipe-friendly in every case: You may find some functions do not take your data produced by a pipeline as the first argument. In this case, you can enclose your expression by `{}` or `()` so that `%>>%` will use `.` to represent the value on the left.
 
 ```r
-rnorm(100) %>>%
-  plot(col="red",main=sprintf("Number of points: %d",length(.)))
+mtcars %>>%
+  { lm(mpg ~ cyl + wt, data = .) }
 ```
 
-*Notice: function call in a namespace must end up with parentheses like `x %>>% base::mean()`.
-
-### Pipe as `.` to expression
-
-If a function name or call directly follows `%>>%`, it means first-argument piping. If the operator is follows by braces (`{}`), the inner expression will be evaluated with `.` representing the piped object.
+```r
+mtcars %>>%
+  ( lm(mpg ~ cyl + wt, data = .) )
+```
 
 ```r
 rnorm(100) %>>% 
@@ -77,13 +112,13 @@ rnorm(100) %>>% {
 }
 ```
 
-### Pipe by lambda expression
+### Pipe by formula as lambda expression
 
 It can be confusing to see multiple `.` symbols in the same context. In some cases, they may represent different things in the same expression. Even though the expression mostly still works, it may not be a good idea to keep it in that way. Here is an example:
 
 ```r
 mtcars %>>%
-  { lm(mpg ~ ., data=.) } %>>%
+  (lm(mpg ~ ., data = .)) %>>%
   summary
 ```
 
@@ -104,40 +139,78 @@ mtcars %>>%
 
 ### Pipe for side effect
 
-In some cases we may only need the side effect of an expression given the previous object. For example, we may want to print some message by `cat()`  in the console and continue piping with the input object rather than the output of `cat()` which is actually `NULL`.
+In a pipeline, one may be interested not only in the final outcome but sometimes also in intermediate results. To print, plot or save the intermediate results, it must be a side-effect to avoid breaking the mainstream pipeline. For example, calling `plot()` to draw scatter plot returns `NULL`, and if one directly calls `plot()` in the middle of a pipeline, it would break the pipeline by changing the subsequent input to `NULL`.
 
-The following syntax is interpreted as side-effect piping:
+One-sided formula that starts with `~` indicates that the right-hand side expression will only be evaluated for its side-effect, its value will be ignored, and the input value will be returned instead.
 
 ```r
-x %>>% (~ expr)
-x %>>% (~ p ~ expr)
+mtcars %>>%
+  subset(mpg >= quantile(mpg, 0.05) & mpg <= quantile(mpg, 0.95)) %>>%
+  (~ cat("rows:",nrow(.),"\n")) %>>%   # cat() returns NULL
+  summary
 ```
 
-The syntax starts with `(~` and is easy to distinguish from non-side-effect lines. The right-hand side is the expression to evaluate only for its side effect. `~ p ~ expr` will interpreted as to evaluated `expr` for side-effect with `p = x` and return `x`.
-
-Both lines are evaluated by lambda expression but the output of the expression will be ignored and `x` are returned instead.
-
 ```r
-rnorm(100) %>>%
-  (~ cat("number of points:",length(.),"\n")) %>>%
+mtcars %>>%
+  subset(mpg >= quantile(mpg, 0.05) & mpg <= quantile(mpg, 0.95)) %>>%
+  (~ plot(mpg ~ wt, data = .)) %>>%    # plot() returns NULL
+  (lm(mpg ~ wt, data = .)) %>>%
   summary()
 ```
 
-### Pipe for element extraction
+With `~`, side-effect operations can be easily distinguished from mainstream pipeline.
 
-If a name is enclosed within `()` following `%>>%`, like `x %>>% (name)`, the operator will extract the element named `name` from `x`.
+An easier way to print the intermediate value it to use `(? expr)` syntax like asking question.
+
+```r
+mtcars %>>% 
+  (? ncol(.)) %>>%
+  summary
+```
+
+### Pipe with assignment
+
+In addition to printing and plotting, one may need to save an intermediate value to the environment by assigning the value to a variable (symbol).
+
+If one needs to assign the value to a symbol, just insert a step like `(~ symbol)`, then the input value of that step will be assigned to `symbol` in the current environment.
 
 ```r
 mtcars %>>%
-  (mpg)
-
-mtcars %>>%
-  (lm(mpg ~ ., data = .)) %>>%
-  summary() %>>%
-  (coefficients)
+  (lm(formula = mpg ~ wt + cyl, data = .)) %>>%
+  (~ lm_mtcars) %>>%
+  summary
 ```
 
-The extraction works not only for list and data frame but also for vector, environment, and S4 object.
+If the input value is not directly to be saved but after some transformation, then one can use `=` to specify a lambda expression to tell what to be saved (thanks @yanlinlin82 for suggestion).
+
+```r
+mtcars %>>%
+  (~ summ = summary(.)) %>>%  # side-effect assignment
+  (lm(formula = mpg ~ wt + cyl, data = .)) %>>%
+  (~ lm_mtcars) %>>%
+  summary
+```
+
+An easier way to saving intermediate value that is to be further piped is to use `(symbol = expression)` syntax.
+
+```r
+mtcars %>>%
+  (~ summ = summary(.)) %>>%  # side-effect assignment
+  (lm_mtcars = lm(formula = mpg ~ wt + cyl, data = .)) %>>%  # continue piping
+  summary
+```
+
+### Extract element from an object
+
+`x %>>% (y)` means extracting the element named `y` from object `x` where `y` must be a valid symbol name and `x` can be a vector, list, environment or anything else for which `[[]]` is defined, or S4 object.
+
+```r
+mtcars %>>%
+  (lm(mpg ~ wt + cyl, data = .)) %>>%
+  (~ lm_mtcars) %>>%
+  summary %>>%
+  (r.squared)
+```
 
 To evaluate an expression within the piped object if it is a list or environment, use `with()` can be helpful.
 
@@ -148,151 +221,8 @@ list(a = 1, b = 2) %>>%
 
 But this method does not work for vector and S4 object.
 
-### Assigning intermediate value to symbol
-
-Intermediate values in the middle of a pipeline can be assigned to symbols, which is done by the syntax using `=`. For example,
-
-`x %>>% (~ y)` indicates that the input value `x` will be assigned to `y` as side-effect (that's why it starts with `~`).
-
-```r
-rnorm(100) %>>%
-  (~ y) %>>%
-  mean
-```
-
-`x %>>% (~ y = f(.))` indicates that the value of `f(x)` will be assigned to `y` as a side-effect, which returns the input value `x` and thus does not influence the pipeline.
-
-```r
-rnorm(100) %>>%
-  (~ y = length(.)) %>>%
-  mean
-```
-
-One is allowed to use lambda expression on the right-hand side of `=`.
-
-```r
-rnorm(100) %>>%
-  (~ y = x ~ length(x)) %>>%
-  mean
-```
-
-In other cases, one may need to assign to a symbol the value of an intermediate step of the pipeline. To do this, one need to remove `~` before the enclosed expression to indicate that its value should be piped.
-
-```r
-mtcars %>>%
-  (model = lm(mpg ~ ., data = .)) %>>%
-  summary %>>%
-  coef
-```
-
 ## Pipe function
 
 `Pipe()` creates a Pipe object where built-in symbols are designed for building pipeline. 
 
-- `$` chains functions by first-argument piping and always returns a Pipe object.
-- `.(...)` evaluates an expression with `.` or by lambda expression, or for side effect, or simply extract a named element. The usage is exactly the same with `x %>>% (...)`.
-- Subsetting, extracing, and assigning with Pipe on its inner value and Pipe object is preserved.
-- `$value` or `[]` extracts the final value of the Pipe object.
-
-### Usage
-
-Pipe as first-argument to a function:
-
-```r
-Pipe(rnorm(100,mean=10))$
-  log()$
-  diff()$
-  plot(col="red")
-```
-
-```r
-Pipe(1:10)$
-  .(x ~ x + rnorm(1))$
-  mean() []
-```
-
-Pipe by lambda expression
-
-```r
-Pipe(mtcars)$
-  .(lm(mpg ~ ., data = .))$
-  summary() []
-```
-
-```r
-Pipe(mtcars)$
-  .(df ~ lm(mpg ~ ., data = df))$
-  summary() []
-```
-
-Pipe for extracting element
-
-```r
-Pipe(mtcars)$
-  .(mpg)$
-  summary() []
-```
-
-Pipe for side effect
-
-```r
-Pipe(iris)$
-  .(~ cat(length(.), "columns","\n"))$
-  .(~ plot(.))$
-  summary()
-```
-
-Subsetting Pipe object
-
-```r
-Pipe(mtcars)["mpg"]
-```
-
-Extracting from Pipe object
-
-```r
-Pipe(mtcars)[["mpg"]]
-```
-
-Assigning to Pipe object's element
-
-```r
-p <- Pipe(list(a=1,b=2))
-p$a <- 0
-p$b <- NULL
-```
-
-```r
-p <- Pipe(list(a=1,b=2))
-p["a"] <- 2
-p[["b"]] <- 3
-```
-
-
-### Lazy evaluation
-
-Pipe is lazily evaluated. Consider working with `ggvis`.
-
-```r
-p1 <- Pipe(mtcars)$
-  ggvis(~ mpg, ~ wt)
-```
-
-The plot will not be evaluated until p1 is called or further Pipe is evaluated.
-
-```r
-p1$layer_points() []
-p1$layer_bars() []
-```
-
-### Stored Pipe
-
-Pipe can also be stored as function.
-
-```r
-f1 <- Pipe(rnorm(100))$plot
-f1(col="red")
-f1(col="green")
-```
-
-When the arguments are supplied, `plot()` will be evaluated. Although Pipe is lazy but its value is determined at first evaluation.
+For more details, view the vignette written for Pipe.

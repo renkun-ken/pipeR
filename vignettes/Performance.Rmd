@@ -9,7 +9,9 @@ knitr::opts_chunk$set(comment="#",error=FALSE,tidy=FALSE)
 
 # Performance
 
-pipeR operator and Pipe object can achieve high performance especially when they are intensively called.
+pipeR operator and Pipe object impose as small overhead as possible in their implementation. However, if either is used in elementary data processing, it would be 2-3 times slower than traditional approach. In data intensive processing such as transform data frames, the difference between using Pipe operator or function and not using them is not significant.
+
+Compared with other implementations (mainly magrittr), pipeR is generally 3-8 times faster in elementary data processing. The performance difference is noteworthy in massive iteration where each step the operator is used. However, in data intensive process, the difference in performance is not noteworthy because the computing time is mainly attributed to data frame transformation.
 
 For more information, see [Difference between magrittr and pipeR](http://renkun.me/blog/2014/08/08/difference-between-magrittr-and-pipeR.html#performance).
 
