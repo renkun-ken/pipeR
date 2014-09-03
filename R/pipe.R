@@ -163,7 +163,8 @@ Pipe.value <- function(x) {
 
 Pipe.get <- function(f, value, dots, envir) {
   rcall <- as.call(c(f,quote(value),dots))
-  eval(rcall,list(value = value),envir)
+  value <- eval(rcall,list(value = value),envir)
+  Pipe(value)
 }
 
 #' @export
@@ -171,8 +172,7 @@ Pipe.get <- function(f, value, dots, envir) {
   value <- Pipe.value(x)
   dots <- match.call(expand.dots = FALSE)$`...`
   if(ndots(dots)) {
-    value <- Pipe.get(`[`,value,dots,parent.frame())
-    Pipe(value)
+    Pipe.get(quote(`[`),value,dots,parent.frame())
   } else {
     value
   }
@@ -183,8 +183,7 @@ Pipe.get <- function(f, value, dots, envir) {
   value <- Pipe.value(x)
   dots <- match.call(expand.dots = FALSE)$`...`
   if(ndots(dots)) {
-    value <- Pipe.get(`[[`,value,dots,parent.frame())
-    Pipe(value)
+    Pipe.get(quote(`[[`),value,dots,parent.frame())
   } else {
     value
   }
@@ -208,29 +207,33 @@ str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
 
 Pipe.set <- function(f, x, dots, value, envir) {
   rcall <- as.call(c(f,quote(x),dots,quote(value)))
-  eval(rcall,list(x = x, value = value),envir)
+  value <- eval(rcall,list(x = x, value = value),envir)
+  Pipe(value)
 }
 
 #' @export
 `$<-.Pipe` <- function(x,...,value) {
   dots <- match.call(expand.dots = FALSE)$`...`
   if(ndots(dots))
-    value <- Pipe.set(`$<-`, Pipe.value(x), dots, value, parent.frame())
-  Pipe(value)
+    Pipe.set(quote(`$<-`), Pipe.value(x), dots, value, parent.frame())
+  else
+    x
 }
 
 #' @export
 `[<-.Pipe` <- function(x,...,value) {
   dots <- match.call(expand.dots = FALSE)$`...`
   if(ndots(dots))
-    value <- Pipe.set(`[<-`, Pipe.value(x), dots, value, parent.frame())
-  Pipe(value)
+    Pipe.set(quote(`[<-`), Pipe.value(x), dots, value, parent.frame())
+  else
+    x
 }
 
 #' @export
 `[[<-.Pipe` <- function(x,...,value) {
   dots <- match.call(expand.dots = FALSE)$`...`
   if(ndots(dots))
-    value <- Pipe.set(`[[<-`, Pipe.value(x), dots, value, parent.frame())
-  Pipe(value)
+    Pipe.set(quote(`[[<-`), Pipe.value(x), dots, value, parent.frame())
+  else
+    x
 }
