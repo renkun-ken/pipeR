@@ -67,7 +67,7 @@ test_that("extracting", {
   expect_equal(Pipe(list2env(list(a=1,b=2)))[["a"]]$value,1)
 })
 
-test_that("assignment", {
+test_that("element assignment", {
   expect_identical({
     z <- Pipe(list(a=1,b=2))
     z$a <- 2
@@ -91,6 +91,50 @@ test_that("assignment", {
     z$value
   },c(a=2,b=2))
 })
+
+test_that("assignment", {
+  # assignment as side-effect
+  expect_identical({
+    x <- Pipe(1:3)$.(~ p)$mean()$value
+    list(x,p)
+  },list(2,1:3))
+  expect_identical({
+    x <- Pipe(1:3)$.(~ . + 1L -> p)$mean()$value
+    list(x,p)
+  },list(2,2:4))
+  expect_identical({
+    x <- Pipe(1:3)$.(~ m ~ m + 1L -> p)$mean()$value
+    list(x,p)
+  },list(2,2:4))
+
+  expect_identical({
+    x <- Pipe(1:3)$.(. + 1L -> p)$mean()$value
+    list(x,p)
+  },list(3,2:4))
+  expect_identical({
+    x <- Pipe(1:3)$.(m ~ m + 1L -> p)$mean()$value
+    list(x,p)
+  },list(3,2:4))
+
+  expect_identical({
+    x <- Pipe(1:3)$.(~ p <- . + 1L)$mean()$value
+    list(x,p)
+  },list(2,2:4))
+  expect_identical({
+    x <- Pipe(1:3)$.(~ p <- m ~ m + 1L)$mean()$value
+    list(x,p)
+  },list(2,2:4))
+
+  expect_identical({
+    x <- Pipe(1:3)$.(p <- . + 1L)$mean()$value
+    list(x,p)
+  },list(3,2:4))
+  expect_identical({
+    x <- Pipe(1:3)$.(p <- m ~ m + 1L)$mean()$value
+    list(x,p)
+  },list(3,2:4))
+})
+
 
 
 test_that("function", {
