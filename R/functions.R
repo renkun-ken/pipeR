@@ -34,7 +34,7 @@ eval.labmda <- function(x,symbol,expr,envir) {
 # x : object
 # expr : lambda expression
 # envir : environment for evaluation
-pipe.lambda <- function(x,expr,envir) {
+pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
   # an explict lambda expression should be a call in forms of either
   # (x -> expr) or (x ~ expr)
   symbol <- as.character(expr)[[1L]]
@@ -48,10 +48,10 @@ pipe.lambda <- function(x,expr,envir) {
         # (symbol ~ expr)
         lhs <- expr[[2L]]
         rhs <- expr[[3L]]
-        if(length(lhs) == 2L && as.character(lhs) == "~") {
+        if(is.side_effect(lhs)) {
           # ~ expr: side effect
-          eval.labmda(x,lhs[[2L]],rhs,envir)
-          return(x)
+          value <- eval.labmda(x,lhs[[2L]],rhs,envir)
+          return(if(side_effect) x else value)
         } else {
           # expr: lambda piping
           return(eval.labmda(x,lhs,rhs,envir))
@@ -60,12 +60,12 @@ pipe.lambda <- function(x,expr,envir) {
         expr <- expr[[2L]]
         if(is.symbol(expr)) {
           # ~ symbol: assign
-          assign(as.character(expr), x, envir = envir)
+          value <- assign(as.character(expr), x, envir = envir)
         } else {
           # ~ expr: side effect
-          pipe.dot(x,expr,envir)
+          value <- pipe.dot(x,expr,envir)
         }
-        return(x)
+        return(if(side_effect) x else value)
       }
     } else if(symbol == "?") {
       value <- Recall(x,expr[[2L]],envir)
@@ -73,17 +73,30 @@ pipe.lambda <- function(x,expr,envir) {
       print(expr[[2L]])
       print(value)
       return(x)
-    } else if(symbol == "=" || symbol == "<-") {
+    } else if(symbol == "=") {
       lhs <- expr[[2L]]
-      value <- Recall(x, expr[[3L]], envir)
-      if(length(lhs) == 2L &&  as.character(lhs) == "~") {
+      rhs <- expr[[3L]]
+      value <- Recall(x, rhs, envir)
+      if(is.side_effect(lhs)) {
         call <- as.call(list(quote(`<-`),lhs[[2L]],value))
-        eval(call,envir)
-        return(x)
+        value <- eval(call,envir)
+        return(if(side_effect) x else value)
       } else {
         call <- as.call(list(quote(`<-`),lhs,value))
         return(eval(call,envir))
       }
+    } else if(symbol == "<-") {
+      lhs <- expr[[2L]]
+      rhs <- expr[[3L]]
+      value <- Recall(x, rhs, envir, FALSE)
+      if(is.side_effect(lhs)) {
+        # ~ x <- expr
+        call <- as.call(list(quote(`<-`),lhs[[2L]],value))
+      } else {
+        call <- as.call(list(quote(`<-`),lhs,value))
+      }
+      value <- eval(call,envir)
+      return(if(side_effect) x else value)
     }
   }
 
