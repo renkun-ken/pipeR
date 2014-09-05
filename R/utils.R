@@ -10,5 +10,12 @@ is.formula <- function(expr) {
 }
 
 is.side_effect <- function(expr) {
-  length(expr) == 2L &&  as.character(expr) == "~"
+  if(length(expr) == 2L && is.call(expr) && as.character(expr) == "~")
+    # side-effect symbol
+    TRUE
+  else if(length(expr) == 3L && Recall(expr[[2L]]))
+    # side-effect formula
+    TRUE
+  else
+    FALSE
 }

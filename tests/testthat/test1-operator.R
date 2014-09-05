@@ -94,7 +94,7 @@ test_that("assignment", {
     list(x,p)
   },list(2,2:4))
 
-    expect_identical({
+  expect_identical({
     x <- 1:3 %>>% (. + 1L -> p) %>>% mean()
     list(x,p)
   },list(3,2:4))

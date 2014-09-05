@@ -34,6 +34,7 @@ eval.labmda <- function(x,symbol,expr,envir) {
 # x : object
 # expr : lambda expression
 # envir : environment for evaluation
+# side_effect: TRUE to return x; FALSE to return value of expr
 pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
   # an explict lambda expression should be a call in forms of either
   # (x -> expr) or (x ~ expr)
@@ -85,18 +86,23 @@ pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
         call <- as.call(list(quote(`<-`),lhs,value))
         return(eval(call,envir))
       }
-    } else if(symbol == "<-") {
+    } else if(symbol == "<-" || symbol == "<<-") {
       lhs <- expr[[2L]]
       rhs <- expr[[3L]]
       value <- Recall(x, rhs, envir, FALSE)
       if(is.side_effect(lhs)) {
         # ~ x <- expr
         call <- as.call(list(quote(`<-`),lhs[[2L]],value))
+        value <- eval(call,envir)
+        return(if(side_effect) x else value)
+      } else if(is.side_effect(rhs)) {
+        call <- as.call(list(quote(`<-`),lhs,value))
+        value <- eval(call,envir)
+        return(if(side_effect) x else value)
       } else {
         call <- as.call(list(quote(`<-`),lhs,value))
+        return(eval(call,envir))
       }
-      value <- eval(call,envir)
-      return(if(side_effect) x else value)
     }
   }
 
