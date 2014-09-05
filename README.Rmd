@@ -171,6 +171,9 @@ mtcars %>>%
 ```r
 mtcars %>>%
   (~ summary(.) -> summ) %>>%
+  
+mtcars %>>%
+  (~ summ <- summary(.)) %>>%
 ```
 
 An easier way to saving intermediate value that is to be further piped is to use `(symbol = expression)` syntax:
@@ -241,6 +244,8 @@ library(rlist)
 `Pipe()` creates a Pipe object that supports light-weight chaining without any external operator. Typically, start with `Pipe()` and end with `$value` or `[]` to extract the final value of the Pipe. 
 
 Pipe object provides an internal function `.(...)` that work exactly in the same way with `x %>>% (...)`, and it has more features than `%>>%`.
+
+> NOTE: `.()` only supports assignment with `<-` or `->`.
 
 #### Piping
 
