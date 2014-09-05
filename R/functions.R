@@ -67,10 +67,6 @@ pipe.lambda <- function(x,expr,envir) {
         }
         return(x)
       }
-    } else if(symbol == "<-") {
-      # (x -> expr) will be parsed as (expr <- x)
-      warning("lambda expression in form of \"x -> expr\" has been deprecated, please use \"x ~ expr\" instead, which also supports side-effect piping.", call. = FALSE)
-      return(eval.labmda(x,expr[[3L]],expr[[2L]],envir))
     } else if(symbol == "?") {
       value <- Recall(x,expr[[2L]],envir)
       cat("? ")

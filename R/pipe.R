@@ -128,11 +128,6 @@
 #' }
 #' @export
 Pipe <- function(value = NULL) {
-  fun <- function(expr) {
-    warning("fun() in Pipe has been deprecated, please use .() instead, which also supports side-effect piping and element extraction.", call. = FALSE)
-    value <- pipe.lambda(value,substitute(expr),parent.frame())
-    Pipe(value)
-  }
   . <- function(expr) {
     if(!missing(expr))
       value <- pipe.fun(value,substitute(expr),parent.frame())
