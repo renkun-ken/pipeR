@@ -6,11 +6,12 @@ ndots <- function(dots) {
 }
 
 is.formula <- function(expr) {
-  is.language(expr) && as.character(expr) == "~"
+  is.call(expr) && as.character(expr) == "~"
 }
 
 is.side_effect <- function(expr) {
-  if(length(expr) == 2L && is.call(expr) && as.character(expr) == "~")
+  if(!is.formula(expr)) return(FALSE)
+  if(length(expr) == 2L)
     # side-effect symbol
     TRUE
   else if(length(expr) == 3L && Recall(expr[[2L]]))
