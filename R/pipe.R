@@ -163,7 +163,7 @@ Pipe.get <- function(f, value, dots, envir) {
 }
 
 Pipe.get_function <- function(op) {
-  op <- substitute(op)
+  op <- as.symbol(op)
   function(x, ...) {
     value <- Pipe.value(x)
     dots <- match.call(expand.dots = FALSE)$`...`
@@ -176,10 +176,10 @@ Pipe.get_function <- function(op) {
 }
 
 #' @export
-`[.Pipe` <- Pipe.get_function(`[`)
+`[.Pipe` <- Pipe.get_function("[")
 
 #' @export
-`[[.Pipe` <- Pipe.get_function(`[[`)
+`[[.Pipe` <- Pipe.get_function("[[")
 
 
 Pipe.set <- function(f, x, dots, value, envir) {
@@ -189,7 +189,7 @@ Pipe.set <- function(f, x, dots, value, envir) {
 }
 
 Pipe.set_function <- function(op) {
-  op <- substitute(op)
+  op <- as.symbol(op)
   function(x,...,value) {
     dots <- match.call(expand.dots = FALSE)$`...`
     if(ndots(dots))
@@ -200,13 +200,13 @@ Pipe.set_function <- function(op) {
 }
 
 #' @export
-`$<-.Pipe` <- Pipe.set_function(`$<-`)
+`$<-.Pipe` <- Pipe.set_function("$<-")
 
 #' @export
-`[<-.Pipe` <- Pipe.set_function(`[<-`)
+`[<-.Pipe` <- Pipe.set_function("[<-")
 
 #' @export
-`[[<-.Pipe` <- Pipe.set_function(`[[<-`)
+`[[<-.Pipe` <- Pipe.set_function("[[<-")
 
 
 #' @export
