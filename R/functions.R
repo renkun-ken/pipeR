@@ -37,8 +37,8 @@ eval.labmda <- function(x,symbol,expr,envir) {
 # side_effect: TRUE to return x; FALSE to return value of expr
 pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
   # an explict lambda expression should be a call in forms of either
-  # (x -> expr) or (x ~ expr)
-  symbol <- as.character(expr)[[1L]]
+  # (x ~ expr)
+  symbol <- as.character(expr[[1L]])
   # if symbol is an anonymous function, length(symbol) > 1L
   # to make a valid lambda expression,
   # its lambda symbol must be of length 1
