@@ -1,4 +1,4 @@
-v0.5 (2014-09-05)
+v0.5 (2014-09-08)
 ===
 Remove deprecated operators (%:>% and %|>%), deprecated closure fun() in Pipe object.
 
