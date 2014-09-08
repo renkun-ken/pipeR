@@ -162,27 +162,52 @@ Pipe.get <- function(f, value, dots, envir) {
   Pipe(value)
 }
 
-#' @export
-`[.Pipe` <- function(x, ...) {
-  value <- Pipe.value(x)
-  dots <- match.call(expand.dots = FALSE)$`...`
-  if(ndots(dots)) {
-    Pipe.get(quote(`[`),value,dots,parent.frame())
-  } else {
-    value
+Pipe.get_function <- function(op) {
+  op <- substitute(op)
+  function(x, ...) {
+    value <- Pipe.value(x)
+    dots <- match.call(expand.dots = FALSE)$`...`
+    if(ndots(dots)) {
+      Pipe.get(op, value, dots, parent.frame())
+    } else {
+      value
+    }
   }
 }
 
 #' @export
-`[[.Pipe` <- function(x, ...) {
-  value <- Pipe.value(x)
-  dots <- match.call(expand.dots = FALSE)$`...`
-  if(ndots(dots)) {
-    Pipe.get(quote(`[[`),value,dots,parent.frame())
-  } else {
-    value
+`[.Pipe` <- Pipe.get_function(`[`)
+
+#' @export
+`[[.Pipe` <- Pipe.get_function(`[[`)
+
+
+Pipe.set <- function(f, x, dots, value, envir) {
+  rcall <- as.call(c(f,quote(x),dots,quote(value)))
+  value <- eval(rcall,list(x = x, value = value),envir)
+  Pipe(value)
+}
+
+Pipe.set_function <- function(op) {
+  op <- substitute(op)
+  function(x,...,value) {
+    dots <- match.call(expand.dots = FALSE)$`...`
+    if(ndots(dots))
+      Pipe.set(op, Pipe.value(x), dots, value, parent.frame())
+    else
+      x
   }
 }
+
+#' @export
+`$<-.Pipe` <- Pipe.set_function(`$<-`)
+
+#' @export
+`[<-.Pipe` <- Pipe.set_function(`[<-`)
+
+#' @export
+`[[<-.Pipe` <- Pipe.set_function(`[[<-`)
+
 
 #' @export
 print.Pipe <- function(x,...,header=getOption("Pipe.header",TRUE)) {
@@ -197,38 +222,4 @@ print.Pipe <- function(x,...,header=getOption("Pipe.header",TRUE)) {
 str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
   if(header) cat("$value : ")
   str(Pipe.value(object),...)
-}
-
-
-Pipe.set <- function(f, x, dots, value, envir) {
-  rcall <- as.call(c(f,quote(x),dots,quote(value)))
-  value <- eval(rcall,list(x = x, value = value),envir)
-  Pipe(value)
-}
-
-#' @export
-`$<-.Pipe` <- function(x,...,value) {
-  dots <- match.call(expand.dots = FALSE)$`...`
-  if(ndots(dots))
-    Pipe.set(quote(`$<-`), Pipe.value(x), dots, value, parent.frame())
-  else
-    x
-}
-
-#' @export
-`[<-.Pipe` <- function(x,...,value) {
-  dots <- match.call(expand.dots = FALSE)$`...`
-  if(ndots(dots))
-    Pipe.set(quote(`[<-`), Pipe.value(x), dots, value, parent.frame())
-  else
-    x
-}
-
-#' @export
-`[[<-.Pipe` <- function(x,...,value) {
-  dots <- match.call(expand.dots = FALSE)$`...`
-  if(ndots(dots))
-    Pipe.set(quote(`[[<-`), Pipe.value(x), dots, value, parent.frame())
-  else
-    x
 }
