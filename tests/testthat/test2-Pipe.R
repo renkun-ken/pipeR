@@ -4,6 +4,7 @@ test_that("first-argument piping", {
 
   # ordinary usages
   expect_identical(Pipe(1:10)$sin()$sum()[], sum(sin(1:10)))
+  expect_identical(Pipe(1:3)$c(1,.)[],c(1:3,1,1:3))
   expect_identical(Pipe(iris)$names()[], names(iris))
   expect_identical(Pipe(iris)$head(n=3)[],head(iris,n=3))
   expect_identical(Pipe("a")$switch(a=1,b=2,c=3)[],switch("a",a=1,b=2,c=3))

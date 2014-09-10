@@ -147,10 +147,10 @@ Pipe.value <- function(x) {
     return(get(i, envir = x, inherits = FALSE))
   f <- get(i,envir = parent.frame(),mode = "function")
   fname <- as.symbol(i)
-  args <- setnames(list(f,Pipe.value(x)),c(i,"value"))
+  args <- setnames(list(f,Pipe.value(x)),c(i,"."))
   function(...) {
     dots <- match.call(expand.dots = FALSE)$`...`
-    rcall <- as.call(c(fname,quote(value),dots))
+    rcall <- as.call(c(fname,quote(.),dots))
     value <- eval(rcall,args,parent.frame())
     Pipe(value)
   }
