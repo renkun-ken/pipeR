@@ -71,6 +71,16 @@ rnorm(100) %>>%
   plot(col="red", main=length(.))
 ```
 
+There are situations where one calls a function in a namespace with `::`. In this case, the call must end up with `()`.
+
+```r
+rnorm(100) %>>%
+  stats::median()
+  
+rnorm(100) %>>%
+  graphics::plot(col = "red")
+```
+
 #### Pipe to `.` in an expression
 
 Not all functions are pipe-friendly in every case: You may find some functions do not take your data produced by a pipeline as the first argument. In this case, you can enclose your expression by `{}` or `()` so that `%>>%` will use `.` to represent the value on the left.
