@@ -60,12 +60,14 @@ test_that("element extraction", {
 
 test_that("subsetting", {
   expect_identical(Pipe(list(a=1,b=2))["a"]$value,list(a=1))
-  expect_equal(Pipe(c(a=1,b=2))["a"]$value,c(a=1))
+  expect_identical(Pipe(c(a=1,b=2))["a"]$value,c(a=1))
+  expect_identical(Pipe(c(a=1,b=2))[length(.)]$value,c(b=2))
 })
 
 test_that("extracting", {
-  expect_equal(Pipe(list(a=1,b=2))[["a"]]$value,1)
-  expect_equal(Pipe(list2env(list(a=1,b=2)))[["a"]]$value,1)
+  expect_identical(Pipe(list(a=1,b=2))[["a"]]$value,1)
+  expect_identical(Pipe(list2env(list(a=1,b=2)))[["a"]]$value,1)
+  expect_identical(Pipe(c(a=1,b=2))[[length(.)]]$value,2)
 })
 
 test_that("element assignment", {
@@ -84,13 +86,15 @@ test_that("element assignment", {
   expect_identical({
     z <- Pipe(c(a=1,b=2))
     z["a"] <- 2
+    z[length(.)] <- 3
     z$value
-  },c(a=2,b=2))
+  },c(a=2,b=3))
   expect_identical({
     z <- Pipe(c(a=1,b=2))
     z[["a"]] <- 2
+    z[[length(.)]] <- 3
     z$value
-  },c(a=2,b=2))
+  },c(a=2,b=3))
 })
 
 test_that("assignment", {
@@ -135,8 +139,6 @@ test_that("assignment", {
     list(x,p)
   },list(3,2:4))
 })
-
-
 
 test_that("function", {
   # closure

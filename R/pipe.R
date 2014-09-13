@@ -157,8 +157,8 @@ Pipe.value <- function(x) {
 }
 
 Pipe.get <- function(f, value, dots, envir) {
-  rcall <- as.call(c(f,quote(value),dots))
-  value <- eval(rcall,list(value = value),envir)
+  rcall <- as.call(c(f,quote(.),dots))
+  value <- eval(rcall,list(. = value),envir)
   Pipe(value)
 }
 
@@ -183,8 +183,8 @@ Pipe.get_function <- function(op) {
 
 
 Pipe.set <- function(f, x, dots, value, envir) {
-  rcall <- as.call(c(f,quote(x),dots,quote(value)))
-  value <- eval(rcall,list(x = x, value = value),envir)
+  rcall <- as.call(c(f,quote(.),dots,quote(value)))
+  value <- eval(rcall,list(. = x, value = value),envir)
   Pipe(value)
 }
 
