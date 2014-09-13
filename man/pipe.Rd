@@ -102,6 +102,7 @@ p[["a"]]
 p$a <- 2
 p["b"] <- NULL
 p[["a"]] <- 3
+p[length(.)] # . = p$value
 
 # Data manipulation with dplyr
 library(dplyr)
