@@ -36,12 +36,14 @@ eval.labmda <- function(x,symbol,expr,envir) {
 # envir : environment for evaluation
 # side_effect: TRUE to return x; FALSE to return value of expr
 pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
+  if(is.symbol(expr)) return(pipe.dot(x,expr,envir))
   # an explict lambda expression should be a call in forms of either
   # (x ~ expr)
   symbol <- as.character(expr[[1L]])
   # if symbol is an anonymous function, length(symbol) > 1L
   # to make a valid lambda expression,
   # its lambda symbol must be of length 1
+
   if(length(symbol) == 1L) {
     if(symbol == "~") {
       # formula
