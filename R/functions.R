@@ -69,9 +69,11 @@ pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
         return(if(side_effect) x else value)
       }
     } else if(symbol == "?") {
+      expr <- expr[[2L]]
+      value <- Recall(x,expr,envir)
       cat("? ")
-      print(expr[[2L]])
-      print(Recall(x,expr[[2L]],envir))
+      print(expr)
+      print(value)
       return(x)
     } else if(symbol == "=") {
       lhs <- expr[[2L]]
