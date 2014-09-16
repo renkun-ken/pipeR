@@ -155,3 +155,14 @@ test_that("scoping", {
   expect_identical(local({p <- function(x) 0L; pobj()$value}),1L)
   expect_identical(local({p <- function(x) 0L; Pipe(0)$p()$value}),0L)
 })
+
+test_that("I()", {
+  expect_equal({
+    a <- quote(x)
+    Pipe(list(x=1))$I(a)$value
+  },1)
+  expect_equal({
+    a <- m ~ m + 1
+    Pipe(1)$I(a)$value
+  },2)
+})

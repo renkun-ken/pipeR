@@ -182,3 +182,14 @@ test_that("scoping", {
     1:3 %>>% (function(x) mean(x + . * p))
   })(1),5)
 })
+
+test_that("I()", {
+  expect_equal({
+    a <- quote(x)
+    list(x=1) %>>% I(a)
+  },1)
+  expect_equal({
+    a <- m ~ m + 1
+    1 %>>% I(a)
+  },2)
+})
