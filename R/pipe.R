@@ -134,6 +134,10 @@ Pipe <- function(value = NULL) {
     args <- withVisible(pipe.fun(value,substitute(expr),parent.frame()))
     Pipe.new(args)
   }
+  I <- function(expr) {
+    args <- withVisible(pipe.I(value,substitute(expr),parent.frame()))
+    Pipe.new(args)
+  }
   .envir <- environment()
   setclass(.envir, "Pipe")
 }

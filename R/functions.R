@@ -123,6 +123,11 @@ pipe.fun <- function(x,expr,envir) {
     pipe.lambda(x,expr,envir)
 }
 
+pipe.I <- function(x,expr,envir) {
+  if(is.symbol(expr)) expr <- eval(expr,envir)
+  pipe.fun(x,expr,envir)
+}
+
 # pipe function that determines the piping mechanism for the expression
 # x : object
 # expr : function name, call, or enclosed expression
@@ -140,7 +145,9 @@ pipe.op <- function(x,expr) {
         return(pipe.dot(x,expr,envir))
       } else if(symbol == "(") {
         # expr is enclosed with (): more syntax
-        return(pipe.fun(x,expr[[2]],envir))
+        return(pipe.fun(x,expr[[2L]],envir))
+      } else if(symbol == "I") {
+        return(pipe.I(x,expr[[2L]],envir))
       }
     }
   }
