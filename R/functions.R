@@ -2,7 +2,7 @@
 # x : object
 # fun : the function name or call
 # envir : environment for evaluation
-pipe.first <- function(x,fun,envir) {
+pipe_first <- function(x,fun,envir) {
   fun <- setclass(fun,"list")
 
   ## insert x as the first argument to fun
@@ -14,7 +14,7 @@ pipe.first <- function(x,fun,envir) {
 # . : object
 # expr : expression
 # envir : environment for evaluation
-pipe.dot <- function(.,expr,envir) {
+pipe_dot <- function(.,expr,envir) {
   eval(expr,list(.=.),envir)
 }
 
@@ -23,7 +23,7 @@ pipe.dot <- function(.,expr,envir) {
 # symbol : symbol part
 # expr : expression part
 # envir : environment for evaluation
-eval.labmda <- function(x,symbol,expr,envir) {
+eval_lambda <- function(x,symbol,expr,envir) {
   if(!is.symbol(symbol))
     stop("Invalid symbol \"",deparse(symbol),
       "\" in lambda expression", call. = FALSE)
@@ -35,8 +35,8 @@ eval.labmda <- function(x,symbol,expr,envir) {
 # expr : lambda expression
 # envir : environment for evaluation
 # side_effect: TRUE to return x; FALSE to return value of expr
-pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
-  if(is.symbol(expr)) return(pipe.dot(x,expr,envir))
+pipe_lambda <- function(x,expr,envir,side_effect = TRUE) {
+  if(is.symbol(expr)) return(pipe_dot(x,expr,envir))
   # an explict lambda expression should be a call in forms of either
   # (x ~ expr)
   symbol <- as.character(expr[[1L]])
@@ -53,11 +53,11 @@ pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
         rhs <- expr[[3L]]
         if(is.side_effect(lhs)) {
           # ~ expr: side effect
-          value <- eval.labmda(x,lhs[[2L]],rhs,envir)
+          value <- eval_lambda(x,lhs[[2L]],rhs,envir)
           return(if(side_effect) x else value)
         } else {
           # expr: lambda piping
-          return(eval.labmda(x,lhs,rhs,envir))
+          return(eval_lambda(x,lhs,rhs,envir))
         }
       } else {
         expr <- expr[[2L]]
@@ -66,7 +66,7 @@ pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
           value <- assign(as.character(expr), x, envir = envir)
         } else {
           # ~ expr: side effect
-          value <- pipe.dot(x,expr,envir)
+          value <- pipe_dot(x,expr,envir)
         }
         return(if(side_effect) x else value)
       }
@@ -111,27 +111,27 @@ pipe.lambda <- function(x,expr,envir,side_effect = TRUE) {
 
   # if no above condition holds, regard as implicit lambda expression
   # pipe to .
-  pipe.dot(x,expr,envir)
+  pipe_dot(x,expr,envir)
 }
 
-pipe.fun <- function(x,expr,envir) {
+pipe_fun <- function(x,expr,envir) {
   if(is.symbol(expr))
     # ( symbol ): extract element
     getElement(x, as.character(expr))
   else
     # ( call ): pipe by lambda expression
-    pipe.lambda(x,expr,envir)
+    pipe_lambda(x,expr,envir)
 }
 
-pipe.I <- function(x,expr,envir) {
+pipe_I <- function(x,expr,envir) {
   if(is.symbol(expr)) expr <- eval(expr,envir)
-  pipe.fun(x,expr,envir)
+  pipe_fun(x,expr,envir)
 }
 
 # pipe function that determines the piping mechanism for the expression
 # x : object
 # expr : function name, call, or enclosed expression
-pipe.op <- function(x,expr) {
+pipe_op <- function(x,expr) {
   expr <- substitute(expr)
   envir <- parent.frame()
   # if expr in enclosed within {} or (),
@@ -142,15 +142,15 @@ pipe.op <- function(x,expr) {
     if(length(symbol) == 1L) {
       if(symbol == "{") {
         # expr is enclosed with {}: pipe to dot.
-        return(pipe.dot(x,expr,envir))
+        return(pipe_dot(x,expr,envir))
       } else if(symbol == "(") {
         # expr is enclosed with (): more syntax
-        return(pipe.fun(x,expr[[2L]],envir))
+        return(pipe_fun(x,expr[[2L]],envir))
       } else if(symbol == "I") {
-        return(pipe.I(x,expr[[2L]],envir))
+        return(pipe_I(x,expr[[2L]],envir))
       }
     }
   }
   # if none of the conditions hold, pipe to first argument
-  pipe.first(x,expr,envir)
+  pipe_first(x,expr,envir)
 }

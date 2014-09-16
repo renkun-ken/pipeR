@@ -193,4 +193,4 @@
 #'   list.filter(. <= 5) %>>%
 #'   list.sort(.)
 #' }
-`%>>%` <- pipe.op
+`%>>%` <- pipe_op
