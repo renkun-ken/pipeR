@@ -129,17 +129,27 @@
 #' }
 #' @export
 Pipe <- function(value = NULL) {
+  .visible <- TRUE
   . <- function(expr) {
-    if(!missing(expr))
-      value <- pipe.fun(value,substitute(expr),parent.frame())
-    Pipe(value)
+    args <- withVisible(pipe.fun(value,substitute(expr),parent.frame()))
+    Pipe.new(args)
   }
   .envir <- environment()
   setclass(.envir, "Pipe")
 }
 
+Pipe.new <- function(args) {
+  x <- Pipe(args$value)
+  assign(".visible", args$visible, envir = x)
+  x
+}
+
 Pipe.value <- function(x) {
   get("value", envir = x, inherits = FALSE)
+}
+
+Pipe.visible <- function(x) {
+  get(".visible", envir = x, mode = "logical", inherits = FALSE)
 }
 
 #' @export
@@ -152,15 +162,15 @@ Pipe.value <- function(x) {
   function(...) {
     dots <- match.call(expand.dots = FALSE)$`...`
     rcall <- as.call(c(fname,quote(.),dots))
-    value <- eval(rcall,args,parent.frame())
-    Pipe(value)
+    args <- withVisible(eval(rcall,args,parent.frame()))
+    Pipe.new(args)
   }
 }
 
 Pipe.get <- function(f, value, dots, envir) {
   rcall <- as.call(c(f,quote(.),dots))
-  value <- eval(rcall,list(. = value),envir)
-  Pipe(value)
+  args <- withVisible(eval(rcall,list(. = value),envir))
+  Pipe.new(args)
 }
 
 Pipe.get_function <- function(op) {
@@ -185,8 +195,8 @@ Pipe.get_function <- function(op) {
 
 Pipe.set <- function(f, x, dots, value, envir) {
   rcall <- as.call(c(f,quote(.),dots,quote(value)))
-  value <- eval(rcall,list(. = x, value = value),envir)
-  Pipe(value)
+  args <- withVisible(eval(rcall,list(. = x, value = value),envir))
+  Pipe.new(args)
 }
 
 Pipe.set_function <- function(op) {
@@ -213,7 +223,7 @@ Pipe.set_function <- function(op) {
 #' @export
 print.Pipe <- function(x,...,header=getOption("Pipe.header",TRUE)) {
   value <- Pipe.value(x)
-  if(!is.null(value)) {
+  if(Pipe.visible(x)) {
     if(header) cat("$value :",class(value),"\n------\n")
     print(value,...)
   }
