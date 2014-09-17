@@ -133,6 +133,8 @@ pipe_I <- function(x,expr,envir) {
 # expr : function name, call, or enclosed expression
 pipe_op <- function(x,expr) {
   expr <- substitute(expr)
+  if(is.null(expr)) return(invisible(NULL))
+
   envir <- parent.frame()
   # if expr in enclosed within {} or (),
   # then pipe to dot or by lambda expression.
