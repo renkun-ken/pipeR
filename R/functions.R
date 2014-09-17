@@ -37,6 +37,7 @@ eval_lambda <- function(x,symbol,expr,envir) {
 # side_effect: TRUE to return x; FALSE to return value of expr
 pipe_lambda <- function(x,expr,envir,side_effect = TRUE) {
   if(is.symbol(expr)) return(pipe_dot(x,expr,envir))
+
   # an explict lambda expression should be a call in forms of either
   # (x ~ expr)
   symbol <- as.character(expr[[1L]])
@@ -124,7 +125,7 @@ pipe_fun <- function(x,expr,envir) {
 }
 
 pipe_I <- function(x,expr,envir) {
-  if(is.symbol(expr)) expr <- eval(expr,envir)
+  expr <- pipe_dot(x,expr,envir)
   pipe_fun(x,expr,envir)
 }
 
