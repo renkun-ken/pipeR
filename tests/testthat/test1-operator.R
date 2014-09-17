@@ -192,4 +192,12 @@ test_that("I()", {
     a <- m ~ m + 1
     1 %>>% I(a)
   },2)
+  expect_equal({
+    1:10 %>>% I(if(mean(.) <= 5) x ~ x+1 else x ~ x-1)
+  },0:9)
+  expect_equal({
+    f1 <- quote(.+1)
+    f2 <- quote(.-1)
+    1:10 %>>% I(if(mean(.) <= 5) f1 else f2)
+  },0:9)
 })
