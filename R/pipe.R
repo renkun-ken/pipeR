@@ -131,11 +131,17 @@
 Pipe <- function(value = NULL) {
   .visible <- TRUE
   . <- function(expr) {
-    args <- withVisible(pipe_fun(value,substitute(expr),parent.frame()))
+    args <- if(missing(expr))
+      list(value = value, visible = .visible)
+     else
+      withVisible(pipe_fun(value,substitute(expr),parent.frame()))
     Pipe_new(args)
   }
   I <- function(expr) {
-    args <- withVisible(pipe_I(value,substitute(expr),parent.frame()))
+    args <- if(missing(expr))
+      list(value = value, visible = .visible)
+     else
+      withVisible(pipe_I(value,substitute(expr),parent.frame()))
     Pipe_new(args)
   }
   .envir <- environment()

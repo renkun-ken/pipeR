@@ -12,6 +12,8 @@ test_that("first-argument piping", {
   expect_identical(Pipe(1:3)$.(base::mean(.))[], mean(1:3))
   expect_identical(Pipe(1:3)$.(c(1,2,.))[], c(1,2,1:3))
 
+  expect_identical(Pipe(1:3)$.()$value, c(1:3))
+
   # working with higher-order functions
   expect_identical(Pipe(1:5)$lapply(function(i) i+1)[], lapply(1:5,function(i) i+1))
   expect_identical(Pipe(1:5)$vapply(function(i) c(i,i^2),numeric(2))[],
@@ -158,6 +160,9 @@ test_that("scoping", {
 
 test_that("I()", {
   expect_equal({
+    Pipe(1)$I()$value
+  },1)
+  expect_equal({
     a <- quote(x)
     Pipe(list(x=1))$I(a)$value
   },1)
@@ -174,3 +179,4 @@ test_that("I()", {
     Pipe(1:10)$I(if(mean(.) <= 5) f1 else f2)$value
   },0:9)
 })
+
