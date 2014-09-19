@@ -129,22 +129,21 @@
 #' }
 #' @export
 Pipe <- function(value = NULL) {
-  .visible <- TRUE
-  . <- function(expr) {
-    args <- if(missing(expr))
-      list(value = value, visible = .visible)
-     else
-      withVisible(pipe_fun(value,substitute(expr),parent.frame()))
-    Pipe_new(args)
-  }
-  I <- function(expr) {
-    args <- if(missing(expr))
-      list(value = value, visible = .visible)
-     else
-      withVisible(pipe_I(value,substitute(expr),parent.frame()))
-    Pipe_new(args)
-  }
   .envir <- environment()
+  .visible <- TRUE
+
+  . <- function(expr) {
+    if(missing(expr)) return(.envir)
+    args <- withVisible(pipe_fun(value,substitute(expr),parent.frame()))
+    Pipe_new(args)
+  }
+
+  I <- function(expr) {
+    if(missing(expr)) return(.envir)
+    args <- withVisible(pipe_I(value,substitute(expr),parent.frame()))
+    Pipe_new(args)
+  }
+
   setclass(.envir, "Pipe")
 }
 
