@@ -255,7 +255,7 @@ library(rlist)
 
 Pipe object provides an internal function `.(...)` that work exactly in the same way with `x %>>% (...)`, and it has more features than `%>>%`.
 
-> NOTE: `.()` only supports assignment with `<-` or `->`.
+> NOTE: `.()` does not support assignment with `=` but supports `~`, `<-` and `->`.
 
 #### Piping
 
