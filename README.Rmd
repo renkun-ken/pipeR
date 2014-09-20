@@ -11,6 +11,8 @@ library(pipeR)
 
 pipeR provides Pipe operator and function based on syntax which support to pipe value to first-argument of a function, to dot in expression, by formula as lambda expression, for side-effect, and with assignment. The set of syntax is designed to make the pipeline highly readable.
 
+[pipeR Tutorial](http://renkun.me/pipeR-tutorial) is a highly recommended complete guide that covers all features of pipeR.
+
 ## Installation
 
 Install from CRAN (v0.4-2):
