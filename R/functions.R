@@ -39,7 +39,7 @@ pipe_lambda <- function(x,expr,envir,side_effect = TRUE) {
   if(is.symbol(expr) || is.function(expr)) return(pipe_dot(x,expr,envir))
   # an explict lambda expression should be a call in forms of either
   # (x ~ expr)
-  symbol <- as.character(expr[[1L]])
+  symbol <- expr[[1L]]
   # if symbol is an anonymous function, length(symbol) > 1L
   # to make a valid lambda expression,
   # its lambda symbol must be of length 1
@@ -138,7 +138,7 @@ pipe_op <- function(x,expr) {
   # then pipe to dot or by lambda expression.
   # note that { ... } and ( ... ) are also calls.
   if(is.call(expr)) {
-    symbol <- as.character(expr[[1L]])
+    symbol <- expr[[1L]]
     if(length(symbol) == 1L) {
       if(symbol == "{") {
         # expr is enclosed with {}: pipe to dot.
