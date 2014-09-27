@@ -138,12 +138,6 @@ Pipe <- function(value = NULL) {
     Pipe_new(args)
   }
 
-  I <- function(expr) {
-    if(missing(expr)) return(.envir)
-    args <- withVisible(pipe_I(value,substitute(expr),parent.frame()))
-    Pipe_new(args)
-  }
-
   setclass(.envir, "Pipe")
 }
 

@@ -123,34 +123,14 @@ pipe_fun <- function(x,expr,envir) {
     pipe_lambda(x,expr,envir)
 }
 
-pipe_I <- function(x,expr,envir) {
-  expr <- pipe_dot(x,expr,envir)
-  pipe_fun(x,expr,envir)
-}
-
 # pipe function that determines the piping mechanism for the expression
 # x : object
 # expr : function name, call, or enclosed expression
 pipe_op <- function(x,expr) {
   expr <- substitute(expr)
   envir <- parent.frame()
-  # if expr in enclosed within {} or (),
-  # then pipe to dot or by lambda expression.
-  # note that { ... } and ( ... ) are also calls.
-  if(is.call(expr)) {
-    symbol <- expr[[1L]]
-    if(length(symbol) == 1L) {
-      if(symbol == "{") {
-        # expr is enclosed with {}: pipe to dot.
-        return(pipe_dot(x,expr,envir))
-      } else if(symbol == "(") {
-        # expr is enclosed with (): more syntax
-        return(pipe_fun(x,expr[[2L]],envir))
-      } else if(symbol == "I") {
-        return(pipe_I(x,expr[[2L]],envir))
-      }
-    }
-  }
-  # if none of the conditions hold, pipe to first argument
-  pipe_first(x,expr,envir)
+  switch(class(expr),
+    "{" = pipe_dot(x,expr,envir),
+    "(" = pipe_fun(x,expr[[2L]],envir),
+    pipe_first(x,expr,envir))
 }
