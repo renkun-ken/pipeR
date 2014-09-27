@@ -233,13 +233,16 @@ Pipe_set_function <- function(op) {
 print.Pipe <- function(x,...,header=getOption("Pipe.header",TRUE)) {
   value <- Pipe_value(x)
   if(Pipe_visible(x)) {
-    if(header) cat("$value :",class(value),"\n------\n")
+    if(header) {
+      cat("<Pipe:", class(value))
+      cat(">\n")
+    }
     print(value,...)
   }
 }
 
 #' @export
 str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
-  if(header) cat("$value : ")
+  if(header) cat("<Pipe>\n")
   str(Pipe_value(object),...)
 }
