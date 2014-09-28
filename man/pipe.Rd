@@ -28,7 +28,7 @@ extracts its final value.
 The functionality of Pipe object fully covers that of the pipe operator \code{\%>>\%}
 and provides more features. For example, Pipe object supports directly subsetting
 \code{$value} by \code{[...]}, extracting element by \code{[[...]]}, and assigning value
-by \code{$value <-}, \code{[...] <-}, and \code{[[...]] <-}.
+by \code{$item <-}, \code{[...] <-}, and \code{[[...]] <-}.
 
 A typical usage of Pipe object is to start with \code{Pipe()} and end with
 \code{$value} or \code{[]}.
