@@ -67,6 +67,10 @@ test_that("assignment", {
     list(x,p)
   },list(2,1:3))
   expect_identical({
+    x <- 1:3 %>>% (~ p = .) %>>% mean()
+    list(x,p)
+  },list(2,1:3))
+  expect_identical({
     x <- 1:3 %>>% (~ p = . + 1L) %>>% mean()
     list(x,p)
   },list(2,2:4))
@@ -74,6 +78,81 @@ test_that("assignment", {
     x <- 1:3 %>>% (~ p = m ~ m + 1L) %>>% mean()
     list(x,p)
   },list(2,2:4))
+
+  expect_identical({
+    x <- 1:3 %>>% (p = . + 1L) %>>% mean()
+    list(x,p)
+  },list(3,2:4))
+
+  expect_identical({
+    x <- 1:3 %>>% (p = m ~ m + 1L) %>>% mean()
+    list(x,p)
+  },list(3,2:4))
+  expect_identical({
+    x <- 1:3 %>>% (~ . + 1L -> p) %>>% mean()
+    list(x,p)
+  },list(2,2:4))
+  expect_identical({
+    x <- 1:3 %>>% (~ . -> p) %>>% mean()
+    list(x,p)
+  },list(2,1:3))
+  expect_identical({
+    x <- 1:3 %>>% (~ m ~ m + 1L -> p) %>>% mean()
+    list(x,p)
+  },list(2,2:4))
+
+  expect_identical({
+    x <- 1:3 %>>% (. + 1L -> p) %>>% mean()
+    list(x,p)
+  },list(3,2:4))
+  expect_identical({
+    x <- 1:3 %>>% (. -> p) %>>% mean()
+    list(x,p)
+  },list(2,1:3))
+  expect_identical({
+    x <- 1:3 %>>% (m ~ m + 1L -> p) %>>% mean()
+    list(x,p)
+  },list(3,2:4))
+
+  expect_identical({
+    x <- 1:3 %>>% (~ p <- .) %>>% mean()
+    list(x,p)
+  },list(2,1:3))
+  expect_identical({
+    x <- 1:3 %>>% (~ p <- . + 1L) %>>% mean()
+    list(x,p)
+  },list(2,2:4))
+  expect_identical({
+    x <- 1:3 %>>% (~ p <- m ~ m + 1L) %>>% mean()
+    list(x,p)
+  },list(2,2:4))
+
+  expect_identical({
+    x <- 1:3 %>>% (p <- . + 1L) %>>% mean()
+    list(x,p)
+  },list(3,2:4))
+  expect_identical({
+    x <- 1:3 %>>% (p <- m ~ m + 1L) %>>% mean()
+    list(x,p)
+  },list(3,2:4))
+})
+
+test_that("function assignment", {
+  expect_identical({
+    p <- 1:3
+    letters[1:3] %>>% (~ names(p) = .)
+    p
+  },c(a=1L,b=2L,c=3L))
+  expect_identical({
+    p <- 1:3
+    letters[1:3] %>>% (~ names(p) <- .)
+    p
+  },c(a=1L,b=2L,c=3L))
+  expect_identical({
+    p <- 1:3
+    letters[1:3] %>>% (~ . -> names(p))
+    p
+  },c(a=1L,b=2L,c=3L))
 })
 
 test_that("element extraction", {

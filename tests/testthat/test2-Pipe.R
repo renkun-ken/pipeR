@@ -4,12 +4,15 @@ test_that("first-argument piping", {
 
   # ordinary usages
   expect_identical(Pipe(1:10)$sin()$sum()[], sum(sin(1:10)))
+  expect_identical(Pipe(1:3)$c(1,.)[],c(1:3,1,1:3))
   expect_identical(Pipe(iris)$names()[], names(iris))
   expect_identical(Pipe(iris)$head(n=3)[],head(iris,n=3))
   expect_identical(Pipe("a")$switch(a=1,b=2,c=3)[],switch("a",a=1,b=2,c=3))
 
   expect_identical(Pipe(1:3)$.(base::mean(.))[], mean(1:3))
   expect_identical(Pipe(1:3)$.(c(1,2,.))[], c(1,2,1:3))
+
+  expect_identical(Pipe(1:3)$.()$value, c(1:3))
 
   # working with higher-order functions
   expect_identical(Pipe(1:5)$lapply(function(i) i+1)[], lapply(1:5,function(i) i+1))
@@ -59,15 +62,17 @@ test_that("element extraction", {
 
 test_that("subsetting", {
   expect_identical(Pipe(list(a=1,b=2))["a"]$value,list(a=1))
-  expect_equal(Pipe(c(a=1,b=2))["a"]$value,c(a=1))
+  expect_identical(Pipe(c(a=1,b=2))["a"]$value,c(a=1))
+  expect_identical(Pipe(c(a=1,b=2))[length(.)]$value,c(b=2))
 })
 
 test_that("extracting", {
-  expect_equal(Pipe(list(a=1,b=2))[["a"]]$value,1)
-  expect_equal(Pipe(list2env(list(a=1,b=2)))[["a"]]$value,1)
+  expect_identical(Pipe(list(a=1,b=2))[["a"]]$value,1)
+  expect_identical(Pipe(list2env(list(a=1,b=2)))[["a"]]$value,1)
+  expect_identical(Pipe(c(a=1,b=2))[[length(.)]]$value,2)
 })
 
-test_that("assignment", {
+test_that("element assignment", {
   expect_identical({
     z <- Pipe(list(a=1,b=2))
     z$a <- 2
@@ -83,15 +88,59 @@ test_that("assignment", {
   expect_identical({
     z <- Pipe(c(a=1,b=2))
     z["a"] <- 2
+    z[length(.)] <- 3
     z$value
-  },c(a=2,b=2))
+  },c(a=2,b=3))
   expect_identical({
     z <- Pipe(c(a=1,b=2))
     z[["a"]] <- 2
+    z[[length(.)]] <- 3
     z$value
-  },c(a=2,b=2))
+  },c(a=2,b=3))
 })
 
+test_that("assignment", {
+  # assignment as side-effect
+  expect_identical({
+    x <- Pipe(1:3)$.(~ p)$mean()$value
+    list(x,p)
+  },list(2,1:3))
+  expect_identical({
+    x <- Pipe(1:3)$.(~ . + 1L -> p)$mean()$value
+    list(x,p)
+  },list(2,2:4))
+  expect_identical({
+    x <- Pipe(1:3)$.(~ m ~ m + 1L -> p)$mean()$value
+    list(x,p)
+  },list(2,2:4))
+
+  expect_identical({
+    x <- Pipe(1:3)$.(. + 1L -> p)$mean()$value
+    list(x,p)
+  },list(3,2:4))
+  expect_identical({
+    x <- Pipe(1:3)$.(m ~ m + 1L -> p)$mean()$value
+    list(x,p)
+  },list(3,2:4))
+
+  expect_identical({
+    x <- Pipe(1:3)$.(~ p <- . + 1L)$mean()$value
+    list(x,p)
+  },list(2,2:4))
+  expect_identical({
+    x <- Pipe(1:3)$.(~ p <- m ~ m + 1L)$mean()$value
+    list(x,p)
+  },list(2,2:4))
+
+  expect_identical({
+    x <- Pipe(1:3)$.(p <- . + 1L)$mean()$value
+    list(x,p)
+  },list(3,2:4))
+  expect_identical({
+    x <- Pipe(1:3)$.(p <- m ~ m + 1L)$mean()$value
+    list(x,p)
+  },list(3,2:4))
+})
 
 test_that("function", {
   # closure

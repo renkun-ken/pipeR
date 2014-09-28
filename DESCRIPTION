@@ -1,7 +1,7 @@
 Package: pipeR
 Type: Package
 Title: Pipe operator and function
-Version: 0.4-3
+Version: 0.5
 Author: Kun Ren <ken@renkun.me>
 Maintainer: Kun Ren <ken@renkun.me>
 Description: Provides Pipe operator and function based on syntax which support
@@ -9,14 +9,14 @@ Description: Provides Pipe operator and function based on syntax which support
     by formula as lambda expression, for side-effect, and with assignment.
     The set of syntax is designed to make the pipeline highly readable.
 Depends:
-    R (>= 2.14)
-Date: 2014-09-03
+    R (>= 2.15)
+Date: 2014-09-28
 Suggests:
-    testthat,knitr
+    testthat
 License: MIT + file LICENSE
 URL: http://renkun.me/pipeR,
-    https://github.com/renkun-ken/pipeR
+    https://github.com/renkun-ken/pipeR,
+    http://renkun.me/pipeR-tutorial
 BugReports: https://github.com/renkun-ken/pipeR/issues
 Roxygen: list(wrap = FALSE)
 ByteCompile: TRUE
-VignetteBuilder: knitr

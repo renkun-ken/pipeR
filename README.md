@@ -2,11 +2,12 @@
 
 # pipeR
 
-[![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=0.4)](https://travis-ci.org/renkun-ken/pipeR)
+[![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR)
+
 
 pipeR provides Pipe operator and function based on syntax which support to pipe value to first-argument of a function, to dot in expression, by formula as lambda expression, for side-effect, and with assignment. The set of syntax is designed to make the pipeline highly readable.
 
-[pipeR Tutorial](http://renkun.me/pipeR-tutorial) is a highly recommended complete guide that covers all features of pipeR.
+**[pipeR Tutorial](http://renkun.me/pipeR-tutorial) is a highly recommended complete guide that covers all features of pipeR.**
 
 ## Installation
 
@@ -16,10 +17,10 @@ Install from CRAN (v0.4-2):
 install.packages("pipeR")
 ```
 
-Install the development version (v0.4-3) from GitHub:
+Install the development version (v0.5) from GitHub:
 
 ```r
-devtools::install_github("pipeR","renkun-ken")
+devtools::install_github("pipeR","renkun-ken","0.5")
 ```
 
 ## Motivation
@@ -71,6 +72,16 @@ Sometimes the value on the left is needed at multiple places. One can use `.` to
 ```r
 rnorm(100) %>>%
   plot(col="red", main=length(.))
+```
+
+There are situations where one calls a function in a namespace with `::`. In this case, the call must end up with `()`.
+
+```r
+rnorm(100) %>>%
+  stats::median()
+  
+rnorm(100) %>>%
+  graphics::plot(col = "red")
 ```
 
 #### Pipe to `.` in an expression
@@ -155,7 +166,7 @@ mtcars %>>%
   summary
 ```
 
-If the input value is not directly to be saved but after some transformation, then one can use `=` to specify a lambda expression to tell what to be saved (thanks @yanlinlin82 for suggestion).
+If the input value is not directly to be saved but after some transformation, then one can use `=`, `<-`, or more natural `->` to specify a lambda expression to tell what to be saved (thanks @yanlinlin82 for suggestion).
 
 ```r
 mtcars %>>%
@@ -165,12 +176,29 @@ mtcars %>>%
   summary
 ```
 
-An easier way to saving intermediate value that is to be further piped is to use `(symbol = expression)` syntax.
+```r
+mtcars %>>%
+  (~ summary(.) -> summ) %>>%
+  
+mtcars %>>%
+  (~ summ <- summary(.)) %>>%
+```
+
+An easier way to saving intermediate value that is to be further piped is to use `(symbol = expression)` syntax:
 
 ```r
 mtcars %>>%
   (~ summ = summary(.)) %>>%  # side-effect assignment
   (lm_mtcars = lm(formula = mpg ~ wt + cyl, data = .)) %>>%  # continue piping
+  summary
+```
+
+or `(expression -> symbol)` syntax:
+
+```r
+mtcars %>>%
+  (~ summary(.) -> summ) %>>%  # side-effect assignment
+  (lm(formula = mpg ~ wt + cyl, data = .) -> lm_mtcars) %>>%  # continue piping
   summary
 ```
 
@@ -225,6 +253,8 @@ library(rlist)
 
 Pipe object provides an internal function `.(...)` that work exactly in the same way with `x %>>% (...)`, and it has more features than `%>>%`.
 
+> NOTE: `.()` does not support assignment with `=` but supports `~`, `<-` and `->`.
+
 #### Piping
 
 ```r
@@ -241,7 +271,7 @@ Pipe(mtcars)$
 
 ```r
 Pipe(mtcars)$
-  .(~ cat("number of columns:", ncol(.), "\n"))$
+  .(~ summary(.) -> summ)$
   lm(formula = mpg ~ wt + cyl)$
   summary()$
   .(coefficients)
@@ -306,15 +336,6 @@ Pipe(1:100)$
   list.mapv(g ~ mean(g))$
   value
 ```
-
-## Vignettes
-
-The package also provides the following vignettes:
-
-- [Introduction](http://cran.r-project.org/web/packages/pipeR/vignettes/Introduction.html)
-- [Examples](http://cran.r-project.org/web/packages/pipeR/vignettes/Examples.html)
-- [Performance](http://cran.r-project.org/web/packages/pipeR/vignettes/Performance.html)
-
 
 ## Help overview
 
