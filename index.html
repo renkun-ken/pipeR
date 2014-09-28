@@ -34,11 +34,11 @@
         <h1>
 <a name="piper" class="anchor" href="#piper"><span class="octicon octicon-link"></span></a>pipeR</h1>
 
-<p><a href="https://travis-ci.org/renkun-ken/pipeR"><img src="https://travis-ci.org/renkun-ken/pipeR.png?branch=0.4" alt="Build Status"></a></p>
+<p><a href="https://travis-ci.org/renkun-ken/pipeR"><img src="https://travis-ci.org/renkun-ken/pipeR.png?branch=master" alt="Build Status"></a></p>
 
 <p>pipeR provides Pipe operator and function based on syntax which support to pipe value to first-argument of a function, to dot in expression, by formula as lambda expression, for side-effect, and with assignment. The set of syntax is designed to make the pipeline highly readable.</p>
 
-<p><a href="http://renkun.me/pipeR-tutorial">pipeR Tutorial</a> is a highly recommended complete guide that covers all features of pipeR.</p>
+<p><strong><a href="http://renkun.me/pipeR-tutorial">pipeR Tutorial</a> is a highly recommended complete guide that covers all features of pipeR.</strong></p>
 
 <h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
@@ -48,7 +48,7 @@
 <div class="highlight highlight-r"><pre>install.packages<span class="p">(</span><span class="s">"pipeR"</span><span class="p">)</span>
 </pre></div>
 
-<p>Install the development version (v0.4-3) from GitHub:</p>
+<p>Install the development version (v0.5) from GitHub:</p>
 
 <div class="highlight highlight-r"><pre>devtools<span class="o">::</span>install_github<span class="p">(</span><span class="s">"pipeR"</span><span class="p">,</span><span class="s">"renkun-ken"</span><span class="p">)</span>
 </pre></div>
@@ -102,6 +102,15 @@
 
 <div class="highlight highlight-r"><pre>rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
   plot<span class="p">(</span>col<span class="o">=</span><span class="s">"red"</span><span class="p">,</span> main<span class="o">=</span><span class="kp">length</span><span class="p">(</span><span class="m">.</span><span class="p">))</span>
+</pre></div>
+
+<p>There are situations where one calls a function in a namespace with <code>::</code>. In this case, the call must end up with <code>()</code>.</p>
+
+<div class="highlight highlight-r"><pre>rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+  stats<span class="o">::</span>median<span class="p">()</span>
+
+rnorm<span class="p">(</span><span class="m">100</span><span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+  graphics<span class="o">::</span>plot<span class="p">(</span>col <span class="o">=</span> <span class="s">"red"</span><span class="p">)</span>
 </pre></div>
 
 <h4>
@@ -181,7 +190,7 @@
   <span class="kp">summary</span>
 </pre></div>
 
-<p>If the input value is not directly to be saved but after some transformation, then one can use <code>=</code> to specify a lambda expression to tell what to be saved (thanks <a href="https://github.com/yanlinlin82" class="user-mention">@yanlinlin82</a> for suggestion).</p>
+<p>If the input value is not directly to be saved but after some transformation, then one can use <code>=</code>, <code>&lt;-</code>, or more natural <code>-&gt;</code> to specify a lambda expression to tell what to be saved (thanks <a href="https://github.com/yanlinlin82" class="user-mention">@yanlinlin82</a> for suggestion).</p>
 
 <div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
   <span class="p">(</span><span class="o">~</span> summ <span class="o">=</span> <span class="kp">summary</span><span class="p">(</span><span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>  <span class="c1"># side-effect assignment</span>
@@ -190,11 +199,26 @@
   <span class="kp">summary</span>
 </pre></div>
 
-<p>An easier way to saving intermediate value that is to be further piped is to use <code>(symbol = expression)</code> syntax.</p>
+<div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span><span class="o">~</span> <span class="kp">summary</span><span class="p">(</span><span class="m">.</span><span class="p">)</span> <span class="o">-&gt;</span> summ<span class="p">)</span> <span class="o">%&gt;&gt;%</span>
+
+mtcars <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span><span class="o">~</span> summ <span class="o">&lt;-</span> <span class="kp">summary</span><span class="p">(</span><span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>
+</pre></div>
+
+<p>An easier way to saving intermediate value that is to be further piped is to use <code>(symbol = expression)</code> syntax:</p>
 
 <div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
   <span class="p">(</span><span class="o">~</span> summ <span class="o">=</span> <span class="kp">summary</span><span class="p">(</span><span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>  <span class="c1"># side-effect assignment</span>
   <span class="p">(</span>lm_mtcars <span class="o">=</span> lm<span class="p">(</span>formula <span class="o">=</span> mpg <span class="o">~</span> wt <span class="o">+</span> cyl<span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">))</span> <span class="o">%&gt;&gt;%</span>  <span class="c1"># continue piping</span>
+  <span class="kp">summary</span>
+</pre></div>
+
+<p>or <code>(expression -&gt; symbol)</code> syntax:</p>
+
+<div class="highlight highlight-r"><pre>mtcars <span class="o">%&gt;&gt;%</span>
+  <span class="p">(</span><span class="o">~</span> <span class="kp">summary</span><span class="p">(</span><span class="m">.</span><span class="p">)</span> <span class="o">-&gt;</span> summ<span class="p">)</span> <span class="o">%&gt;&gt;%</span>  <span class="c1"># side-effect assignment</span>
+  <span class="p">(</span>lm<span class="p">(</span>formula <span class="o">=</span> mpg <span class="o">~</span> wt <span class="o">+</span> cyl<span class="p">,</span> data <span class="o">=</span> <span class="m">.</span><span class="p">)</span> <span class="o">-&gt;</span> lm_mtcars<span class="p">)</span> <span class="o">%&gt;&gt;%</span>  <span class="c1"># continue piping</span>
   <span class="kp">summary</span>
 </pre></div>
 
@@ -249,6 +273,10 @@ mtcars <span class="o">%&gt;&gt;%</span>
 
 <p>Pipe object provides an internal function <code>.(...)</code> that work exactly in the same way with <code>x %&gt;&gt;% (...)</code>, and it has more features than <code>%&gt;&gt;%</code>.</p>
 
+<blockquote>
+<p>NOTE: <code>.()</code> does not support assignment with <code>=</code> but supports <code>~</code>, <code>&lt;-</code> and <code>-&gt;</code>.</p>
+</blockquote>
+
 <h4>
 <a name="piping" class="anchor" href="#piping"><span class="octicon octicon-link"></span></a>Piping</h4>
 
@@ -263,7 +291,7 @@ mtcars <span class="o">%&gt;&gt;%</span>
 </pre></div>
 
 <div class="highlight highlight-r"><pre>Pipe<span class="p">(</span>mtcars<span class="p">)</span><span class="o">$</span>
-  <span class="m">.</span><span class="p">(</span><span class="o">~</span> <span class="kp">cat</span><span class="p">(</span><span class="s">"number of columns:"</span><span class="p">,</span> <span class="kp">ncol</span><span class="p">(</span><span class="m">.</span><span class="p">),</span> <span class="s">"\n"</span><span class="p">))</span><span class="o">$</span>
+  <span class="m">.</span><span class="p">(</span><span class="o">~</span> <span class="kp">summary</span><span class="p">(</span><span class="m">.</span><span class="p">)</span> <span class="o">-&gt;</span> summ<span class="p">)</span><span class="o">$</span>
   lm<span class="p">(</span>formula <span class="o">=</span> mpg <span class="o">~</span> wt <span class="o">+</span> cyl<span class="p">)</span><span class="o">$</span>
   <span class="kp">summary</span><span class="p">()</span><span class="o">$</span>
   <span class="m">.</span><span class="p">(</span>coefficients<span class="p">)</span>
@@ -328,15 +356,6 @@ plist<span class="o">$</span>b <span class="o">&lt;-</span> <span class="kc">NUL
 </pre></div>
 
 <h2>
-<a name="vignettes" class="anchor" href="#vignettes"><span class="octicon octicon-link"></span></a>Vignettes</h2>
-
-<p>The package also provides the following vignettes:</p>
-
-<ul>
-<li><a href="http://cran.r-project.org/web/packages/pipeR/vignettes/Introduction.html">Introduction</a></li>
-<li><a href="http://cran.r-project.org/web/packages/pipeR/vignettes/Examples.html">Examples</a></li>
-<li><a href="http://cran.r-project.org/web/packages/pipeR/vignettes/Performance.html">Performance</a></li>
-</ul><h2>
 <a name="help-overview" class="anchor" href="#help-overview"><span class="octicon octicon-link"></span></a>Help overview</h2>
 
 <div class="highlight highlight-r"><pre>help<span class="p">(</span>package <span class="o">=</span> pipeR<span class="p">)</span>
