@@ -25,7 +25,7 @@ install.packages("pipeR")
 Install the development version (v0.5) from GitHub:
 
 ```r
-devtools::install_github("pipeR","renkun-ken","0.5")
+devtools::install_github("pipeR","renkun-ken")
 ```
 
 ## Motivation
