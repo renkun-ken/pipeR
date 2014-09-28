@@ -341,15 +341,6 @@ Pipe(1:100)$
   value
 ```
 
-## Vignettes
-
-The package also provides the following vignettes:
-
-- [Introduction](http://cran.r-project.org/web/packages/pipeR/vignettes/Introduction.html)
-- [Examples](http://cran.r-project.org/web/packages/pipeR/vignettes/Examples.html)
-- [Performance](http://cran.r-project.org/web/packages/pipeR/vignettes/Performance.html)
-
-
 ## Help overview
 
 ```r
