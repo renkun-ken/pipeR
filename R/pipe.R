@@ -163,7 +163,7 @@ Pipe_visible <- function(x) {
   fname <- as.symbol(i)
   args <- setnames(list(f,Pipe_value(x)),c(i,"."))
   function(...) {
-    dots <- match.call(expand.dots = FALSE)$`...`
+    dots <- match.call(expand.dots = FALSE)$...
     rcall <- as.call(c(fname,quote(.),dots))
     args <- withVisible(eval(rcall,args,parent.frame()))
     Pipe_new(args)
@@ -180,7 +180,7 @@ Pipe_get_function <- function(op) {
   op <- as.symbol(op)
   function(x, ...) {
     value <- Pipe_value(x)
-    dots <- match.call(expand.dots = FALSE)$`...`
+    dots <- match.call(expand.dots = FALSE)$...
     if(ndots(dots)) {
       Pipe_get(op, value, dots, parent.frame())
     } else {
@@ -205,7 +205,7 @@ Pipe_set <- function(f, x, dots, value, envir) {
 Pipe_set_function <- function(op) {
   op <- as.symbol(op)
   function(x,...,value) {
-    dots <- match.call(expand.dots = FALSE)$`...`
+    dots <- match.call(expand.dots = FALSE)$...
     if(ndots(dots))
       Pipe_set(op, Pipe_value(x), dots, value, parent.frame())
     else
