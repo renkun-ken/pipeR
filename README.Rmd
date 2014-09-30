@@ -16,13 +16,13 @@ pipeR provides Pipe operator and function based on syntax which support to pipe 
 
 ## Installation
 
-Install from CRAN (v0.4-2):
+Install from [CRAN](http://cran.r-project.org/web/packages/pipeR/index.html):
 
 ```r
 install.packages("pipeR")
 ```
 
-Install the development version (v0.5) from GitHub:
+Install the development version from GitHub:
 
 ```r
 devtools::install_github("pipeR","renkun-ken")

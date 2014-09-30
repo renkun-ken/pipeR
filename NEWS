@@ -1,9 +1,9 @@
-v0.5 (2014-09-28)
+v0.5 (2014-09-30)
 ===
-Remove deprecated operators (%:>% and %|>%), deprecated closure fun() in Pipe object, and deprecated `->` for lambda expression.
-Support assignment with `<-` and `->`.
+Remove deprecated operators (%:>% and %|>%), deprecated closure fun() in Pipe object, and deprecated `->` to build lambda expression.
+Support assignment in () with `<-` and `->`.
+Improve the implementation of functions.
 Fix bugs.
-
 
 v0.4-3 (2014-09-03)
 ===
@@ -20,7 +20,6 @@ Add question piping
 Add subsetting, extracting, assigning to Pipe object
 Resolve compatibility issues with data.table (#28)
 Resolve evaluation environment issues (#20, #34)
-
 
 v0.4-1 (2014-08-15)
 ===
