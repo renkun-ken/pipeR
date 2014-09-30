@@ -131,14 +131,26 @@
 Pipe <- function(value = NULL) {
   .envir <- environment()
   .visible <- TRUE
+  . <- Pipe_dot(value, .envir)
+  setclass(.envir, c("Pipe","environment"))
+}
 
-  . <- function(expr) {
-    if(missing(expr)) return(.envir)
+Pipe_dot <- function(value, envir) {
+  function(expr) {
+    if(missing(expr)) return(envir)
     args <- withVisible(pipe_fun(value,substitute(expr),parent.frame()))
     Pipe_new(args)
   }
+}
 
-  setclass(.envir, "Pipe")
+Pipe_closure <- function(f, args) {
+  f <- as.symbol(f)
+  function(...) {
+    dots <- match.call(expand.dots = FALSE)$...
+    rcall <- as.call(c(f, quote(.), dots))
+    args <- withVisible(eval(rcall, args, parent.frame()))
+    Pipe_new(args)
+  }
 }
 
 Pipe_new <- function(args) {
@@ -156,23 +168,18 @@ Pipe_visible <- function(x) {
 }
 
 #' @export
-`$.Pipe` <- function(x,i) {
+`$.Pipe` <- function(x, i) {
   if(exists(i, envir = x, inherits = FALSE))
     return(get(i, envir = x, inherits = FALSE))
-  f <- get(i,envir = parent.frame(),mode = "function")
-  fname <- as.symbol(i)
-  args <- setnames(list(f,Pipe_value(x)),c(i,"."))
-  function(...) {
-    dots <- match.call(expand.dots = FALSE)$...
-    rcall <- as.call(c(fname,quote(.),dots))
-    args <- withVisible(eval(rcall,args,parent.frame()))
-    Pipe_new(args)
-  }
+  f <- get(i, envir = parent.frame(), mode = "function")
+  args <- setnames(list(f, Pipe_value(x)), c(i, "."))
+  Pipe_closure(i, args)
 }
 
 Pipe_get <- function(f, value, dots, envir) {
-  rcall <- as.call(c(f,quote(.),dots))
-  args <- withVisible(eval(rcall,list(. = value),envir))
+  if(!ndots(dots)) return(value)
+  rcall <- as.call(c(f, quote(.), dots))
+  args <- withVisible(eval(rcall, list(. = value), envir))
   Pipe_new(args)
 }
 
@@ -181,11 +188,7 @@ Pipe_get_function <- function(op) {
   function(x, ...) {
     value <- Pipe_value(x)
     dots <- match.call(expand.dots = FALSE)$...
-    if(ndots(dots)) {
-      Pipe_get(op, value, dots, parent.frame())
-    } else {
-      value
-    }
+    Pipe_get(op, value, dots, parent.frame())
   }
 }
 
@@ -197,6 +200,7 @@ Pipe_get_function <- function(op) {
 
 
 Pipe_set <- function(f, x, dots, value, envir) {
+  if(!ndots(dots)) return(value)
   rcall <- as.call(c(f,quote(.),dots,quote(value)))
   args <- withVisible(eval(rcall,list(. = x, value = value),envir))
   Pipe_new(args)
@@ -206,10 +210,7 @@ Pipe_set_function <- function(op) {
   op <- as.symbol(op)
   function(x,...,value) {
     dots <- match.call(expand.dots = FALSE)$...
-    if(ndots(dots))
-      Pipe_set(op, Pipe_value(x), dots, value, parent.frame())
-    else
-      x
+    Pipe_set(op, Pipe_value(x), dots, value, parent.frame())
   }
 }
 
