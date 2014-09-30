@@ -1,6 +1,3 @@
-# compatibility for data.table functions
-.datatable.aware <- TRUE
-
 #' Create a Pipe object that stores a value and allows command chaining with \code{$}.
 #' @details
 #' \code{Pipe()} function creates a Pipe object that provides object-like command
@@ -138,7 +135,7 @@ Pipe <- function(value = NULL) {
 Pipe_dot <- function(value, envir) {
   function(expr) {
     if(missing(expr)) return(envir)
-    args <- withVisible(pipe_fun(value,substitute(expr),parent.frame()))
+    args <- withVisible(pipe_fun(value, substitute(expr), parent.frame()))
     Pipe_new(args)
   }
 }
@@ -201,8 +198,8 @@ Pipe_get_function <- function(op) {
 
 Pipe_set <- function(f, x, dots, value, envir) {
   if(!ndots(dots)) return(value)
-  rcall <- as.call(c(f,quote(.),dots,quote(value)))
-  args <- withVisible(eval(rcall,list(. = x, value = value),envir))
+  rcall <- as.call(c(f,quote(.), dots, quote(value)))
+  args <- withVisible(eval(rcall,list(. = x, value = value), envir))
   Pipe_new(args)
 }
 

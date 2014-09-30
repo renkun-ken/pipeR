@@ -1,3 +1,6 @@
+# compatibility for data.table functions
+.datatable.aware <- TRUE
+
 setnames <- `names<-`
 setclass <- `class<-`
 
