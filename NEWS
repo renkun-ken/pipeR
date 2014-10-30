@@ -1,17 +1,22 @@
-v0.5 (2014-09-30)
+Version 0.5.1
+===
+Improve documentation
+
+
+Version 0.5
 ===
 Remove deprecated operators (%:>% and %|>%), deprecated closure fun() in Pipe object, and deprecated `->` to build lambda expression.
 Support assignment in () with `<-` and `->`.
 Improve the implementation of functions.
 Fix bugs.
 
-v0.4-3 (2014-09-03)
+Version 0.4-3
 ===
 Add syntax for assignment: Side effect with a symbol
 Update documentation.
 Fix bugs for Pipe object
 
-v0.4-2 (2014-08-22)
+Version 0.4-2
 ===
 Deprecate fun() in Pipe object, use .() instead.
 Deprecate lambda expression like (x -> expr), use (x ~ expr) instead.
@@ -21,37 +26,37 @@ Add subsetting, extracting, assigning to Pipe object
 Resolve compatibility issues with data.table (#28)
 Resolve evaluation environment issues (#20, #34)
 
-v0.4-1 (2014-08-15)
+Version 0.4-1
 ===
 Add element extraction syntax
 Improve Pipe function
 Refine vignettes and documentation
 
 
-v0.4 (2014-08-04)
+Version 0.4
 ===
 MAJOR API BREAK: %>>% operator handles all pipeline mechanisms (see README) and other operators are deprecated.
 Add Pipe object that supports object-based pipeline operation.
 
 
-v0.3-3 (2014-08-02)
+Version 0.3-3
 ===
 Resolve issue #16 so that call-using functions will not get the piped object.
 
 
-v0.3-2 (2014-07-26)
+Version 0.3-2
 ===
 Add vignettes
 Minor improvements
 
 
-v0.3-1 (2014-06-28)
+Version 0.3-1
 ===
 Minor implementation improvements
 
 
 
-v0.3 (2014-06-03)
+Version 0.3
 ===
 Major operator change
 
@@ -64,19 +69,19 @@ Lambda piping: `%|>%`
 Now this package can perfectly coexist with magritter and dplyr but is not backward compatible with previous code if old operators are used, please notify the potential issues and upgrade to the new set of operators if possible.
 
 
-v0.2-4 (2014-05-31)
+Version 0.2-4
 ===
 Refined to adapt to CRAN standards.
 
 
 
-v0.2-3 (2014-05-28)
+Version 0.2-3
 ===
 Minor changes to function descriptions
 
 
 
-v0.2-2 (2014-05-08)
+Version 0.2-2
 ===
 This is a major refine of code for better compatibility.
 
@@ -86,7 +91,7 @@ Now the code is highly compatible with functions that have ... as an argument.
 
 
 
-v0.2-1 (2014-05-07)
+Version 0.2-1
 ===
 This version is not compatible with v0.2 due to the switch of lambda expression symbol from `->` to `~`.
 
@@ -95,7 +100,7 @@ The reason is that using ~ directly refers to formula object that is more well d
 
 
 
-v0.2 (2014-04-21)
+Version 0.2
 ===
 1. Add lambda piping `%|>%`
 ```
@@ -113,6 +118,6 @@ rnorm(100,10,1) %>% log %>% diff
 
 
 
-v0.1 (2014-04-08)
+Version 0.1
 ===
 Initial release
