@@ -1,7 +1,7 @@
 Package: pipeR
 Type: Package
 Title: Pipe operator and function
-Version: 0.5.1
+Version: 0.5.1.1
 Author: Kun Ren <ken@renkun.me>
 Maintainer: Kun Ren <ken@renkun.me>
 Description: Provides Pipe operator and function based on syntax which support
