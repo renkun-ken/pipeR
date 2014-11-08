@@ -106,13 +106,16 @@ eval_lambda <- function(x, symbol, expr, envir) {
 pipe_lambda <- function(x, expr, envir, side_effect = TRUE) {
   if(is.symbol(expr) || is.function(expr) || length(expr[[1L]]) > 1L)
     return(pipe_dot(x, expr, envir))
+  pipe_symbol(x, expr, envir, side_effect, pipe_dot)
+}
 
-  switch(as.character(expr[[1L]]),
+pipe_symbol <- function(x, expr, envir, side_effect, default) {
+  switch(as.character(expr)[[1L]],
     "~" = eval_formula(x, expr, envir, side_effect),
     "?" = eval_question(x, expr, envir),
     "=" = eval_equal(x, expr, envir, side_effect),
-    "<-" = , "<<-" = eval_assign(x, expr, envir, side_effect),
-    pipe_dot(x, expr, envir))
+    "<-" = eval_assign(x, expr, envir, side_effect),
+    default(x, expr, envir))
 }
 
 pipe_fun <- function(x, expr, envir) {
@@ -131,7 +134,8 @@ pipe_op <- function(x, expr) {
   expr <- substitute(expr)
   envir <- parent.frame()
   switch(class(expr),
+    "NULL" = NULL,
     "{" = pipe_dot(x, expr, envir),
     "(" = pipe_fun(x, expr[[2L]], envir),
-    pipe_first(x, expr, envir))
+    pipe_symbol(x, expr, envir, TRUE, pipe_first))
 }

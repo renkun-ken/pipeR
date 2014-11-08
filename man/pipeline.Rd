@@ -26,15 +26,27 @@ being piped forward.
 }
 \examples{
 pipeline(1:10, sin, sum)
+
 pipeline(1:10, plot(col = "red", type = "l"))
+
 pipeline(mtcars,
   lm(formula = mpg ~ cyl + wt),
   summary,
   coef)
+
 pipeline({
   mtcars
   lm(formula = mpg ~ cyl + wt)
   summary
+  coef
+})
+
+pipeline({
+  mtcars
+  lm(formula = mpg ~ cyl + wt)
+  ~ lmodel
+  summary
+  ? .$r.squared
   coef
 })
 }
