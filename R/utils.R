@@ -17,8 +17,5 @@ is.formula <- function(expr) {
 }
 
 is.side_effect <- function(expr) {
-  if(!is.formula(expr)) FALSE
-  else if(length(expr) == 2L) TRUE
-  else if(length(expr) == 3L && Recall(expr[[2L]])) TRUE
-  else FALSE
+  is.formula(expr) && (length(expr) == 2L || length(expr) == 3L && Recall(expr[[2L]]))
 }

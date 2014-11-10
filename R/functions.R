@@ -35,7 +35,7 @@ eval_formula <- function(x, expr, envir, side_effect) {
     expr <- expr[[2L]]
     if(is.symbol(expr)) {
       # ~ symbol: assign
-      value <- assign(as.character(expr), x, envir = envir)
+      value <- envir[[as.character(expr)]] <- x
     } else {
       # ~ expr: side effect
       value <- pipe_dot(x, expr, envir)
