@@ -2,10 +2,13 @@
 #' @name pipeR-package
 #' @docType package
 #' @details
-#' pipeR provides Pipe operator and function based on syntax which support to pipe
-#' value to first-argument of a function, to dot in expression, by formula as lambda
-#' expression, for side-effect, and with assignment. The set of syntax is designed to
-#' make the pipeline highly readable.
+#' pipeR provides various styles of function chaining methods: Pipe operator,
+#' Pipe object, and pipeline function, each representing a distinct pipeline
+#' model yet sharing almost a common set of features: A value can be piped to
+#' the first unnamed argument of a function, to dot symbol in an enclosed expression,
+#' by formula as lambda expression, for side-effect, and with assignment.
+#' The set of syntax is designed to make the pipeline more readable and fluent to
+#' a wide variety of operations.
 #'
 #' pipeR Tutorial (\url{http://renkun.me/pipeR-tutorial}) is a highly recommended
 #' complete guide to pipeR.

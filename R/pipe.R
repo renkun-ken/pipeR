@@ -26,7 +26,7 @@
 #' object specially so that it is easy to distinguish the Pipe object from the value it
 #' stores. For example, it can start with \code{p}.
 #' @param value value to pipe (default is \code{NULL})
-#' @name Pipe
+#' @export
 #' @return Pipe object
 #' @examples
 #' \dontrun{
@@ -124,7 +124,6 @@
 #' f1(col="red")
 #' f1(col="green")
 #' }
-#' @export
 Pipe <- function(value = NULL) {
   .envir <- environment()
   .visible <- TRUE
