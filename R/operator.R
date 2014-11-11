@@ -106,6 +106,12 @@
 #' \code{x \%>>\% (? expr)} will print the value of \code{expr} and
 #' return \code{x}, just like a question.
 #'
+#' 8. Other usages:
+#'
+#' If an object is piped to a single \code{character} value, then the string will
+#' be \code{cat()} and starts a new paragraph. This is useful for indicating the
+#' executing process of a pipeline.
+#'
 #' @export
 #' @examples
 #' \dontrun{

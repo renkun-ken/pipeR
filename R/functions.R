@@ -131,10 +131,12 @@ pipe_fun <- function(x, expr, envir) {
 # x : object
 # expr : function name, call, or enclosed expression
 pipe_op <- function(x, expr) {
+  x # avoid lazy evaluation of x
   expr <- substitute(expr)
   envir <- parent.frame()
   switch(class(expr),
     "NULL" = NULL,
+    "character" = { cat(expr, "\n"); x },
     "{" = pipe_dot(x, expr, envir),
     "(" = pipe_fun(x, expr[[2L]], envir),
     pipe_symbol(x, expr, envir, TRUE, pipe_first))

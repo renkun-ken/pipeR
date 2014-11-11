@@ -41,6 +41,14 @@
 #'   ? .$r.squared
 #'   coef
 #' })
+#'
+#' pipeline({
+#'  mtcars
+#'  "estimating a linear model ..."
+#'  lm(formula = mpg ~ cyl + wt)
+#'  "summarizing the model ..."
+#'  summary
+#' })
 pipeline <- function(x, ...) {
   if(missing(x)) return(NULL)
   x <- substitute(x)

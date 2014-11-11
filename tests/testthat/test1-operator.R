@@ -58,6 +58,7 @@ test_that("side effect", {
     x <- 1:3 %>>% (~ x ~ side(x))
     c(x,env$x)
   }, c(1:3,2:4))
+  testthat::expect_output(1:10 %>>% "compute sum" %>>% sum, "compute sum")
 })
 
 test_that("assignment", {

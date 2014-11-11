@@ -23,4 +23,9 @@ test_that("tests", {
     })
     list(z, nhead)
   }, list(1L, 1:5))
+  testthat::expect_output(pipeline({
+    1:10
+    "compute sum"
+    sum
+  }), "compute sum")
 })
