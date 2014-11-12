@@ -13,7 +13,7 @@ ndots <- function(dots) {
 }
 
 is.formula <- function(expr) {
-  is.call(expr) && as.character(expr) == "~"
+  inherits(expr, "formula") || (is.call(expr) && expr[[1L]] == "~")
 }
 
 is.side_effect <- function(expr) {
