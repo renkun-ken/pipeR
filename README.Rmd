@@ -9,12 +9,32 @@ library(pipeR)
 
 [![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR)
 
+pipeR provides various styles of function chaining methods: 
 
-pipeR provides Pipe operator and function based on syntax which support to pipe value to first-argument of a function, to dot in expression, by formula as lambda expression, for side-effect, and with assignment. The set of syntax is designed to make the pipeline highly readable.
+* Pipe operator
+* Pipe object
+* pipeline function
+
+Each of them represents a distinct pipeline model but they share almost a common set of features. A value can be piped to the next expression as
+
+* The first unnamed argument of the function
+* Dot symbol in the expression
+* A named variable defined by a formula
+* Side-effect that branches the pipeline
+* Assignment that saves intermediate values of the pipeline
+
+The set of syntax is designed to make the pipeline more readable and friendly to
+a wide variety of operations.
 
 **[pipeR Tutorial](http://renkun.me/pipeR-tutorial) is a highly recommended complete guide to pipeR.**
 
 ## Installation
+
+Install the latest development version from GitHub:
+
+```r
+devtools::install_github("renkun-ken/pipeR")
+```
 
 Install from [CRAN](http://cran.r-project.org/web/packages/pipeR/index.html):
 
@@ -22,13 +42,7 @@ Install from [CRAN](http://cran.r-project.org/web/packages/pipeR/index.html):
 install.packages("pipeR")
 ```
 
-Install the development version from GitHub:
-
-```r
-devtools::install_github("renkun-ken/pipeR")
-```
-
-## Motivation
+## Getting started
 
 The following code is an example written in traditional approach:
 
@@ -39,7 +53,9 @@ plot(density(sample(mtcars$mpg, size = 10000, replace = TRUE),
   kernel = "gaussian"), col = "red", main="density of mpg (bootstrap)")
 ```
 
-The code is deeply nested and can be hard to read and maintain. With Pipe operator, it can be reorganized to
+The code is deeply nested and can be hard to read and maintain. In the following examples, the traditional code is rewritten by Pipe operator, `Pipe()` function and `pipeline()` function, respectively.
+
+* Operator-based pipeline
 
 ```r
 mtcars$mpg %>>%
@@ -48,7 +64,34 @@ mtcars$mpg %>>%
   plot(col = "red", main = "density of mpg (bootstrap)")
 ```
 
-The code becomes much cleaner, more readable and more maintainable.
+* Object-based pipeline (`Pipe()`)
+
+```r
+Pipe(mtcars$mpg)$
+  sample(size = 10000, replace = TRUE)$
+  density(kernel = "gaussian")$
+  plot(col = "red", main = "density of mpg (bootstrap)")
+```
+
+* Argument-based pipeline
+
+```r
+pipeline(mtcars$mpg,
+  sample(size = 10000, replace = TRUE),
+  density(kernel = "gaussian"),
+  plot(col = "red", main = "density of mpg (bootstrap)"))
+```
+
+* Expression-based pipeline
+
+```r
+pipeline({
+  mtcars$mpg
+  sample(size = 10000, replace = TRUE)
+  density(kernel = "gaussian")
+  plot(col = "red", main = "density of mpg (bootstrap)")  
+})
+```
 
 ## Usage
 
@@ -342,11 +385,24 @@ Pipe(1:100)$
   value
 ```
 
-## Help overview
+### `pipeline()`
+
+`pipeline()` provides argument-based and expression-based pipeline evaluation mechanisms. Its behavior depends on how its arguments are supplied. If only the first argument is supplied, it expects an expression enclosed in `{}` in which each line represents a pipeline step. If, instead, multiple arguments are supplied, it regards each argument as a pipeline step. For all pipeline steps, the expressions will be transformed to be connected by `%>>%` so that they behave exactly the same.
+
+One notable difference is that in `pipeline()`'s argument or expression, the special symbols to perform specially defined pipeline tasks (e.g. side-effect) does not need to be enclosed within `()` because no operator priority issues arise as they do in using `%>>%`.
 
 ```r
-help(package = pipeR)
+pipeline({
+  mtcars
+  lm(formula = mpg ~ cyl + wt)
+  ~ lmodel
+  summary
+  ? .$r.squared
+  coef
+})
 ```
+
+Thanks [@hoxo_m](https://twitter.com/hoxo_m) for the idea presented in this [post](http://qiita.com/hoxo_m/items/3fd3d2520fa014a248cb).
 
 ## License
 
