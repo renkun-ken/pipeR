@@ -1,8 +1,3 @@
-Version 0.5.1
-===
-Improve documentation
-
-
 Version 0.5
 ===
 Remove deprecated operators (%:>% and %|>%), deprecated closure fun() in Pipe object, and deprecated `->` to build lambda expression.
