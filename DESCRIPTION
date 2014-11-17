@@ -1,19 +1,19 @@
 Package: pipeR
 Type: Package
 Title: Multi-paradigm pipeline implementation for R
-Version: 0.5.2.2
+Version: 0.5.3
 Author: Kun Ren <ken@renkun.me>
 Maintainer: Kun Ren <ken@renkun.me>
-Description: Provides various styles of function chaining methods: Pipe operator,
-    Pipe object, and pipeline function, each representing a distinct pipeline
-    model yet sharing almost a common set of features: A value can be piped to
-    the first unnamed argument of a function, to dot symbol in an enclosed expression,
-    by formula as lambda expression, for side-effect, and with assignment.
-    The set of syntax is designed to make the pipeline more readable and friendly to
-    a wide variety of operations.
+Description: Provides various styles of function chaining methods: Pipe
+    operator, Pipe object, and pipeline function, each representing a distinct
+    pipeline model yet sharing almost a common set of features: A value can be
+    piped to the first unnamed argument of a function, to dot symbol in an
+    enclosed expression, by formula as lambda expression, for side-effect, and
+    with assignment. The set of syntax is designed to make the pipeline more
+    readable and friendly to a wide variety of operations.
 Depends:
     R (>= 2.15)
-Date: 2014-11-12
+Date: 2014-11-17
 Suggests:
     testthat
 License: MIT + file LICENSE

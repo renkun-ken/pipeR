@@ -183,3 +183,15 @@ test_that("scoping", {
     1:3 %>>% (function(x) mean(x + . * p))
   })(1),5)
 })
+
+test_that("printing", {
+  expect_output({
+    z <- 1:10 %>>% (? length(.)) %>>% sum
+  }, "^\\? length\\(\\.\\)\n\\[1\\] 10$")
+  expect_output({
+    z <- 1:10 %>>% ("length" ? length(.)) %>>% sum
+  }, "^\\? length\\s*\n\\[1\\] 10$")
+  expect_output({
+    z <- 1:10 %>>% "numbers" %>>% sum
+  }, "^numbers\\s*$")
+})

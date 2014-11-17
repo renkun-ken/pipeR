@@ -43,6 +43,7 @@ pipeline({
 
 pipeline({
   mtcars
+  "Sample data" ? head(., 3)
   lm(formula = mpg ~ cyl + wt)
   ~ lmodel
   summary

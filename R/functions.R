@@ -45,10 +45,17 @@ eval_formula <- function(x, expr, envir, side_effect) {
 }
 
 eval_question <- function(x, expr, envir) {
-  expr <- expr[[2L]]
-  value <- pipe_lambda(x, expr, envir)
-  cat("? ")
-  print(expr)
+  if(length(expr) == 2L) {
+    expr <- expr[[2L]]
+    value <- pipe_lambda(x, expr, envir)
+    cat("? ")
+    print(expr)
+  } else if(length(expr) == 3L && is.character(expr[[2L]])) {
+    value <- pipe_lambda(x, expr[[3L]], envir)
+    cat("?", expr[[2L]], "\n")
+  } else {
+    stop("Invalid question expression", call. = FALSE)
+  }
   print(value)
   x
 }

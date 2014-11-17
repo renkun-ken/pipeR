@@ -106,6 +106,9 @@
 #' \code{x \%>>\% (? expr)} will print the value of \code{expr} and
 #' return \code{x}, just like a question.
 #'
+#' \code{x \%>>\% ("title" ? expr)} will print \code{"title"} as the question, the
+#' value of \code{expr}, and return \code{x}.
+#'
 #' 8. Other usages:
 #'
 #' If an object is piped to a single \code{character} value, then the string will
@@ -167,10 +170,22 @@
 #' # Pipe for element extraction
 #' mtcars %>>% (mpg)
 #'
-#' # Pipe for questioning
+#' # Pipe for questioning and printing
 #' rnorm(100) %>>%
 #'   (? summary(.)) %>>%
 #'   plot(col="red")
+#'
+#' mtcars %>>%
+#'   "data prepared" %>>%
+#'   lm(formula = mpg ~ wt + cyl) %>>%
+#'   summary %>>%
+#'   coef
+#'
+#' mtcars %>>%
+#'   ("Sample data" ? head(., 3)) %>>%
+#'   lm(formula = mpg ~ wt + cyl) %>>%
+#'   summary %>>%
+#'   coef
 #'
 #' # Pipe to an anomymous function
 #' rnorm(100) %>>% (function(x) mean(x))()
