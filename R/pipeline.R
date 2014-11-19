@@ -10,7 +10,7 @@
 #' chained by \code{\%>>\%} operator.
 #'
 #' When \code{...} is not missing but given a number of function names or calls, or enclosed
-#' expressions, \code{x} will be evaluated as an ordianry expression as the first object
+#' expressions, \code{x} will be evaluated as an ordinary expression as the first object
 #' being piped forward.
 #'
 #' @param x An object or expression
