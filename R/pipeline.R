@@ -5,16 +5,18 @@
 #' operator but produce the same result.
 #'
 #' @details
-#' When \code{...} is missing, \code{x} should be an expression enclosed in \code{\{\}} and
-#' will be evaluated as a pipeline expression, that is, the expression works as if they are
-#' chained by \code{\%>>\%} operator.
+#' When \code{pipeline(...)} is called with multiple arguments, the arguments will be
+#' regarded as pipeline expressions.
 #'
-#' When \code{...} is not missing but given a number of function names or calls, or enclosed
-#' expressions, \code{x} will be evaluated as an ordinary expression as the first object
-#' being piped forward.
+#' When \code{pipeline(...)} is called with a single argument, the argument is expected to
+#' be a block expression enclosed by \code{\{\}} in which each expression will be regarded
+#' as a pipeline expression.
 #'
-#' @param x An object or expression
-#' @param ... The expressions in pipeline. Ignored when
+#' The pipeline expressions will be chained sequentially by \code{\%>>\%} and be evaluated
+#' to produce the same results as if using the pipe operator.
+#'
+#' @param ... Pipeline expressions. Supply multiple pipeline expressions as arguments or
+#' only an enclosed expression within \code{\{\}} as the first argument.
 #' @export
 #' @examples
 #' pipeline(1:10, sin, sum)
@@ -50,10 +52,14 @@
 #'  "summarizing the model ..."
 #'  summary
 #' })
-pipeline <- function(x, ...) {
-  if(missing(x)) return(NULL)
-  x <- substitute(x)
-  expr <- if(missing(...) && !is.null(x) && x == "{") x[-1L] else c(list(x), dots(...))
-  expr <- Reduce(function(pl, p) as.call(list(pipe_op, pl, p)), expr)
+pipeline <- function(...) {
+  if(missing(...)) return(invisible(NULL))
+  dots <- match.call(expand.dots = FALSE)$...
+  if(length(dots) == 1L) {
+    dots <- dots[[1L]]
+    if(class(dots) == "{") dots <- dots[-1L]
+    else return(eval(dots, envir = parent.frame()))
+  }
+  expr <- Reduce(function(pl, p) as.call(list(pipe_op, pl, p)), dots)
   eval(expr, envir = parent.frame())
 }

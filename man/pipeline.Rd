@@ -3,12 +3,11 @@
 \alias{pipeline}
 \title{Evaluate an expression pipeline}
 \usage{
-pipeline(x, ...)
+pipeline(...)
 }
 \arguments{
-\item{x}{An object or expression}
-
-\item{...}{The expressions in pipeline. Ignored when}
+\item{...}{Pipeline expressions. Supply multiple pipeline expressions as arguments or
+only an enclosed expression within \code{\{\}} as the first argument.}
 }
 \description{
 Evaluate an expression pipeline enclosed by \code{\{\}} or a sequence of expressions
@@ -16,13 +15,15 @@ as as pipeline. This functions works to chain expressions without using \code{\%
 operator but produce the same result.
 }
 \details{
-When \code{...} is missing, \code{x} should be an expression enclosed in \code{\{\}} and
-will be evaluated as a pipeline expression, that is, the expression works as if they are
-chained by \code{\%>>\%} operator.
+When \code{pipeline(...)} is called with multiple arguments, the arguments will be
+regarded as pipeline expressions.
 
-When \code{...} is not missing but given a number of function names or calls, or enclosed
-expressions, \code{x} will be evaluated as an ordinary expression as the first object
-being piped forward.
+When \code{pipeline(...)} is called with a single argument, the argument is expected to
+be a block expression enclosed by \code{\{\}} in which each expression will be regarded
+as a pipeline expression.
+
+The pipeline expressions will be chained sequentially by \code{\%>>\%} and be evaluated
+to produce the same results as if using the pipe operator.
 }
 \examples{
 pipeline(1:10, sin, sum)
