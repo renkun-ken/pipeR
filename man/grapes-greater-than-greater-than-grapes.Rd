@@ -12,17 +12,15 @@ x \%>>\% expr
 }
 \description{
 The \code{\%>>\%} operator pipes the object on the left-hand side to the
-right-hand side as either the first unnamed argument and \code{.}, to
-\code{.} in an enclosed expression, by lambda expression, or to a symbol
-for assignment.
+right-hand side according to the syntax.
 }
 \details{
 Pipe operator \code{\%>>\%} determines the piping mechanism by the syntax
 of the expression on the right-hand side.
 
-\code{\%>>\%} supports the following piping mechanisms:
+\code{\%>>\%} supports the following syntaxes:
 
-1. Pipe to first argument:
+1. Pipe to first unnamed argument:
 
 Whenever a function name or call with or without parameters follows
 the operator, the left-hand side value will be piped to the right-hand
@@ -31,6 +29,8 @@ side function as the first unnamed argument.
 \code{x \%>>\% f} evaluated as \code{f(x)}
 
 \code{x \%>>\% f(...)} evaluated as \code{f(x,...)}
+
+\code{x \%>>\% package::name(...)} evaluated as \code{package::name(x, ...)}
 
 2. Pipe to \code{.} in enclosed expression:
 
@@ -105,7 +105,16 @@ is defined. Moreover, it also works with S4 object.
 \code{list}, \code{environment}, \code{data.frame}, etc; and
 \code{x@name} when \code{x} is S4 object.
 
-7. Pipe for questioning:
+7. Pipe to string:
+
+If an object is piped to a single \code{character} value, then the string will
+be \code{cat()} and starts a new paragraph. This is useful for indicating the
+executing process of a pipeline.
+
+\code{x \%>>\% "print something" \%>>\% f(y)} will \code{cat("print something")}
+and then evaluate \code{f(x,y)}.
+
+8. Pipe for questioning:
 
 If a lambda expression start with \code{?}, the expression will be a side
 effect printing the syntax and the value of the expression. This is a
@@ -117,12 +126,6 @@ return \code{x}, just like a question.
 
 \code{x \%>>\% ("title" ? expr)} will print \code{"title"} as the question, the
 value of \code{expr}, and return \code{x}.
-
-8. Other usages:
-
-If an object is piped to a single \code{character} value, then the string will
-be \code{cat()} and starts a new paragraph. This is useful for indicating the
-executing process of a pipeline.
 }
 \examples{
 \dontrun{
