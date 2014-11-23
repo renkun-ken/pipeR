@@ -9,7 +9,7 @@ dots <- function(...) {
 }
 
 ndots <- function(dots) {
-  length(dots) >= 1L && any(nzchar(dots))
+  any(nzchar(dots))
 }
 
 is.formula <- function(expr) {
