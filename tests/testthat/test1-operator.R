@@ -111,6 +111,16 @@ test_that("assignment", {
     list(x,p)
   },list(2,1:3))
   expect_identical({
+    m <- 0
+    local({1:10 %>>% (. -> m)})
+    m
+  },0)
+  expect_identical({
+    m <- 0
+    local({1:10 %>>% (. ->> m)})
+    m
+  },1:10)
+  expect_identical({
     x <- 1:3 %>>% (m ~ m + 1L -> p) %>>% mean()
     list(x,p)
   },list(3,2:4))

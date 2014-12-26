@@ -63,32 +63,34 @@ eval_question <- function(x, expr, envir) {
 eval_equal <- function(x, expr, envir, side_effect) {
   lhs <- expr[[2L]]
   rhs <- expr[[3L]]
+  op <- quote(`<-`)
   value <- pipe_lambda(x, rhs, envir)
   if(is.side_effect(lhs)) {
-    call <- as.call(list(quote(`<-`), lhs[[2L]], value))
+    call <- as.call(list(op, lhs[[2L]], value))
     value <- eval(call, envir)
     return(if(side_effect) x else value)
   } else {
-    call <- as.call(list(quote(`<-`), lhs, value))
+    call <- as.call(list(op, lhs, value))
     return(eval(call, envir))
   }
 }
 
-eval_assign <- function(x, expr, envir, side_effect) {
+eval_assign <- function(x, expr, envir, op, side_effect) {
   lhs <- expr[[2L]]
   rhs <- expr[[3L]]
+  op <- as.symbol(op)
   value <- pipe_lambda(x, rhs, envir, FALSE)
   if(is.side_effect(lhs)) {
     # ~ x <- expr
-    call <- as.call(list(quote(`<-`),lhs[[2L]],value))
+    call <- as.call(list(op, lhs[[2L]], value))
     value <- eval(call, envir)
     return(if(side_effect) x else value)
   } else if(is.side_effect(rhs)) {
-    call <- as.call(list(quote(`<-`),lhs,value))
+    call <- as.call(list(op, lhs, value))
     value <- eval(call, envir)
     return(if(side_effect) x else value)
   } else {
-    call <- as.call(list(quote(`<-`), lhs, value))
+    call <- as.call(list(op, lhs, value))
     return(eval(call, envir))
   }
 }
@@ -121,7 +123,8 @@ pipe_symbol <- function(x, expr, envir, side_effect, default) {
     "~" = eval_formula(x, expr, envir, side_effect),
     "?" = eval_question(x, expr, envir),
     "=" = eval_equal(x, expr, envir, side_effect),
-    "<-" = eval_assign(x, expr, envir, side_effect),
+    "<-" = eval_assign(x, expr, envir, "<-", side_effect),
+    "<<-" = eval_assign(x, expr, envir, "<<-", side_effect),
     default(x, expr, envir))
 }
 
