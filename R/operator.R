@@ -56,8 +56,8 @@
 #'
 #' 5. Pipe for assignment
 #'
-#' Equal operator (\code{=}) indicates assignment. This is particularly
-#' useful when one needs to save an intermediate value in the middle
+#' Equal operator (\code{=}) and assignment operators (\code{<-} and \code{->}) perform assignment.
+#' This is particularly useful when one needs to save an intermediate value in the middle
 #' of a pipeline without breaking it.
 #'
 #' Assignment as side-effect
@@ -84,6 +84,11 @@
 #'
 #' \code{x \%>>\% (y = p ~ f(p))} evaluated as \code{y <- f(x)} and returns
 #' \code{f(x)}.
+#'
+#' The equal sign above can be interchangeably used as the assignment operator \code{<-}.
+#' Note that the global assignment operator \code{<<-} and \code{->>} in a pipeline also
+#' performs global assignment that is subject to side-effect outside the calling
+#' environment.
 #'
 #' 6. Pipe for element extraction:
 #'
