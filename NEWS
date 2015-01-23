@@ -1,3 +1,14 @@
+Version 0.6
+===
+* New features
+  * Add `pipeline` function to support expression-based pipeline evaluation. (#60)
+  * Piping to string now `cat` the string in the console. (#61)
+  * Question mark now supports binary operation `("message" ? expression)` in which
+    `expression` is evaluated while `"message"` is printed ahead of its value. (#62)
+* Improvements
+  * `<<-` and `->>` now correctly performs global assignment in enclosed expression in
+    a pipeline. (#65)
+
 Version 0.5
 ===
 Remove deprecated operators (%:>% and %|>%), deprecated closure fun() in Pipe object, and deprecated `->` to build lambda expression.
