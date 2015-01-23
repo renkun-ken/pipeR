@@ -23,7 +23,7 @@ Each of them represents a distinct pipeline model but they share almost a common
 * Side-effect that branches the pipeline
 * Assignment that saves intermediate values of the pipeline
 
-The set of syntax is designed to make the pipeline more readable and friendly to
+The syntax is designed to make the pipeline more readable and friendly to
 a wide variety of operations.
 
 **[pipeR Tutorial](http://renkun.me/pipeR-tutorial) is a highly recommended complete guide to pipeR.**
