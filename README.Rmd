@@ -7,7 +7,7 @@ library(pipeR)
 
 # pipeR
 
-[![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/renkun-ken/pipeR?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR)
 
 pipeR provides various styles of function chaining methods: 
 
@@ -15,13 +15,13 @@ pipeR provides various styles of function chaining methods:
 * Pipe object
 * pipeline function
 
-Each of them represents a distinct pipeline model but they share almost a common set of features. A value can be piped to the next expression as
+Each of them represents a distinct pipeline model but they share almost a common set of features. A value can be piped to the next expression
 
-* The first unnamed argument of the function
-* Dot symbol in the expression
-* A named variable defined by a formula
-* Side-effect that branches the pipeline
-* Assignment that saves intermediate values of the pipeline
+* As the first unnamed argument of the function
+* As dot symbol (`.`) in the expression
+* As a named variable defined by a formula
+* For side-effect that carries over the input to the next
+* For assignment that saves an intermediate value
 
 The syntax is designed to make the pipeline more readable and friendly to
 a wide variety of operations.
