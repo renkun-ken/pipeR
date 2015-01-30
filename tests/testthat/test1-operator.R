@@ -204,4 +204,7 @@ test_that("printing", {
   expect_output({
     z <- 1:10 %>>% "numbers" %>>% sum
   }, "^numbers\\s*$")
+  expect_error({
+    1:10 %>>% (1 ? sum(.))
+  }, "Invalid question expression")
 })

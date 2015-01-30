@@ -157,3 +157,10 @@ test_that("scoping", {
   expect_identical(local({p <- function(x) 0L; pobj()$value}),1L)
   expect_identical(local({p <- function(x) 0L; Pipe(0)$p()$value}),0L)
 })
+
+test_that("printing", {
+  expect_output(print(Pipe(1:3)), "<Pipe: integer>.+")
+  expect_output(print(Pipe(1:10)$invisible()), "")
+  expect_output(str(Pipe(1:3)), "<Pipe>.+")
+  expect_output(str(Pipe(1:3)$invisible()), "<Pipe>.+")
+})

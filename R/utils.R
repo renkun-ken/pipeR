@@ -4,10 +4,6 @@
 setnames <- `names<-`
 setclass <- `class<-`
 
-dots <- function(...) {
-  eval(substitute(alist(...)))
-}
-
 ndots <- function(dots) {
   any(nzchar(dots))
 }
