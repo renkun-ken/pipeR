@@ -2,7 +2,7 @@
 
 # pipeR
 
-[![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR)
+[![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR) [![Coverage Status](https://coveralls.io/repos/renkun-ken/pipeR/badge.svg)](https://coveralls.io/r/renkun-ken/pipeR)
 
 pipeR provides various styles of function chaining methods: 
 
