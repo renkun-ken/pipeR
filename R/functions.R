@@ -26,7 +26,7 @@ eval_formula <- function(x, expr, envir, side_effect) {
     if(is.side_effect(lhs)) {
       # ~ expr: side effect
       value <- eval_lambda(x, lhs[[2L]], rhs, envir)
-      return(if(side_effect) x else value)
+      return(if (side_effect) x else value)
     } else {
       # expr: lambda piping
       return(eval_lambda(x, lhs, rhs, envir))
@@ -40,7 +40,7 @@ eval_formula <- function(x, expr, envir, side_effect) {
       # ~ expr: side effect
       value <- pipe_dot(x, expr, envir)
     }
-    return(if(side_effect) x else value)
+    return(if (side_effect) x else value)
   }
 }
 
@@ -68,7 +68,7 @@ eval_equal <- function(x, expr, envir, side_effect) {
   if(is.side_effect(lhs)) {
     call <- as.call(list(op, lhs[[2L]], value))
     value <- eval(call, envir)
-    return(if(side_effect) x else value)
+    return(if (side_effect) x else value)
   } else {
     call <- as.call(list(op, lhs, value))
     return(eval(call, envir))
@@ -84,11 +84,11 @@ eval_assign <- function(x, expr, envir, op, side_effect) {
     # ~ x <- expr
     call <- as.call(list(op, lhs[[2L]], value))
     value <- eval(call, envir)
-    return(if(side_effect) x else value)
+    return(if (side_effect) x else value)
   } else if(is.side_effect(rhs)) {
     call <- as.call(list(op, lhs, value))
     value <- eval(call, envir)
-    return(if(side_effect) x else value)
+    return(if (side_effect) x else value)
   } else {
     call <- as.call(list(op, lhs, value))
     return(eval(call, envir))
@@ -146,7 +146,10 @@ pipe_op <- function(x, expr) {
   envir <- parent.frame()
   switch(class(expr),
     "NULL" = NULL,
-    "character" = { cat(expr, "\n"); x },
+    "character" = {
+      cat(expr, "\n")
+      x
+    },
     "{" = pipe_dot(x, expr, envir),
     "(" = pipe_fun(x, expr[[2L]], envir),
     pipe_symbol(x, expr, envir, TRUE, pipe_first))

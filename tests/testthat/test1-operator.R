@@ -13,17 +13,18 @@ test_that("first-argument piping", {
   expect_identical(1:3 %>>% c(1,2,.), c(1:3,1,2,1:3))
 
   # working with higher-order functions
-  expect_identical(1:5 %>>% lapply(function(i) i+1), lapply(1:5,function(i) i+1))
-  expect_identical(1:5 %>>% vapply(function(i) c(i,i^2),numeric(2)),
-    vapply(1:5,function(i) c(i,i^2),numeric(2)))
+  expect_identical(1:5 %>>% lapply(function(i) i + 1),
+    lapply(1:5, function(i) i + 1))
+  expect_identical(1:5 %>>% vapply(function(i) c(i,i ^ 2), numeric(2)),
+    vapply(1:5, function(i) c(i, i ^ 2), numeric(2)))
 
   # working with ...
   fun1 <- function(x,a,b) {
-    c(x+a,x+b)
+    c(x + a, x + b)
   }
 
   fun2 <- function(x,...) {
-    fun1(x,...)
+    fun1(x, ...)
   }
 
   expect_identical(1:10 %>>% fun2(a=-1,b=1), fun1(1:10,a=-1,b=1))
@@ -31,7 +32,7 @@ test_that("first-argument piping", {
   # working with closures
   fun1 <- function(p) {
     f <- function(x) {
-      x+p
+      x + p
     }
     1:3 %>>% f()
   }
@@ -41,7 +42,9 @@ test_that("first-argument piping", {
 
 test_that("lambda piping", {
   expect_identical(1:3 %>>% (c(1,2,.)), c(1,2,1:3))
-  expect_identical(1:3 %>>% {c(1,2,.)}, c(1,2,1:3))
+  expect_identical(1:3 %>>% {
+    c(1, 2, .)
+  }, c(1,2,1:3))
   expect_identical(1:3 %>>% (x ~ c(1,2,x)), c(1,2,1:3))
 })
 
