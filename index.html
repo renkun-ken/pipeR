@@ -1,37 +1,25 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="pipeR : Multi-paradigm Pipeline Implementation">
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>pipeR</title>
+    <meta charset="UTF-8">
+    <title>pipeR by renkun-ken</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
+    <section class="page-header">
+      <h1 class="project-name">pipeR</h1>
+      <h2 class="project-tagline">Multi-paradigm Pipeline Implementation</h2>
+      <a href="https://github.com/renkun-ken/pipeR" class="btn">View on GitHub</a>
+      <a href="https://github.com/renkun-ken/pipeR/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/renkun-ken/pipeR/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/renkun-ken/pipeR">View on GitHub</a>
-
-          <h1 id="project_title">pipeR</h1>
-          <h2 id="project_tagline">Multi-paradigm Pipeline Implementation</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/renkun-ken/pipeR/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/renkun-ken/pipeR/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
+    <section class="main-content">
+      <h1>
 <a id="piper" class="anchor" href="#piper" aria-hidden="true"><span class="octicon octicon-link"></span></a>pipeR</h1>
 
 <p><a href="https://travis-ci.org/renkun-ken/pipeR"><img src="https://travis-ci.org/renkun-ken/pipeR.png?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/r/renkun-ken/pipeR"><img src="https://coveralls.io/repos/renkun-ken/pipeR/badge.svg" alt="Coverage Status"></a> <a href="http://issuestats.com/github/renkun-ken/pipeR"><img src="http://issuestats.com/github/renkun-ken/pipeR/badge/issue?style=flat" alt="Issue Stats"></a> <a href="http://issuestats.com/github/renkun-ken/pipeR"><img src="http://issuestats.com/github/renkun-ken/pipeR/badge/pr?style=flat" alt="Issue Stats"></a></p>
@@ -64,11 +52,11 @@ a wide variety of operations.</p>
 
 <p>Install the latest development version from GitHub:</p>
 
-<div class="highlight highlight-r"><pre><span class="pl-e">devtools</span><span class="pl-k">::</span>install_github(<span class="pl-s1"><span class="pl-pds">"</span>renkun-ken/pipeR<span class="pl-pds">"</span></span>)</pre></div>
+<div class="highlight highlight-r"><pre><span class="pl-e">devtools</span><span class="pl-k">::</span>install_github(<span class="pl-s"><span class="pl-pds">"</span>renkun-ken/pipeR<span class="pl-pds">"</span></span>)</pre></div>
 
 <p>Install from <a href="http://cran.r-project.org/web/packages/pipeR/index.html">CRAN</a>:</p>
 
-<div class="highlight highlight-r"><pre>install.packages(<span class="pl-s1"><span class="pl-pds">"</span>pipeR<span class="pl-pds">"</span></span>)</pre></div>
+<div class="highlight highlight-r"><pre>install.packages(<span class="pl-s"><span class="pl-pds">"</span>pipeR<span class="pl-pds">"</span></span>)</pre></div>
 
 <h2>
 <a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h2>
@@ -77,8 +65,8 @@ a wide variety of operations.</p>
 
 <p>It basically performs bootstrap on <code>mpg</code> values in built-in dataset <code>mtcars</code> and plots  its density function estimated by Gaussian kernel.</p>
 
-<div class="highlight highlight-r"><pre>plot(density(sample(<span class="pl-vo">mtcars</span><span class="pl-k">$</span><span class="pl-vo">mpg</span>, <span class="pl-v">size</span> <span class="pl-k">=</span> <span class="pl-c1">10000</span>, <span class="pl-v">replace</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>), 
-  <span class="pl-v">kernel</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>gaussian<span class="pl-pds">"</span></span>), <span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-v">main</span><span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>density of mpg (bootstrap)<span class="pl-pds">"</span></span>)</pre></div>
+<div class="highlight highlight-r"><pre>plot(density(sample(<span class="pl-smi">mtcars</span><span class="pl-k">$</span><span class="pl-smi">mpg</span>, <span class="pl-v">size</span> <span class="pl-k">=</span> <span class="pl-c1">10000</span>, <span class="pl-v">replace</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>), 
+  <span class="pl-v">kernel</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>gaussian<span class="pl-pds">"</span></span>), <span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-v">main</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>density of mpg (bootstrap)<span class="pl-pds">"</span></span>)</pre></div>
 
 <p>The code is deeply nested and can be hard to read and maintain. In the following examples, the traditional code is rewritten by Pipe operator, <code>Pipe()</code> function and <code>pipeline()</code> function, respectively.</p>
 
@@ -86,38 +74,38 @@ a wide variety of operations.</p>
 <li>Operator-based pipeline</li>
 </ul>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span><span class="pl-k">$</span><span class="pl-vo">mpg</span> %<span class="pl-k">&gt;&gt;</span>%
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span><span class="pl-k">$</span><span class="pl-smi">mpg</span> %<span class="pl-k">&gt;&gt;</span>%
   sample(<span class="pl-v">size</span> <span class="pl-k">=</span> <span class="pl-c1">10000</span>, <span class="pl-v">replace</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>) %<span class="pl-k">&gt;&gt;</span>%
-  density(<span class="pl-v">kernel</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>gaussian<span class="pl-pds">"</span></span>) %<span class="pl-k">&gt;&gt;</span>%
-  plot(<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-v">main</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>density of mpg (bootstrap)<span class="pl-pds">"</span></span>)</pre></div>
+  density(<span class="pl-v">kernel</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>gaussian<span class="pl-pds">"</span></span>) %<span class="pl-k">&gt;&gt;</span>%
+  plot(<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-v">main</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>density of mpg (bootstrap)<span class="pl-pds">"</span></span>)</pre></div>
 
 <ul>
 <li>Object-based pipeline (<code>Pipe()</code>)</li>
 </ul>
 
-<div class="highlight highlight-r"><pre>Pipe(<span class="pl-vo">mtcars</span><span class="pl-k">$</span><span class="pl-vo">mpg</span>)<span class="pl-k">$</span>
+<div class="highlight highlight-r"><pre>Pipe(<span class="pl-smi">mtcars</span><span class="pl-k">$</span><span class="pl-smi">mpg</span>)<span class="pl-k">$</span>
   sample(<span class="pl-v">size</span> <span class="pl-k">=</span> <span class="pl-c1">10000</span>, <span class="pl-v">replace</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>)<span class="pl-k">$</span>
-  density(<span class="pl-v">kernel</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>gaussian<span class="pl-pds">"</span></span>)<span class="pl-k">$</span>
-  plot(<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-v">main</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>density of mpg (bootstrap)<span class="pl-pds">"</span></span>)</pre></div>
+  density(<span class="pl-v">kernel</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>gaussian<span class="pl-pds">"</span></span>)<span class="pl-k">$</span>
+  plot(<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-v">main</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>density of mpg (bootstrap)<span class="pl-pds">"</span></span>)</pre></div>
 
 <ul>
 <li>Argument-based pipeline</li>
 </ul>
 
-<div class="highlight highlight-r"><pre>pipeline(<span class="pl-vo">mtcars</span><span class="pl-k">$</span><span class="pl-vo">mpg</span>,
+<div class="highlight highlight-r"><pre>pipeline(<span class="pl-smi">mtcars</span><span class="pl-k">$</span><span class="pl-smi">mpg</span>,
   sample(<span class="pl-v">size</span> <span class="pl-k">=</span> <span class="pl-c1">10000</span>, <span class="pl-v">replace</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>),
-  density(<span class="pl-v">kernel</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>gaussian<span class="pl-pds">"</span></span>),
-  plot(<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-v">main</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>density of mpg (bootstrap)<span class="pl-pds">"</span></span>))</pre></div>
+  density(<span class="pl-v">kernel</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>gaussian<span class="pl-pds">"</span></span>),
+  plot(<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-v">main</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>density of mpg (bootstrap)<span class="pl-pds">"</span></span>))</pre></div>
 
 <ul>
 <li>Expression-based pipeline</li>
 </ul>
 
 <div class="highlight highlight-r"><pre>pipeline({
-  <span class="pl-vo">mtcars</span><span class="pl-k">$</span><span class="pl-vo">mpg</span>
+  <span class="pl-smi">mtcars</span><span class="pl-k">$</span><span class="pl-smi">mpg</span>
   sample(<span class="pl-v">size</span> <span class="pl-k">=</span> <span class="pl-c1">10000</span>, <span class="pl-v">replace</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>)
-  density(<span class="pl-v">kernel</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>gaussian<span class="pl-pds">"</span></span>)
-  plot(<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-v">main</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>density of mpg (bootstrap)<span class="pl-pds">"</span></span>)  
+  density(<span class="pl-v">kernel</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>gaussian<span class="pl-pds">"</span></span>)
+  plot(<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-v">main</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>density of mpg (bootstrap)<span class="pl-pds">"</span></span>)  
 })</pre></div>
 
 <h2>
@@ -137,15 +125,15 @@ a wide variety of operations.</p>
 <p>On the right-hand side of <code>%&gt;&gt;%</code>, whenever a function name or call is supplied, the left-hand side value will always be put to the first unnamed argument to that function.</p>
 
 <div class="highlight highlight-r"><pre>rnorm(<span class="pl-c1">100</span>) %<span class="pl-k">&gt;&gt;</span>%
-  <span class="pl-vo">plot</span></pre></div>
+  <span class="pl-smi">plot</span></pre></div>
 
 <div class="highlight highlight-r"><pre>rnorm(<span class="pl-c1">100</span>) %<span class="pl-k">&gt;&gt;</span>%
-  plot(<span class="pl-v">col</span><span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>)</pre></div>
+  plot(<span class="pl-v">col</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>)</pre></div>
 
 <p>Sometimes the value on the left is needed at multiple places. One can use <code>.</code> to represent it anywhere in the function call.</p>
 
 <div class="highlight highlight-r"><pre>rnorm(<span class="pl-c1">100</span>) %<span class="pl-k">&gt;&gt;</span>%
-  plot(<span class="pl-v">col</span><span class="pl-k">=</span><span class="pl-s1"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-v">main</span><span class="pl-k">=</span>length(.))</pre></div>
+  plot(<span class="pl-v">col</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>, <span class="pl-v">main</span><span class="pl-k">=</span>length(.))</pre></div>
 
 <p>There are situations where one calls a function in a namespace with <code>::</code>. In this case, the call must end up with <code>()</code>.</p>
 
@@ -153,37 +141,37 @@ a wide variety of operations.</p>
   <span class="pl-e">stats</span><span class="pl-k">::</span>median()
 
 rnorm(<span class="pl-c1">100</span>) %<span class="pl-k">&gt;&gt;</span>%
-  <span class="pl-e">graphics</span><span class="pl-k">::</span>plot(<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>)</pre></div>
+  <span class="pl-e">graphics</span><span class="pl-k">::</span>plot(<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>)</pre></div>
 
 <h4>
 <a id="pipe-to--in-an-expression" class="anchor" href="#pipe-to--in-an-expression" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pipe to <code>.</code> in an expression</h4>
 
 <p>Not all functions are pipe-friendly in every case: You may find some functions do not take your data produced by a pipeline as the first argument. In this case, you can enclose your expression by <code>{}</code> or <code>()</code> so that <code>%&gt;&gt;%</code> will use <code>.</code> to represent the value on the left.</p>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
-  { lm(<span class="pl-vo">mpg</span> <span class="pl-k">~</span> <span class="pl-vo">cyl</span> <span class="pl-k">+</span> <span class="pl-vo">wt</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .) }</pre></div>
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+  { lm(<span class="pl-smi">mpg</span> <span class="pl-k">~</span> <span class="pl-smi">cyl</span> <span class="pl-k">+</span> <span class="pl-smi">wt</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .) }</pre></div>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
-  ( lm(<span class="pl-vo">mpg</span> <span class="pl-k">~</span> <span class="pl-vo">cyl</span> <span class="pl-k">+</span> <span class="pl-vo">wt</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .) )</pre></div>
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+  ( lm(<span class="pl-smi">mpg</span> <span class="pl-k">~</span> <span class="pl-smi">cyl</span> <span class="pl-k">+</span> <span class="pl-smi">wt</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .) )</pre></div>
 
 <h4>
 <a id="pipe-by-formula-as-lambda-expression" class="anchor" href="#pipe-by-formula-as-lambda-expression" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pipe by formula as lambda expression</h4>
 
 <p>Sometimes, it may look confusing to use <code>.</code> to represent the value being piped. For example,</p>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
-  (lm(<span class="pl-vo">mpg</span> <span class="pl-k">~</span> ., <span class="pl-v">data</span> <span class="pl-k">=</span> .))</pre></div>
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+  (lm(<span class="pl-smi">mpg</span> <span class="pl-k">~</span> ., <span class="pl-v">data</span> <span class="pl-k">=</span> .))</pre></div>
 
 <p>Although it works perfectly, it may look ambiguous if <code>.</code> has several meanings in one line of code. </p>
 
 <p><code>%&gt;&gt;%</code> accepts lambda expression to direct its piping behavior. Lambda expression is characterized by a formula enclosed within <code>()</code>, for example, <code>(x ~ f(x))</code>. It contains a user-defined symbol to represent the value being piped and the expression to be evaluated.</p>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
-  (<span class="pl-vo">df</span> <span class="pl-k">~</span> lm(<span class="pl-vo">mpg</span> <span class="pl-k">~</span> ., <span class="pl-v">data</span> <span class="pl-k">=</span> <span class="pl-vo">df</span>))</pre></div>
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+  (<span class="pl-smi">df</span> <span class="pl-k">~</span> lm(<span class="pl-smi">mpg</span> <span class="pl-k">~</span> ., <span class="pl-v">data</span> <span class="pl-k">=</span> <span class="pl-smi">df</span>))</pre></div>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
-  subset(<span class="pl-v">select</span> <span class="pl-k">=</span> c(<span class="pl-vo">mpg</span>, <span class="pl-vo">wt</span>, <span class="pl-vo">cyl</span>)) %<span class="pl-k">&gt;&gt;</span>%
-  (<span class="pl-vo">x</span> <span class="pl-k">~</span> plot(<span class="pl-vo">mpg</span> <span class="pl-k">~</span> ., <span class="pl-v">data</span> <span class="pl-k">=</span> <span class="pl-vo">x</span>))</pre></div>
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+  subset(<span class="pl-v">select</span> <span class="pl-k">=</span> c(<span class="pl-smi">mpg</span>, <span class="pl-smi">wt</span>, <span class="pl-smi">cyl</span>)) %<span class="pl-k">&gt;&gt;</span>%
+  (<span class="pl-smi">x</span> <span class="pl-k">~</span> plot(<span class="pl-smi">mpg</span> <span class="pl-k">~</span> ., <span class="pl-v">data</span> <span class="pl-k">=</span> <span class="pl-smi">x</span>))</pre></div>
 
 <h4>
 <a id="pipe-for-side-effect" class="anchor" href="#pipe-for-side-effect" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pipe for side effect</h4>
@@ -192,24 +180,24 @@ rnorm(<span class="pl-c1">100</span>) %<span class="pl-k">&gt;&gt;</span>%
 
 <p>One-sided formula that starts with <code>~</code> indicates that the right-hand side expression will only be evaluated for its side-effect, its value will be ignored, and the input value will be returned instead.</p>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
-  subset(<span class="pl-vo">mpg</span> <span class="pl-k">&gt;</span><span class="pl-k">=</span> quantile(<span class="pl-vo">mpg</span>, <span class="pl-c1">0.05</span>) <span class="pl-k">&amp;</span> <span class="pl-vo">mpg</span> <span class="pl-k">&lt;</span><span class="pl-k">=</span> quantile(<span class="pl-vo">mpg</span>, <span class="pl-c1">0.95</span>)) %<span class="pl-k">&gt;&gt;</span>%
-  (<span class="pl-k">~</span> cat(<span class="pl-s1"><span class="pl-pds">"</span>rows:<span class="pl-pds">"</span></span>,nrow(.),<span class="pl-s1"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>)) %<span class="pl-k">&gt;&gt;</span>%   <span class="pl-c"># cat() returns NULL</span>
-  <span class="pl-vo">summary</span></pre></div>
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+  subset(<span class="pl-smi">mpg</span> <span class="pl-k">&gt;</span><span class="pl-k">=</span> quantile(<span class="pl-smi">mpg</span>, <span class="pl-c1">0.05</span>) <span class="pl-k">&amp;</span> <span class="pl-smi">mpg</span> <span class="pl-k">&lt;</span><span class="pl-k">=</span> quantile(<span class="pl-smi">mpg</span>, <span class="pl-c1">0.95</span>)) %<span class="pl-k">&gt;&gt;</span>%
+  (<span class="pl-k">~</span> cat(<span class="pl-s"><span class="pl-pds">"</span>rows:<span class="pl-pds">"</span></span>,nrow(.),<span class="pl-s"><span class="pl-pds">"</span><span class="pl-cce">\n</span><span class="pl-pds">"</span></span>)) %<span class="pl-k">&gt;&gt;</span>%   <span class="pl-c"># cat() returns NULL</span>
+  <span class="pl-smi">summary</span></pre></div>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
-  subset(<span class="pl-vo">mpg</span> <span class="pl-k">&gt;</span><span class="pl-k">=</span> quantile(<span class="pl-vo">mpg</span>, <span class="pl-c1">0.05</span>) <span class="pl-k">&amp;</span> <span class="pl-vo">mpg</span> <span class="pl-k">&lt;</span><span class="pl-k">=</span> quantile(<span class="pl-vo">mpg</span>, <span class="pl-c1">0.95</span>)) %<span class="pl-k">&gt;&gt;</span>%
-  (<span class="pl-k">~</span> plot(<span class="pl-vo">mpg</span> <span class="pl-k">~</span> <span class="pl-vo">wt</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .)) %<span class="pl-k">&gt;&gt;</span>%    <span class="pl-c"># plot() returns NULL</span>
-  (lm(<span class="pl-vo">mpg</span> <span class="pl-k">~</span> <span class="pl-vo">wt</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .)) %<span class="pl-k">&gt;&gt;</span>%
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+  subset(<span class="pl-smi">mpg</span> <span class="pl-k">&gt;</span><span class="pl-k">=</span> quantile(<span class="pl-smi">mpg</span>, <span class="pl-c1">0.05</span>) <span class="pl-k">&amp;</span> <span class="pl-smi">mpg</span> <span class="pl-k">&lt;</span><span class="pl-k">=</span> quantile(<span class="pl-smi">mpg</span>, <span class="pl-c1">0.95</span>)) %<span class="pl-k">&gt;&gt;</span>%
+  (<span class="pl-k">~</span> plot(<span class="pl-smi">mpg</span> <span class="pl-k">~</span> <span class="pl-smi">wt</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .)) %<span class="pl-k">&gt;&gt;</span>%    <span class="pl-c"># plot() returns NULL</span>
+  (lm(<span class="pl-smi">mpg</span> <span class="pl-k">~</span> <span class="pl-smi">wt</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .)) %<span class="pl-k">&gt;&gt;</span>%
   summary()</pre></div>
 
 <p>With <code>~</code>, side-effect operations can be easily distinguished from mainstream pipeline.</p>
 
 <p>An easier way to print the intermediate value it to use <code>(? expr)</code> syntax like asking question.</p>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>% 
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>% 
   (? ncol(.)) %<span class="pl-k">&gt;&gt;</span>%
-  <span class="pl-vo">summary</span></pre></div>
+  <span class="pl-smi">summary</span></pre></div>
 
 <h4>
 <a id="pipe-with-assignment" class="anchor" href="#pipe-with-assignment" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pipe with assignment</h4>
@@ -218,49 +206,49 @@ rnorm(<span class="pl-c1">100</span>) %<span class="pl-k">&gt;&gt;</span>%
 
 <p>If one needs to assign the value to a symbol, just insert a step like <code>(~ symbol)</code>, then the input value of that step will be assigned to <code>symbol</code> in the current environment.</p>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
-  (lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-vo">mpg</span> <span class="pl-k">~</span> <span class="pl-vo">wt</span> <span class="pl-k">+</span> <span class="pl-vo">cyl</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .)) %<span class="pl-k">&gt;&gt;</span>%
-  (<span class="pl-k">~</span> <span class="pl-vo">lm_mtcars</span>) %<span class="pl-k">&gt;&gt;</span>%
-  <span class="pl-vo">summary</span></pre></div>
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+  (lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-smi">mpg</span> <span class="pl-k">~</span> <span class="pl-smi">wt</span> <span class="pl-k">+</span> <span class="pl-smi">cyl</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .)) %<span class="pl-k">&gt;&gt;</span>%
+  (<span class="pl-k">~</span> <span class="pl-smi">lm_mtcars</span>) %<span class="pl-k">&gt;&gt;</span>%
+  <span class="pl-smi">summary</span></pre></div>
 
 <p>If the input value is not directly to be saved but after some transformation, then one can use <code>=</code>, <code>&lt;-</code>, or more natural <code>-&gt;</code> to specify a lambda expression to tell what to be saved (thanks <a href="https://github.com/yanlinlin82" class="user-mention">@yanlinlin82</a> for suggestion).</p>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
   (<span class="pl-k">~</span> <span class="pl-v">summ</span> <span class="pl-k">=</span> summary(.)) %<span class="pl-k">&gt;&gt;</span>%  <span class="pl-c"># side-effect assignment</span>
-  (lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-vo">mpg</span> <span class="pl-k">~</span> <span class="pl-vo">wt</span> <span class="pl-k">+</span> <span class="pl-vo">cyl</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .)) %<span class="pl-k">&gt;&gt;</span>%
-  (<span class="pl-k">~</span> <span class="pl-vo">lm_mtcars</span>) %<span class="pl-k">&gt;&gt;</span>%
-  <span class="pl-vo">summary</span></pre></div>
+  (lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-smi">mpg</span> <span class="pl-k">~</span> <span class="pl-smi">wt</span> <span class="pl-k">+</span> <span class="pl-smi">cyl</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .)) %<span class="pl-k">&gt;&gt;</span>%
+  (<span class="pl-k">~</span> <span class="pl-smi">lm_mtcars</span>) %<span class="pl-k">&gt;&gt;</span>%
+  <span class="pl-smi">summary</span></pre></div>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
-  (<span class="pl-k">~</span> summary(.) <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-vo">summ</span>) %<span class="pl-k">&gt;&gt;</span>%
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+  (<span class="pl-k">~</span> summary(.) <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">summ</span>) %<span class="pl-k">&gt;&gt;</span>%
 
-<span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
-  (<span class="pl-k">~</span> <span class="pl-vo">summ</span> <span class="pl-k">&lt;-</span> summary(.)) %<span class="pl-k">&gt;&gt;</span>%</pre></div>
+<span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+  (<span class="pl-k">~</span> <span class="pl-smi">summ</span> <span class="pl-k">&lt;-</span> summary(.)) %<span class="pl-k">&gt;&gt;</span>%</pre></div>
 
 <p>An easier way to saving intermediate value that is to be further piped is to use <code>(symbol = expression)</code> syntax:</p>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
   (<span class="pl-k">~</span> <span class="pl-v">summ</span> <span class="pl-k">=</span> summary(.)) %<span class="pl-k">&gt;&gt;</span>%  <span class="pl-c"># side-effect assignment</span>
-  (<span class="pl-v">lm_mtcars</span> <span class="pl-k">=</span> lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-vo">mpg</span> <span class="pl-k">~</span> <span class="pl-vo">wt</span> <span class="pl-k">+</span> <span class="pl-vo">cyl</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .)) %<span class="pl-k">&gt;&gt;</span>%  <span class="pl-c"># continue piping</span>
-  <span class="pl-vo">summary</span></pre></div>
+  (<span class="pl-v">lm_mtcars</span> <span class="pl-k">=</span> lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-smi">mpg</span> <span class="pl-k">~</span> <span class="pl-smi">wt</span> <span class="pl-k">+</span> <span class="pl-smi">cyl</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .)) %<span class="pl-k">&gt;&gt;</span>%  <span class="pl-c"># continue piping</span>
+  <span class="pl-smi">summary</span></pre></div>
 
 <p>or <code>(expression -&gt; symbol)</code> syntax:</p>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
-  (<span class="pl-k">~</span> summary(.) <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-vo">summ</span>) %<span class="pl-k">&gt;&gt;</span>%  <span class="pl-c"># side-effect assignment</span>
-  (lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-vo">mpg</span> <span class="pl-k">~</span> <span class="pl-vo">wt</span> <span class="pl-k">+</span> <span class="pl-vo">cyl</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .) <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-vo">lm_mtcars</span>) %<span class="pl-k">&gt;&gt;</span>%  <span class="pl-c"># continue piping</span>
-  <span class="pl-vo">summary</span></pre></div>
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+  (<span class="pl-k">~</span> summary(.) <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">summ</span>) %<span class="pl-k">&gt;&gt;</span>%  <span class="pl-c"># side-effect assignment</span>
+  (lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-smi">mpg</span> <span class="pl-k">~</span> <span class="pl-smi">wt</span> <span class="pl-k">+</span> <span class="pl-smi">cyl</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .) <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">lm_mtcars</span>) %<span class="pl-k">&gt;&gt;</span>%  <span class="pl-c"># continue piping</span>
+  <span class="pl-smi">summary</span></pre></div>
 
 <h4>
 <a id="extract-element-from-an-object" class="anchor" href="#extract-element-from-an-object" aria-hidden="true"><span class="octicon octicon-link"></span></a>Extract element from an object</h4>
 
 <p><code>x %&gt;&gt;% (y)</code> means extracting the element named <code>y</code> from object <code>x</code> where <code>y</code> must be a valid symbol name and <code>x</code> can be a vector, list, environment or anything else for which <code>[[]]</code> is defined, or S4 object.</p>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
-  (lm(<span class="pl-vo">mpg</span> <span class="pl-k">~</span> <span class="pl-vo">wt</span> <span class="pl-k">+</span> <span class="pl-vo">cyl</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .)) %<span class="pl-k">&gt;&gt;</span>%
-  (<span class="pl-k">~</span> <span class="pl-vo">lm_mtcars</span>) %<span class="pl-k">&gt;&gt;</span>%
-  <span class="pl-vo">summary</span> %<span class="pl-k">&gt;&gt;</span>%
-  (<span class="pl-vo">r.squared</span>)</pre></div>
+<div class="highlight highlight-r"><pre><span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+  (lm(<span class="pl-smi">mpg</span> <span class="pl-k">~</span> <span class="pl-smi">wt</span> <span class="pl-k">+</span> <span class="pl-smi">cyl</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .)) %<span class="pl-k">&gt;&gt;</span>%
+  (<span class="pl-k">~</span> <span class="pl-smi">lm_mtcars</span>) %<span class="pl-k">&gt;&gt;</span>%
+  <span class="pl-smi">summary</span> %<span class="pl-k">&gt;&gt;</span>%
+  (<span class="pl-smi">r.squared</span>)</pre></div>
 
 <h4>
 <a id="compatibility" class="anchor" href="#compatibility" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compatibility</h4>
@@ -269,32 +257,32 @@ rnorm(<span class="pl-c1">100</span>) %<span class="pl-k">&gt;&gt;</span>%
 <li>Working with <a href="https://github.com/hadley/dplyr/">dplyr</a>:</li>
 </ul>
 
-<div class="highlight highlight-r"><pre>library(<span class="pl-vo">dplyr</span>)
-<span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
-  filter(<span class="pl-vo">mpg</span> <span class="pl-k">&lt;</span><span class="pl-k">=</span> mean(<span class="pl-vo">mpg</span>)) %<span class="pl-k">&gt;&gt;</span>%  
-  select(<span class="pl-vo">mpg</span>, <span class="pl-vo">wt</span>, <span class="pl-vo">cyl</span>) %<span class="pl-k">&gt;&gt;</span>%
+<div class="highlight highlight-r"><pre>library(<span class="pl-smi">dplyr</span>)
+<span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+  filter(<span class="pl-smi">mpg</span> <span class="pl-k">&lt;</span><span class="pl-k">=</span> mean(<span class="pl-smi">mpg</span>)) %<span class="pl-k">&gt;&gt;</span>%  
+  select(<span class="pl-smi">mpg</span>, <span class="pl-smi">wt</span>, <span class="pl-smi">cyl</span>) %<span class="pl-k">&gt;&gt;</span>%
   (<span class="pl-k">~</span> plot(.)) %<span class="pl-k">&gt;&gt;</span>%
-  (<span class="pl-v">model</span> <span class="pl-k">=</span> lm(<span class="pl-vo">mpg</span> <span class="pl-k">~</span> <span class="pl-vo">wt</span> <span class="pl-k">+</span> <span class="pl-vo">cyl</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .)) %<span class="pl-k">&gt;&gt;</span>%
+  (<span class="pl-v">model</span> <span class="pl-k">=</span> lm(<span class="pl-smi">mpg</span> <span class="pl-k">~</span> <span class="pl-smi">wt</span> <span class="pl-k">+</span> <span class="pl-smi">cyl</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> .)) %<span class="pl-k">&gt;&gt;</span>%
   (<span class="pl-v">summ</span> <span class="pl-k">=</span> summary(.)) %<span class="pl-k">&gt;&gt;</span>%
-  (<span class="pl-vo">coefficients</span>)</pre></div>
+  (<span class="pl-smi">coefficients</span>)</pre></div>
 
 <ul>
 <li>Working with <a href="http://ggvis.rstudio.com/">ggvis</a>:</li>
 </ul>
 
-<div class="highlight highlight-r"><pre>library(<span class="pl-vo">ggvis</span>)
-<span class="pl-vo">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
-  ggvis(<span class="pl-k">~</span><span class="pl-vo">mpg</span>, <span class="pl-k">~</span><span class="pl-vo">wt</span>) %<span class="pl-k">&gt;&gt;</span>%
+<div class="highlight highlight-r"><pre>library(<span class="pl-smi">ggvis</span>)
+<span class="pl-smi">mtcars</span> %<span class="pl-k">&gt;&gt;</span>%
+  ggvis(<span class="pl-k">~</span><span class="pl-smi">mpg</span>, <span class="pl-k">~</span><span class="pl-smi">wt</span>) %<span class="pl-k">&gt;&gt;</span>%
   layer_points()</pre></div>
 
 <ul>
 <li>Working with <a href="http://renkun.me/rlist/">rlist</a>:</li>
 </ul>
 
-<div class="highlight highlight-r"><pre>library(<span class="pl-vo">rlist</span>)
+<div class="highlight highlight-r"><pre>library(<span class="pl-smi">rlist</span>)
 <span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">100</span> %<span class="pl-k">&gt;&gt;</span>%
   list.group(. <span class="pl-k">%%</span> <span class="pl-c1">3</span>) %<span class="pl-k">&gt;&gt;</span>%
-  list.mapv(<span class="pl-vo">g</span> <span class="pl-k">~</span> mean(<span class="pl-vo">g</span>))</pre></div>
+  list.mapv(<span class="pl-smi">g</span> <span class="pl-k">~</span> mean(<span class="pl-smi">g</span>))</pre></div>
 
 <h3>
 <a id="pipe" class="anchor" href="#pipe" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>Pipe()</code>
@@ -312,43 +300,43 @@ rnorm(<span class="pl-c1">100</span>) %<span class="pl-k">&gt;&gt;</span>%
 <a id="piping" class="anchor" href="#piping" aria-hidden="true"><span class="octicon octicon-link"></span></a>Piping</h4>
 
 <div class="highlight highlight-r"><pre>Pipe(rnorm(<span class="pl-c1">1000</span>))<span class="pl-k">$</span>
-  density(<span class="pl-v">kernel</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>cosine<span class="pl-pds">"</span></span>)<span class="pl-k">$</span>
-  plot(<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">"</span>blue<span class="pl-pds">"</span></span>)</pre></div>
+  density(<span class="pl-v">kernel</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>cosine<span class="pl-pds">"</span></span>)<span class="pl-k">$</span>
+  plot(<span class="pl-v">col</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>blue<span class="pl-pds">"</span></span>)</pre></div>
 
-<div class="highlight highlight-r"><pre>Pipe(<span class="pl-vo">mtcars</span>)<span class="pl-k">$</span>
-  .(<span class="pl-vo">mpg</span>)<span class="pl-k">$</span>
+<div class="highlight highlight-r"><pre>Pipe(<span class="pl-smi">mtcars</span>)<span class="pl-k">$</span>
+  .(<span class="pl-smi">mpg</span>)<span class="pl-k">$</span>
   summary()</pre></div>
 
-<div class="highlight highlight-r"><pre>Pipe(<span class="pl-vo">mtcars</span>)<span class="pl-k">$</span>
-  .(<span class="pl-k">~</span> summary(.) <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-vo">summ</span>)<span class="pl-k">$</span>
-  lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-vo">mpg</span> <span class="pl-k">~</span> <span class="pl-vo">wt</span> <span class="pl-k">+</span> <span class="pl-vo">cyl</span>)<span class="pl-k">$</span>
+<div class="highlight highlight-r"><pre>Pipe(<span class="pl-smi">mtcars</span>)<span class="pl-k">$</span>
+  .(<span class="pl-k">~</span> summary(.) <span class="pl-k">-</span><span class="pl-k">&gt;</span> <span class="pl-smi">summ</span>)<span class="pl-k">$</span>
+  lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-smi">mpg</span> <span class="pl-k">~</span> <span class="pl-smi">wt</span> <span class="pl-k">+</span> <span class="pl-smi">cyl</span>)<span class="pl-k">$</span>
   summary()<span class="pl-k">$</span>
-  .(<span class="pl-vo">coefficients</span>)</pre></div>
+  .(<span class="pl-smi">coefficients</span>)</pre></div>
 
 <h4>
 <a id="subsetting-and-extracting" class="anchor" href="#subsetting-and-extracting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Subsetting and extracting</h4>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">pmtcars</span> <span class="pl-k">&lt;-</span> Pipe(<span class="pl-vo">mtcars</span>)
-<span class="pl-vo">pmtcars</span>[c(<span class="pl-s1"><span class="pl-pds">"</span>mpg<span class="pl-pds">"</span></span>,<span class="pl-s1"><span class="pl-pds">"</span>wt<span class="pl-pds">"</span></span>)]<span class="pl-k">$</span>
-  lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-vo">mpg</span> <span class="pl-k">~</span> <span class="pl-vo">wt</span>)<span class="pl-k">$</span>
+<div class="highlight highlight-r"><pre><span class="pl-smi">pmtcars</span> <span class="pl-k">&lt;-</span> Pipe(<span class="pl-smi">mtcars</span>)
+<span class="pl-smi">pmtcars</span>[c(<span class="pl-s"><span class="pl-pds">"</span>mpg<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>wt<span class="pl-pds">"</span></span>)]<span class="pl-k">$</span>
+  lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-smi">mpg</span> <span class="pl-k">~</span> <span class="pl-smi">wt</span>)<span class="pl-k">$</span>
   summary()
-<span class="pl-vo">pmtcars</span>[[<span class="pl-s1"><span class="pl-pds">"</span>mpg<span class="pl-pds">"</span></span>]]<span class="pl-k">$</span>mean()</pre></div>
+<span class="pl-smi">pmtcars</span>[[<span class="pl-s"><span class="pl-pds">"</span>mpg<span class="pl-pds">"</span></span>]]<span class="pl-k">$</span>mean()</pre></div>
 
 <h4>
 <a id="assigning-values" class="anchor" href="#assigning-values" aria-hidden="true"><span class="octicon octicon-link"></span></a>Assigning values</h4>
 
-<div class="highlight highlight-r"><pre><span class="pl-vo">plist</span> <span class="pl-k">&lt;-</span> Pipe(<span class="pl-st">list</span>(<span class="pl-v">a</span><span class="pl-k">=</span><span class="pl-c1">1</span>,<span class="pl-v">b</span><span class="pl-k">=</span><span class="pl-c1">2</span>))
-<span class="pl-vo">plist</span><span class="pl-k">$</span><span class="pl-vo">a</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">0</span>
-<span class="pl-vo">plist</span><span class="pl-k">$</span><span class="pl-vo">b</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">NULL</span></pre></div>
+<div class="highlight highlight-r"><pre><span class="pl-smi">plist</span> <span class="pl-k">&lt;-</span> Pipe(<span class="pl-k">list</span>(<span class="pl-v">a</span><span class="pl-k">=</span><span class="pl-c1">1</span>,<span class="pl-v">b</span><span class="pl-k">=</span><span class="pl-c1">2</span>))
+<span class="pl-smi">plist</span><span class="pl-k">$</span><span class="pl-smi">a</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">0</span>
+<span class="pl-smi">plist</span><span class="pl-k">$</span><span class="pl-smi">b</span> <span class="pl-k">&lt;-</span> <span class="pl-c1">NULL</span></pre></div>
 
 <h4>
 <a id="side-effect" class="anchor" href="#side-effect" aria-hidden="true"><span class="octicon octicon-link"></span></a>Side effect</h4>
 
-<div class="highlight highlight-r"><pre>Pipe(<span class="pl-vo">mtcars</span>)<span class="pl-k">$</span>
+<div class="highlight highlight-r"><pre>Pipe(<span class="pl-smi">mtcars</span>)<span class="pl-k">$</span>
   .(? ncol(.))<span class="pl-k">$</span>
-  .(<span class="pl-k">~</span> plot(<span class="pl-vo">mpg</span> <span class="pl-k">~</span> ., <span class="pl-v">data</span> <span class="pl-k">=</span> .))<span class="pl-k">$</span>    <span class="pl-c"># side effect: plot</span>
-  lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-vo">mpg</span> <span class="pl-k">~</span> .)<span class="pl-k">$</span>
-  .(<span class="pl-k">~</span> <span class="pl-vo">lm_mtcars</span>)<span class="pl-k">$</span>                  <span class="pl-c"># side effect: assign</span>
+  .(<span class="pl-k">~</span> plot(<span class="pl-smi">mpg</span> <span class="pl-k">~</span> ., <span class="pl-v">data</span> <span class="pl-k">=</span> .))<span class="pl-k">$</span>    <span class="pl-c"># side effect: plot</span>
+  lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-smi">mpg</span> <span class="pl-k">~</span> .)<span class="pl-k">$</span>
+  .(<span class="pl-k">~</span> <span class="pl-smi">lm_mtcars</span>)<span class="pl-k">$</span>                  <span class="pl-c"># side effect: assign</span>
   summary()<span class="pl-k">$</span></pre></div>
 
 <h4>
@@ -358,20 +346,20 @@ rnorm(<span class="pl-c1">100</span>) %<span class="pl-k">&gt;&gt;</span>%
 <li>Working with dplyr:</li>
 </ul>
 
-<div class="highlight highlight-r"><pre>Pipe(<span class="pl-vo">mtcars</span>)<span class="pl-k">$</span>
-  filter(<span class="pl-vo">mpg</span> <span class="pl-k">&gt;</span><span class="pl-k">=</span> mean(<span class="pl-vo">mpg</span>))<span class="pl-k">$</span>
-  select(<span class="pl-vo">mpg</span>, <span class="pl-vo">wt</span>, <span class="pl-vo">cyl</span>)<span class="pl-k">$</span>
-  lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-vo">mpg</span> <span class="pl-k">~</span> <span class="pl-vo">wt</span> <span class="pl-k">+</span> <span class="pl-vo">cyl</span>)<span class="pl-k">$</span>
+<div class="highlight highlight-r"><pre>Pipe(<span class="pl-smi">mtcars</span>)<span class="pl-k">$</span>
+  filter(<span class="pl-smi">mpg</span> <span class="pl-k">&gt;</span><span class="pl-k">=</span> mean(<span class="pl-smi">mpg</span>))<span class="pl-k">$</span>
+  select(<span class="pl-smi">mpg</span>, <span class="pl-smi">wt</span>, <span class="pl-smi">cyl</span>)<span class="pl-k">$</span>
+  lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-smi">mpg</span> <span class="pl-k">~</span> <span class="pl-smi">wt</span> <span class="pl-k">+</span> <span class="pl-smi">cyl</span>)<span class="pl-k">$</span>
   summary()<span class="pl-k">$</span>
-  .(<span class="pl-vo">coefficients</span>)<span class="pl-k">$</span>
-  <span class="pl-vo">value</span></pre></div>
+  .(<span class="pl-smi">coefficients</span>)<span class="pl-k">$</span>
+  <span class="pl-smi">value</span></pre></div>
 
 <ul>
 <li>Working with ggvis:</li>
 </ul>
 
-<div class="highlight highlight-r"><pre>Pipe(<span class="pl-vo">mtcars</span>)<span class="pl-k">$</span>
-  ggvis(<span class="pl-k">~</span> <span class="pl-vo">mpg</span>, <span class="pl-k">~</span> <span class="pl-vo">wt</span>)<span class="pl-k">$</span>
+<div class="highlight highlight-r"><pre>Pipe(<span class="pl-smi">mtcars</span>)<span class="pl-k">$</span>
+  ggvis(<span class="pl-k">~</span> <span class="pl-smi">mpg</span>, <span class="pl-k">~</span> <span class="pl-smi">wt</span>)<span class="pl-k">$</span>
   layer_points()</pre></div>
 
 <ul>
@@ -380,8 +368,8 @@ rnorm(<span class="pl-c1">100</span>) %<span class="pl-k">&gt;&gt;</span>%
 
 <div class="highlight highlight-r"><pre>Pipe(<span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-c1">100</span>)<span class="pl-k">$</span>
   list.group(. <span class="pl-k">%%</span> <span class="pl-c1">3</span>)<span class="pl-k">$</span>
-  list.mapv(<span class="pl-vo">g</span> <span class="pl-k">~</span> mean(<span class="pl-vo">g</span>))<span class="pl-k">$</span>
-  <span class="pl-vo">value</span></pre></div>
+  list.mapv(<span class="pl-smi">g</span> <span class="pl-k">~</span> mean(<span class="pl-smi">g</span>))<span class="pl-k">$</span>
+  <span class="pl-smi">value</span></pre></div>
 
 <h3>
 <a id="pipeline" class="anchor" href="#pipeline" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>pipeline()</code>
@@ -392,12 +380,12 @@ rnorm(<span class="pl-c1">100</span>) %<span class="pl-k">&gt;&gt;</span>%
 <p>One notable difference is that in <code>pipeline()</code>'s argument or expression, the special symbols to perform specially defined pipeline tasks (e.g. side-effect) does not need to be enclosed within <code>()</code> because no operator priority issues arise as they do in using <code>%&gt;&gt;%</code>.</p>
 
 <div class="highlight highlight-r"><pre>pipeline({
-  <span class="pl-vo">mtcars</span>
-  lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-vo">mpg</span> <span class="pl-k">~</span> <span class="pl-vo">cyl</span> <span class="pl-k">+</span> <span class="pl-vo">wt</span>)
-  <span class="pl-k">~</span> <span class="pl-vo">lmodel</span>
-  <span class="pl-vo">summary</span>
-  ? .<span class="pl-k">$</span><span class="pl-vo">r.squared</span>
-  <span class="pl-vo">coef</span>
+  <span class="pl-smi">mtcars</span>
+  lm(<span class="pl-v">formula</span> <span class="pl-k">=</span> <span class="pl-smi">mpg</span> <span class="pl-k">~</span> <span class="pl-smi">cyl</span> <span class="pl-k">+</span> <span class="pl-smi">wt</span>)
+  <span class="pl-k">~</span> <span class="pl-smi">lmodel</span>
+  <span class="pl-smi">summary</span>
+  ? .<span class="pl-k">$</span><span class="pl-smi">r.squared</span>
+  <span class="pl-smi">coef</span>
 })</pre></div>
 
 <p>Thanks <a href="https://twitter.com/hoxo_m">@hoxo_m</a> for the idea presented in this <a href="http://qiita.com/hoxo_m/items/3fd3d2520fa014a248cb">post</a>.</p>
@@ -406,18 +394,16 @@ rnorm(<span class="pl-c1">100</span>) %<span class="pl-k">&gt;&gt;</span>%
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p>This package is under <a href="http://opensource.org/licenses/MIT">MIT License</a>.</p>
-      </section>
-    </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">pipeR maintained by <a href="https://github.com/renkun-ken">renkun-ken</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/renkun-ken/pipeR">pipeR</a> is maintained by <a href="https://github.com/renkun-ken">renkun-ken</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
 
-              <script type="text/javascript">
+    </section>
+
+            <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
@@ -428,6 +414,6 @@ rnorm(<span class="pl-c1">100</span>) %<span class="pl-k">&gt;&gt;</span>%
             } catch(err) {}
           </script>
 
-
   </body>
 </html>
+
