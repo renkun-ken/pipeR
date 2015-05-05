@@ -46,6 +46,11 @@ test_that("lambda piping", {
   expect_identical(Pipe(1:3)$.(x ~ c(1,2,x))[], c(1,2,1:3))
 })
 
+test_that("closure", {
+  expect_is(Pipe_get_function(quote(`[`)), "function")
+  expect_is(Pipe_set_function(quote(`[`)), "function")
+})
+
 test_that("side effect", {
   side <- function(x) {
     x + 1
