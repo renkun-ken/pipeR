@@ -2,7 +2,7 @@
 
 # pipeR
 
-[![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR) [![Coverage Status](https://coveralls.io/repos/renkun-ken/pipeR/badge.svg)](https://coveralls.io/r/renkun-ken/pipeR) [![Issue Stats](http://issuestats.com/github/renkun-ken/pipeR/badge/issue?style=flat)](http://issuestats.com/github/renkun-ken/pipeR) [![Issue Stats](http://issuestats.com/github/renkun-ken/pipeR/badge/pr?style=flat)](http://issuestats.com/github/renkun-ken/pipeR)
+[![Build Status](https://travis-ci.org/renkun-ken/pipeR.png?branch=master)](https://travis-ci.org/renkun-ken/pipeR) [![Coverage Status](https://coveralls.io/repos/renkun-ken/pipeR/badge.svg)](https://coveralls.io/r/renkun-ken/pipeR) [![CRAN Version](http://www.r-pkg.org/badges/version/pipeR)](http://cran.rstudio.com/web/packages/pipeR)
 
 pipeR provides various styles of function chaining methods: 
 
