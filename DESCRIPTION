@@ -1,6 +1,6 @@
 Package: pipeR
 Type: Package
-Title: Multi-paradigm Pipeline Implementation
+Title: Multi-Paradigm Pipeline Implementation
 Version: 0.6.0.6
 Author: Kun Ren <ken@renkun.me>
 Maintainer: Kun Ren <ken@renkun.me>

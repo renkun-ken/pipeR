@@ -232,6 +232,7 @@ print.Pipe <- function(x,...,header=getOption("Pipe.header",TRUE)) {
   }
 }
 
+#' @importFrom utils str
 #' @export
 str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
   if(header) cat("<Pipe>\n")
