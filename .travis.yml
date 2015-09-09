@@ -17,7 +17,7 @@ script:
   - ./pkg-build.sh run_tests
 
 after_success:
-  - Rscript -e 'library(covr);coveralls()'
+  - ./pkg-build.sh run_script 'covr::coveralls()'
 
 after_failure:
   - ./pkg-build.sh dump_logs
