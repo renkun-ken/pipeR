@@ -14,16 +14,16 @@ pipe_first <- function(x, fun, envir) {
 # . : object
 # expr : expression
 # envir : environment for evaluation
-pipe_dot <- function(.,expr,envir) {
-  eval(expr, list(.=.), envir)
+pipe_dot <- function(., expr, envir) {
+  eval(expr, list(. = .), envir)
 }
 
 eval_formula <- function(x, expr, envir, side_effect) {
-  if(length(expr) == 3L) {
+  if (length(expr) == 3L) {
     # (symbol ~ expr)
     lhs <- expr[[2L]]
     rhs <- expr[[3L]]
-    if(is.side_effect(lhs)) {
+    if (is.side_effect(lhs)) {
       # ~ expr: side effect
       value <- eval_lambda(x, lhs[[2L]], rhs, envir)
       return(if (side_effect) x else value)
@@ -33,7 +33,7 @@ eval_formula <- function(x, expr, envir, side_effect) {
     }
   } else {
     expr <- expr[[2L]]
-    if(is.symbol(expr)) {
+    if (is.symbol(expr)) {
       # ~ symbol: assign
       value <- envir[[as.character(expr)]] <- x
     } else {
@@ -45,12 +45,12 @@ eval_formula <- function(x, expr, envir, side_effect) {
 }
 
 eval_question <- function(x, expr, envir) {
-  if(length(expr) == 2L) {
+  if (length(expr) == 2L) {
     expr <- expr[[2L]]
     value <- pipe_lambda(x, expr, envir)
     cat("? ")
     print(expr)
-  } else if(length(expr) == 3L && is.character(expr[[2L]])) {
+  } else if (length(expr) == 3L && is.character(expr[[2L]])) {
     value <- pipe_lambda(x, expr[[3L]], envir)
     cat("?", expr[[2L]], "\n")
   } else {
@@ -65,7 +65,7 @@ eval_equal <- function(x, expr, envir, side_effect) {
   rhs <- expr[[3L]]
   op <- quote(`<-`)
   value <- pipe_lambda(x, rhs, envir)
-  if(is.side_effect(lhs)) {
+  if (is.side_effect(lhs)) {
     call <- as.call(list(op, lhs[[2L]], value))
     value <- eval(call, envir)
     return(if (side_effect) x else value)
@@ -80,12 +80,12 @@ eval_assign <- function(x, expr, envir, op, side_effect) {
   rhs <- expr[[3L]]
   op <- as.symbol(op)
   value <- pipe_lambda(x, rhs, envir, FALSE)
-  if(is.side_effect(lhs)) {
+  if (is.side_effect(lhs)) {
     # ~ x <- expr
     call <- as.call(list(op, lhs[[2L]], value))
     value <- eval(call, envir)
     return(if (side_effect) x else value)
-  } else if(is.side_effect(rhs)) {
+  } else if (is.side_effect(rhs)) {
     call <- as.call(list(op, lhs, value))
     value <- eval(call, envir)
     return(if (side_effect) x else value)
@@ -101,10 +101,10 @@ eval_assign <- function(x, expr, envir, op, side_effect) {
 # expr : expression part
 # envir : environment for evaluation
 eval_lambda <- function(x, symbol, expr, envir) {
-  if(!is.symbol(symbol))
+  if (!is.symbol(symbol))
     stop("Invalid symbol \"", deparse(symbol),
       "\" in lambda expression", call. = FALSE)
-  eval(expr,setnames(list(x), as.character(symbol)), envir)
+  eval(expr, setnames(list(x), as.character(symbol)), envir)
 }
 
 # pipe by lambda expression
@@ -113,7 +113,7 @@ eval_lambda <- function(x, symbol, expr, envir) {
 # envir : environment for evaluation
 # side_effect: TRUE to return x; FALSE to return value of expr
 pipe_lambda <- function(x, expr, envir, side_effect = TRUE) {
-  if(is.symbol(expr) || is.function(expr) || length(expr[[1L]]) > 1L)
+  if (is.symbol(expr) || is.function(expr) || length(expr[[1L]]) > 1L)
     return(pipe_dot(x, expr, envir))
   pipe_symbol(x, expr, envir, side_effect, pipe_dot)
 }
@@ -129,7 +129,7 @@ pipe_symbol <- function(x, expr, envir, side_effect, default) {
 }
 
 pipe_fun <- function(x, expr, envir) {
-  if(is.symbol(expr))
+  if (is.symbol(expr))
     # ( symbol ): extract element
     getElement(x, as.character(expr))
   else
