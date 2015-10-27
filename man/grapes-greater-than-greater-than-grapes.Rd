@@ -100,6 +100,12 @@ Note that the global assignment operator \code{<<-} and \code{->>} in a pipeline
 performs global assignment that is subject to side-effect outside the calling
 environment.
 
+In some cases, users might need to create a group of symbols. The following code
+calls \code{assign} to dynamically determine the symbol name when its value is
+evaluated.
+
+\code{for (i in 1:5) rnorm(i) \%>>\% (assign(paste0("rnorm", i), .))}
+
 6. Pipe for element extraction:
 
 If a symbol is enclosed within \code{()}, it tells the operator to
@@ -183,6 +189,19 @@ mtcars \%>>\%
   (~ lm_mtcars = df ~ lm(mpg ~ ., data = df)) \%>>\%
   subset(mpg <= mean(mpg)) \%>>\%
   summary
+
+# Modifying values in calling environment
+"col_" \%>>\%
+  paste0(colnames(mtcars)) \%>>\%
+  {names(mtcars) <- .}
+
+rnorm(100) \%>>\% {
+  num_mean <- mean(.)
+  num_sd <- sd(.)
+  num_var <- var(.)
+}
+
+for(i in 1:10) rnorm(i) \%>>\% (assign(paste0("var", i), .))
 
 # Pipe for element extraction
 mtcars \%>>\% (mpg)

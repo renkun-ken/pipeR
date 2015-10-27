@@ -199,7 +199,7 @@ test_that("scoping", {
 
 test_that("printing", {
   expect_output({
-    z <- 1:10 %>>% (? length(.)) %>>% sum
+    z <- 1:10 %>>% (?length(.)) %>>% sum
   }, "^\\? length\\(\\.\\)\n\\[1\\] 10$")
   expect_output({
     z <- 1:10 %>>% ("length" ? length(.)) %>>% sum
@@ -210,4 +210,18 @@ test_that("printing", {
   expect_error({
     1:10 %>>% (1 ? sum(.))
   }, "Invalid question expression")
+})
+
+test_that("modifying environment", {
+  a <- 1
+  b <- c(x = 1)
+  "x" %>>% {names(a) <- .}
+  expect_identical(a, b)
+
+  1:10 %>>% (assign("a", .))
+  expect_identical(a, 1:10)
+
+  mtcars_data <- mtcars
+  "col_" %>>% paste0(colnames(mtcars_data)) %>>% {names(mtcars_data) <- .}
+  expect_identical(colnames(mtcars_data), paste0("col_", colnames(mtcars)))
 })

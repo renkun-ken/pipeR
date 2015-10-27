@@ -1,7 +1,7 @@
 Package: pipeR
 Type: Package
 Title: Multi-Paradigm Pipeline Implementation
-Version: 0.6.0.6
+Version: 0.6.1
 Author: Kun Ren <ken@renkun.me>
 Maintainer: Kun Ren <ken@renkun.me>
 Description: Provides various styles of function chaining methods: Pipe
@@ -12,7 +12,7 @@ Description: Provides various styles of function chaining methods: Pipe
     readable and friendly to a wide range of operations.
 Depends:
     R (>= 2.15)
-Date: 2015-07-08
+Date: 2015-10-27
 Suggests:
     testthat
 License: MIT + file LICENSE

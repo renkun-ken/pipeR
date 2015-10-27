@@ -1,3 +1,19 @@
+eval_with <- function(expr, enclos, data, symbol = ".") {
+  if (missing(data)) {
+    eval_envir <- enclos
+    res <- withVisible(eval(expr, eval_envir))
+  } else {
+    lambda_env <- new.env(FALSE, enclos, 1L)
+    lambda_env[[symbol]] <- data
+    lockEnvironment(lambda_env, bindings = TRUE)
+    eval_envir <- new.env(parent = lambda_env)
+    res <- withVisible(eval(expr, eval_envir))
+    list2env(as.list.environment(eval_envir), enclos)
+  }
+
+  if (res$visible) res$value else invisible(res$value)
+}
+
 # pipe to first argument
 # x : object
 # fun : the function name or call
@@ -6,16 +22,15 @@ pipe_first <- function(x, fun, envir) {
   fun <- setclass(fun, "list")
 
   ## insert x as the first argument to fun
-  eval(as.call(c(fun[1L], quote(.), fun[-1L])),
-    envir = list(. = x), enclos = envir)
+  eval_with(as.call(c(fun[1L], quote(.), fun[-1L])), envir, x)
 }
 
 # pipe to dot
 # . : object
 # expr : expression
 # envir : environment for evaluation
-pipe_dot <- function(., expr, envir) {
-  eval(expr, list(. = .), envir)
+pipe_dot <- function(x, expr, envir) {
+  eval_with(expr, envir, x)
 }
 
 eval_formula <- function(x, expr, envir, side_effect) {
@@ -104,7 +119,7 @@ eval_lambda <- function(x, symbol, expr, envir) {
   if (!is.symbol(symbol))
     stop("Invalid symbol \"", deparse(symbol),
       "\" in lambda expression", call. = FALSE)
-  eval(expr, setnames(list(x), as.character(symbol)), envir)
+  eval_with(expr, envir, x, as.character(symbol))
 }
 
 # pipe by lambda expression
@@ -146,10 +161,7 @@ pipe_op <- function(x, expr) {
   envir <- parent.frame()
   switch(class(expr),
     "NULL" = NULL,
-    "character" = {
-      cat(expr, "\n")
-      x
-    },
+    "character" = {cat(expr, "\n"); x},
     "{" = pipe_dot(x, expr, envir),
     "(" = pipe_fun(x, expr[[2L]], envir),
     pipe_symbol(x, expr, envir, TRUE, pipe_first))
