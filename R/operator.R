@@ -96,6 +96,10 @@
 #'
 #' \code{for (i in 1:5) rnorm(i) \%>>\% (assign(paste0("rnorm", i), .))}
 #'
+#' To avoid exporting a symbol to the calling environment, use a symbol name
+#' starting with \code{.} like
+#'
+#'
 #' 6. Pipe for element extraction:
 #'
 #' If a symbol is enclosed within \code{()}, it tells the operator to
@@ -189,6 +193,12 @@
 #'   num_mean <- mean(.)
 #'   num_sd <- sd(.)
 #'   num_var <- var(.)
+#' }
+#'
+#' rnorm(100) %>>% {
+#'   .mean <- mean(.)
+#'   .sd <- sd(.)
+#'   ci <- .mean + c(-1,1) * 1.96 * .sd
 #' }
 #'
 #' for(i in 1:10) rnorm(i) %>>% (assign(paste0("var", i), .))
