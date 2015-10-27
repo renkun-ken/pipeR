@@ -1,16 +1,10 @@
-eval_with <- function(expr, enclos, data, symbol = ".") {
-  if (missing(data)) {
-    eval_envir <- enclos
-    res <- withVisible(eval(expr, eval_envir))
-  } else {
-    lambda_env <- new.env(FALSE, enclos, 1L)
-    lambda_env[[symbol]] <- data
-    lockEnvironment(lambda_env, bindings = TRUE)
-    eval_envir <- new.env(parent = lambda_env)
-    res <- withVisible(eval(expr, eval_envir))
-    list2env(as.list.environment(eval_envir), enclos)
-  }
-
+eval_with <- function(expr, enclos, value, symbol = ".") {
+  lambda_env <- new.env(FALSE, enclos, 1L)
+  lambda_env[[symbol]] <- value
+  lockEnvironment(lambda_env, bindings = TRUE)
+  eval_envir <- new.env(parent = lambda_env)
+  res <- withVisible(eval(expr, eval_envir))
+  list2env(as.list.environment(eval_envir), enclos)
   if (res$visible) res$value else invisible(res$value)
 }
 
