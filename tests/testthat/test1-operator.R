@@ -224,4 +224,25 @@ test_that("modifying environment", {
   mtcars_data <- mtcars
   "col_" %>>% paste0(colnames(mtcars_data)) %>>% {names(mtcars_data) <- .}
   expect_identical(colnames(mtcars_data), paste0("col_", colnames(mtcars)))
+
+  x <- rnorm(100)
+  x %>>% {
+    num_mean <- mean(.)
+    num_sd <- sd(.)
+    num_var <- var(.)
+  }
+
+  expect_equal(mean(x), num_mean)
+  expect_equal(sd(x), num_sd)
+  expect_equal(var(x), num_var)
+
+  x %>>% {
+    .mean <- mean(.)
+    .sd <- sd(.)
+    ci <- .mean + c(-1,1) * 1.96 * .sd
+  }
+
+  expect_equal(mean(x) + c(-1,1) * 1.96 * sd(x), ci)
+  expect_equal(exists(".mean"), FALSE)
+  expect_equal(exists(".sd"), FALSE)
 })
