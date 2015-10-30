@@ -22,3 +22,4 @@ URL: http://renkun.me/pipeR,
 BugReports: https://github.com/renkun-ken/pipeR/issues
 Roxygen: list(wrap = FALSE)
 ByteCompile: TRUE
+RoxygenNote: 5.0.0
