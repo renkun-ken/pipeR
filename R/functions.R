@@ -1,7 +1,7 @@
 eval_with <- function(expr, enclos, value, symbol = ".") {
   lambda_env <- new.env(FALSE, enclos, 1L)
   lambda_env[[symbol]] <- value
-  lockEnvironment(lambda_env, bindings = TRUE)
+  lockEnvironment(lambda_env, bindings = FALSE)
   eval_envir <- new.env(parent = lambda_env)
   res <- withVisible(eval(expr, eval_envir))
   list2env(as.list.environment(eval_envir), enclos)
