@@ -125,17 +125,23 @@
 #' f1(col="green")
 #' }
 Pipe <- function(value = NULL) {
-  .envir <- environment()
-  .visible <- TRUE
-  . <- Pipe_dot(value, .envir)
-  setclass(.envir, c("Pipe","environment"))
+  Pipe_new(value, TRUE)
 }
 
-Pipe_dot <- function(value, envir) {
+Pipe_new <- function(value, visible) {
+  e <- new.env(FALSE, emptyenv(), 0L)
+  attr(e, "object") <- list(value = value, visible = visible, . = Pipe_dot(e))
+  lockEnvironment(e, bindings = TRUE)
+  setclass(e, "Pipe")
+}
+
+Pipe_value <- function(x) attr(x, "object", exact = TRUE)$value
+Pipe_visible <- function(x) attr(x, "object", exact = TRUE)$visible
+Pipe_dot <- function(x) {
   function(expr) {
-    if(missing(expr)) return(envir)
-    args <- withVisible(pipe_fun(value, substitute(expr), parent.frame()))
-    Pipe_new(args)
+    if (missing(expr)) return(x)
+    args <- withVisible(pipe_fun(Pipe_value(x), substitute(expr), parent.frame()))
+    Pipe_new(args$value, args$visible)
   }
 }
 
@@ -145,38 +151,23 @@ Pipe_closure <- function(f, args) {
     dots <- match.call(expand.dots = FALSE)$...
     rcall <- as.call(c(f, quote(.), dots))
     args <- withVisible(eval(rcall, args, parent.frame()))
-    Pipe_new(args)
+    Pipe_new(args$value, args$visible)
   }
-}
-
-Pipe_new <- function(args) {
-  x <- Pipe(args$value)
-  assign(".visible", args$visible, envir = x)
-  x
-}
-
-Pipe_value <- function(x) {
-  get("value", envir = x, inherits = FALSE)
-}
-
-Pipe_visible <- function(x) {
-  get(".visible", envir = x, mode = "logical", inherits = FALSE)
 }
 
 #' @export
 `$.Pipe` <- function(x, i) {
-  if(exists(i, envir = x, inherits = FALSE))
-    return(get(i, envir = x, inherits = FALSE))
+  if (!is.null(f <- attr(x, "object", exact = TRUE)[[i]])) return(f)
   f <- get(i, envir = parent.frame(), mode = "function")
   args <- setnames(list(f, Pipe_value(x)), c(i, "."))
   Pipe_closure(i, args)
 }
 
 Pipe_get <- function(f, value, dots, envir) {
-  if(!ndots(dots)) return(value)
+  if (!ndots(dots)) return(value)
   rcall <- as.call(c(f, quote(.), dots))
   args <- withVisible(eval(rcall, list(. = value), envir))
-  Pipe_new(args)
+  Pipe_new(args$value, args$visible)
 }
 
 Pipe_get_function <- function(op) {
@@ -196,10 +187,10 @@ Pipe_get_function <- function(op) {
 
 
 Pipe_set <- function(f, x, dots, value, envir) {
-  if(!ndots(dots)) return(value)
+  if (!ndots(dots)) return(value)
   rcall <- as.call(c(f,quote(.), dots, quote(value)))
   args <- withVisible(eval(rcall,list(. = x, value = value), envir))
-  Pipe_new(args)
+  Pipe_new(args$value, args$visible)
 }
 
 Pipe_set_function <- function(op) {
@@ -223,18 +214,18 @@ Pipe_set_function <- function(op) {
 #' @export
 print.Pipe <- function(x,...,header=getOption("Pipe.header",TRUE)) {
   value <- Pipe_value(x)
-  if(Pipe_visible(x)) {
-    if(header) {
+  if (isTRUE(Pipe_visible(x))) {
+    if (header) {
       cat("<Pipe:", class(value))
       cat(">\n")
     }
-    print(value,...)
+    print(value, ...)
   }
 }
 
 #' @importFrom utils str
 #' @export
-str.Pipe <- function(object,...,header=getOption("Pipe.header",TRUE)) {
-  if(header) cat("<Pipe>\n")
-  str(Pipe_value(object),...)
+str.Pipe <- function(object, ..., header = getOption("Pipe.header", TRUE)) {
+  if (header) cat("<Pipe>\n")
+  str(Pipe_value(object), ...)
 }

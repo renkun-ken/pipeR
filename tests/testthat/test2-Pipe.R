@@ -17,15 +17,15 @@ test_that("first-argument piping", {
   # working with higher-order functions
   expect_identical(Pipe(1:5)$lapply(function(i) i+1)[], lapply(1:5,function(i) i+1))
   expect_identical(Pipe(1:5)$vapply(function(i) c(i,i^2),numeric(2))[],
-    vapply(1:5,function(i) c(i,i^2),numeric(2)))
+    vapply(1:5, function(i) c(i, i ^ 2),numeric(2)))
 
   # working with ...
   fun1 <- function(x,a,b) {
-    c(x+a,x+b)
+    c(x+a, x+b)
   }
 
   fun2 <- function(x,...) {
-    fun1(x,...)
+    fun1(x, ...)
   }
 
   expect_identical(Pipe(1:10)$fun2(a=-1,b=1)[], fun1(1:10,a=-1,b=1))
