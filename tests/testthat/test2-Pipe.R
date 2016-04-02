@@ -150,7 +150,7 @@ test_that("assignment", {
 test_that("function", {
   # closure
   expect_identical({
-    z <- Pipe(1:3)$.(p ~ function(x) mean(x+p))[]
+    z <- Pipe(1:3)$.(p ~ function(x) mean(x + p))[]
     z(3)
   }, 5)
 })
@@ -165,7 +165,6 @@ test_that("scoping", {
 
 test_that("printing", {
   expect_output(print(Pipe(1:3)), "<Pipe: integer>.+")
-  expect_output(print(Pipe(1:10)$invisible()), "")
   expect_output(str(Pipe(1:3)), "<Pipe>.+")
   expect_output(str(Pipe(1:3)$invisible()), "<Pipe>.+")
 })
