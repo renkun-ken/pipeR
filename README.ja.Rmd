@@ -40,7 +40,7 @@ pipeR の文法は、パイプラインの読みやすさと、広く様々な�
 devtools::install_github("renkun-ken/pipeR")
 ```
 
-[CRAN](http://cran.r-project.org/web/packages/pipeR/index.html) からインストールするには：
+[CRAN](https://cran.r-project.org/package=pipeR) からインストールするには：
 
 ```r
 install.packages("pipeR")

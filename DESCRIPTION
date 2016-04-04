@@ -12,13 +12,13 @@ Description: Provides various styles of function chaining methods: Pipe
     readable and friendly to a wide range of operations.
 Depends:
     R (>= 2.15)
-Date: 2015-12-04
+Date: 2016-04-04
 Suggests:
     testthat
 License: MIT + file LICENSE
-URL: http://renkun.me/pipeR,
+URL: https://renkun.me/pipeR,
     https://github.com/renkun-ken/pipeR,
-    http://renkun.me/pipeR-tutorial
+    https://renkun.me/pipeR-tutorial
 BugReports: https://github.com/renkun-ken/pipeR/issues
 Roxygen: list(wrap = FALSE)
 ByteCompile: TRUE
