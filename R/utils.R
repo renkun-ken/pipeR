@@ -9,12 +9,12 @@ ndots <- function(dots) {
 }
 
 is.formula <- function(expr) {
-  inherits(expr, "formula") || (is.call(expr) && expr[[1L]] == "~")
+  inherits(expr, "formula") || (is.call(expr) && .subset2(expr, 1L) == "~")
 }
 
 is.side_effect <- function(expr) {
   is.formula(expr) &&
     (length(expr) == 2L ||
         length(expr) == 3L &&
-        Recall(expr[[2L]]))
+        Recall(.subset2(expr, 2L)))
 }

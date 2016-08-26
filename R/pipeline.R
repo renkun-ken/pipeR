@@ -56,8 +56,8 @@ pipeline <- function(...) {
   if(missing(...)) return(invisible(NULL))
   dots <- match.call(expand.dots = FALSE)$...
   if(length(dots) == 1L) {
-    dots <- dots[[1L]]
-    if(class(dots) == "{") dots <- dots[-1L]
+    dots <- .subset2(dots, 1L)
+    if(class(dots) == "{") dots <- .subset(dots, -1L)
     else return(eval(dots, envir = parent.frame()))
   }
   expr <- Reduce(function(pl, p) as.call(list(pipe_op, pl, p)), dots)
